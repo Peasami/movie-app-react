@@ -6,18 +6,19 @@ import Reviews from './components/reviews';
 import Login from './components/login';
 import Profile from './components/profile';
 import Register from './components/register';
+import Navigation from './components/navigation';
 
 function App() {
   return (
     <BrowserRouter>
-    <Link to="/">Main</Link>
-    <Link to ="/Reviews">Reviews</Link>
       <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/Reviews" element={<Reviews />} />
-        <Route path="/Login" element={<Login />} />
-        <Route path="/Profile/:username" element={<Profile />} />
-        <Route path="/Register" element={<Register />} />
+        <Route path='/' element={<Navigation />}>
+          <Route index element={<Main />} />
+          <Route path="Reviews" element={<Reviews />} />
+          <Route path="Login" element={<Login />} />
+          <Route path="Profile/:username" element={<Profile />} />
+          <Route path="Register" element={<Register />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
