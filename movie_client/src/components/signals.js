@@ -1,5 +1,5 @@
 // stores jwtoken
-import { signal } from '@preact/signals-react'
+import { effect, signal } from '@preact/signals-react'
 
 // initializes token with value if there is one in sessionStorage
 const jwtToken = signal(getSessionToken());
@@ -25,3 +25,5 @@ effect(() => {
     };
 
 });
+
+export { jwtToken };
