@@ -5,12 +5,12 @@ const Navigation = () => {
         <>
             <nav>
                 <form>
-                    <Link to="/" style={{ color: "red", fontSize: 40, margin: 40 }}>Movie App</Link>
-                    <input type="text" style={{margin: 40 }}></input>
+                    <a className="logo" href="/" >Movie App</a>
+                    <input className="search" type="text" style={{margin: 40 }}></input>
                     <Link to="/register" style={{marginLeft: 200}}>Register</Link>
+                    <hr/>
                 </form>
             </nav>
-
             <Outlet />
         </>
     )

@@ -1,0 +1,21 @@
+nav {
+    background-color: white;
+}
+
+.logo {
+    color: black;
+    font-size: 40px;
+    margin-left: 40px;
+    text-decoration: none;
+}
+
+.search {
+    width: 250px;
+    min-height: 20px;
+    border-radius: 30px;
+}
+
+hr {
+    height: 2px;
+    background-color: #333;
+}
