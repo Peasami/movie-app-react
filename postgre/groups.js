@@ -13,7 +13,8 @@ async function getGroups() {
     try {
         const result = await pgPool.query(sql.GET_GROUPS);
         const rows = result.rows;
-        return console.log(rows);
+        //console.log(rows);
+        return result;
         
     } catch (error) {
         console.error("Error executing query:", error);
