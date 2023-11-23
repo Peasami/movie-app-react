@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const accountRoute = require('./routes/account');
+const groupsRoute = require('./routes/groups');
 const cors = require('cors');
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(express.static('public'));
 
 //Setting routes
 app.use('/account', accountRoute );
+app.use('/groups', groupsRoute );
 
 //Start server
 const PORT = process.env.PORT || 3001;
