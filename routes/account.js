@@ -24,22 +24,39 @@ router.post("/register", upload.none(), async (req,res) =>{
     }
 });
 
-router.post("/login"),upload.none(), async (req,res) => {
-    console.log("Received post request on /register")
+router.post("/login", upload.none(), async (req, res) => {
+    console.log("Received POST request on /login");
+
     const username = req.body.username;
-    let pw = req.body.pw
-    
-    const pwHash = checkLogin(username);
-    if (pwHast){
-        const isCorrect = await bcrypt.compare(pw,pwHash);
-        if(isCorrect) {
-            const token = createToken(username);
-            res.status(200).json({jwtToken:token});
+    const pw = req.body.pw;
+
+    try {
+
+        const pwhashpromise = checkLogin(username);
+        const pwhash = await pwhashpromise;
+
+        if (pwhash) {
+
+            console.log("user gave Password:", pw);
+            console.log("Stored Hashed Password:", pwhash);
+            const isCorrect = await bcrypt.compare(pw, pwhash);
+
+            if (isCorrect) {
+
+                const token = createToken(username);
+                res.status(200).json({ jwtToken: token });
+            } else {
+
+                res.status(401).json({ error: "Incorrect password" });
+            }
         } else {
-        res.status(401).json({error:"error"});
+
+            res.status(401).json({ error: "Username not found" });
         }
-    } else{
-        res.status(401).json({error: "wrong username"})};
-};
+    } catch (error) {
+        console.error("Error during login:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 
 module.exports = router;
