@@ -3,7 +3,7 @@ const multer = require('multer');
 const upload = multer({dest:'upload/'});
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { createToken } = require('../Auth/auth');
+const { createToken, auth } = require('../Auth/auth');
 
 const {getGroups,CreateGroup,getGroupUsers} = require('../postgre/groups');
 
@@ -17,13 +17,11 @@ router.get("/getGroups", upload.none(), async (req,res) =>{
     }
 });
 
-router.post("/createGroup", upload.none(), async (req,res) =>{
-    const admin_id = req.body.admin_id;
-    const community_name = req.body.community_name;
-    const community_desc = req.body.community_desc;
+router.post("/createGroup", auth, async (req,res) =>{
     try {
-        await CreateGroup(admin_id,community_name,community_desc);
-        res.end();
+        const username = res.locals.username;
+        // await CreateGroup(admin_id,community_name,community_desc);
+        res.status(200).json({username: username, personalData: "Some personal data"});
     } catch(error){
         console.log("Error executing query:", error)
         

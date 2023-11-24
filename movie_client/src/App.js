@@ -7,6 +7,7 @@ import Login from './components/login';
 import Profile from './components/profile';
 import Register from './components/register';
 import Navigation from './components/navigation';
+import Groups from './components/groups';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="Login" element={<Login />} />
           <Route path="Profile/:username" element={<Profile />} />
           <Route path="Register" element={<Register />} />
+          <Route path="Groups" element={<Groups />} />
         </Route>
       </Routes>
     </BrowserRouter>
