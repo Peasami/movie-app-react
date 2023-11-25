@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { jwtToken, userInfo } from "./signals";
 import axios from "axios";
+import { useState } from "react";
 
 function Groups() {
 
@@ -16,6 +17,9 @@ function Groups() {
 // Creates a group if user is logged in
 function CreateGroupForm(){
 
+  const [groupName, setGroupName] = useState("");
+  const [groupDesc, setGroupDesc] = useState("");
+
   // stores jwtToken from signals.js
   const config = {
     headers: { Authorization: 'Bearer ' + jwtToken.value }
@@ -23,8 +27,8 @@ function CreateGroupForm(){
 
   const bodyParameters = {
     adminId: JSON.stringify(userInfo.value.userId),
-    groupId: "4321",
-    groupName: "TestGroup"
+    groupDesc: groupDesc,
+    groupName: groupName
   }
 
   function createGroup(){
@@ -35,6 +39,8 @@ function CreateGroupForm(){
   
   return (
     <div>
+      <input value={groupName} onChange={e => setGroupName(e.target.value)}/>
+      <input value={groupDesc} onChange={e => setGroupDesc(e.target.value)}/>
       <button onClick={createGroup}>Create Group</button>
     </div>
   )
