@@ -13,15 +13,17 @@ function Groups() {
   );
 }
 
+// Creates a group if user is logged in
 function CreateGroupForm(){
-  // create group only if user is logged in using jwtToken
 
+  // stores jwtToken from signals.js
   const config = {
     headers: { Authorization: 'Bearer ' + jwtToken.value }
   }
 
   const bodyParameters = {
-    groupId: "1234",
+    adminId: "1234",
+    groupId: "4321",
     groupName: "TestGroup"
   }
 
