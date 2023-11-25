@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { jwtToken } from "./signals"
+import { jwtToken, userInfo } from "./signals"
 
 function Login() {
     return (
@@ -20,7 +20,7 @@ function Login() {
     function login() {
       axios.postForm('http://localhost:3001/account/login', {username, pw})
         .then(res => jwtToken.value = res.data.jwtToken)
-        .catch(err => console.log(err.response.data));
+        .catch(err => console.log(err.message));
     }
 
     return (
@@ -29,7 +29,7 @@ function Login() {
         <input value={pw} onChange={e => setPassword(e.target.value)}/>
         <button onClick={login}>Login</button>
         <button onClick={() => jwtToken.value = ''}>Logout</button>
-        <button onClick={() => console.log(jwtToken.value)}>value</button>
+        <button onClick={() => console.log('jwtToken: '+jwtToken.value+'\nuserInfo: '+ JSON.stringify(userInfo.value))}>value</button>
       </div>
     )
   }

@@ -4,6 +4,7 @@ const multer = require('multer');
 const upload = multer({dest:'upload/'});
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { auth } = require('../Auth/auth');
 const { createToken } = require('../Auth/auth');
 
 
@@ -43,6 +44,7 @@ router.post("/login", upload.none(), async (req, res) => {
             const userId = await getUserId(username);
             console.log("userId: ", userId);
 
+            // data to be stored in jwtToken
             const userData = {
                 username: username,
                 userId: userId
@@ -65,6 +67,20 @@ router.post("/login", upload.none(), async (req, res) => {
     } catch (error) {
         console.error("Error during login:", error);
         res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+
+// Returns personal data of user
+// token is checked with auth middleware
+router.get('/getUserInfo', auth, async (req,res)=>{
+    
+    try{
+       const username = res.locals.username;
+       const userId = await getUserId(username);
+       res.status(200).json({username: username, userId: userId});
+    }catch(err){
+       res.status(505).json({error: err.message});
     }
 });
 

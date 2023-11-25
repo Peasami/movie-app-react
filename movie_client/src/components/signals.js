@@ -1,8 +1,11 @@
 // stores jwtoken
 import { effect, signal } from '@preact/signals-react'
+import axios from 'axios';
 
 // initializes token with value if there is one in sessionStorage
 const jwtToken = signal(getSessionToken());
+
+const userInfo = signal(null);
 
 // returns jwtToken stored in sessionStorage
 function getSessionToken() {
@@ -24,6 +27,17 @@ effect(() => {
         }
     };
 
+    // Update userInfo
+    if(jwtToken.value.length !== 0){
+        axios.get('http://localhost:3001/account/getUserInfo', config)
+            .then(res => {
+                userInfo.value = res.data;
+            })
+            .catch(err => console.log(err.message))
+    }else{
+        userInfo.value = null;
+    }
+
 });
 
-export { jwtToken };
+export { jwtToken, userInfo };
