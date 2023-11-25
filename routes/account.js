@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const { createToken } = require('../Auth/auth');
 
 
-const {register,checkLogin} = require('../postgre/account');
+const {register,checkLogin,getUserId} = require('../postgre/account');
 
 
 router.post("/register", upload.none(), async (req,res) =>{
@@ -39,11 +39,20 @@ router.post("/login", upload.none(), async (req, res) => {
 
             console.log("user gave Password:", pw);
             console.log("Stored Hashed Password:", pwhash);
-            const isCorrect = await bcrypt.compare(pw, pwhash);
+            
+            const userId = await getUserId(username);
+            console.log("userId: ", userId);
 
+            const userData = {
+                username: username,
+                userId: userId
+            };
+
+            const isCorrect = await bcrypt.compare(pw, pwhash);
+            
             if (isCorrect) {
 
-                const token = jwt.sign({username: username}, process.env.JWT_SECRET_KEY);
+                const token = jwt.sign(userData, process.env.JWT_SECRET_KEY);
                 res.status(200).json({ jwtToken: token });
             } else {
 
