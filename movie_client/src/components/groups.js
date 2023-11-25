@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { jwtToken } from "./signals";
+import { jwtToken, userInfo } from "./signals";
 import axios from "axios";
 
 function Groups() {
@@ -22,7 +22,7 @@ function CreateGroupForm(){
   }
 
   const bodyParameters = {
-    adminId: "1234",
+    adminId: JSON.stringify(userInfo.value.userId),
     groupId: "4321",
     groupName: "TestGroup"
   }

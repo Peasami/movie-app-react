@@ -76,11 +76,12 @@ router.post("/login", upload.none(), async (req, res) => {
 router.get('/getUserInfo', auth, async (req,res)=>{
     
     try{
-       const username = res.locals.username;
-       const userId = await getUserId(username);
-       res.status(200).json({username: username, userId: userId});
+        // res.locals.username is set in auth middleware
+        const username = res.locals.username;
+        const userId = await getUserId(username);
+        res.status(200).json({username: username, userId: userId});
     }catch(err){
-       res.status(505).json({error: err.message});
+        res.status(505).json({error: err.message});
     }
 });
 
