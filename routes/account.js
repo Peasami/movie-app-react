@@ -6,8 +6,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { createToken } = require('../Auth/auth');
 
-
-const {register,checkLogin} = require('../postgre/account');
+const {getFavourites, addFavourite,deleteFavourite} = require ('../postgre/favourite')
+const {register,checkLogin, deleteAccount} = require('../postgre/account');
 
 
 router.post("/register", upload.none(), async (req,res) =>{
@@ -59,4 +59,22 @@ router.post("/login", upload.none(), async (req, res) => {
     }
 });
 
+
+router.delete("/Delete/:account_id", async (req, res) => {
+    console.log("Received delete request on ");
+
+});
+
+
+router.get("/favourite/:account_id", upload.none(), async (req,res) =>{
+    try {
+        const account_id = req.params.account_id;
+        const result = await getFavourites(account_id);
+        res.json(result.rows);
+    } catch (error) {
+        console.error("Error executing query:", error);
+        
+    }
+});
+  
 module.exports = router;

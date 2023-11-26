@@ -3,7 +3,7 @@ const pgPool = require("./connection");
 const sql = {
     ADD_NEWS: "INSERT INTO news (account_id, community_id, news_url) VALUES ($1, $2,$3) ",
     GET_NEWS: "SELECT news_url FROM news WHERE community_id = $1",
-    DELETE_NEWS: "DELETE FROM news WHERE account_id =$1"
+    DELETE_NEWS: "DELETE FROM news WHERE account_id = $1"
 
 
 }
@@ -23,9 +23,9 @@ async function addNews(account_id, community_id, news_url){
     await pgPool.query(sql.ADD_NEWS, [account_id, community_id, news_url]); 
 }
 
-async function DeleteNews(account_id){
+async function deleteNews(account_id){
 
-await pgPool.query(sql.DELETE_NEWS, [ account_id]);
+await pgPool.query(sql.DELETE_NEWS, [account_id]);
 } 
 
-module.exports = {getNews,addNews,DeleteNews};
+module.exports = {getNews,addNews,deleteNews};

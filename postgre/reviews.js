@@ -12,12 +12,13 @@ const sql = {
     try {
         const result = await pgPool.query(sql.GET_REVIEWS);
         const rows = result.rows;
-        return console.log(rows);
-        
+        //console.log(rows);
+        return result;
     } catch (error) {
         console.error("Error executing query:", error);
     }
 }
+
 //Hakee arvostelut account_id avulla (TESTI)
 //getReview(10);
 
@@ -25,7 +26,7 @@ async function getReview(account_id) {
     try {
         const result = await pgPool.query(sql.GET_REVIEW,[account_id]);
         const rows = result.rows;
-        return console.log(rows);
+        return result;
         
     } catch (error) {
         console.error("Error executing query:", error);
@@ -34,12 +35,12 @@ async function getReview(account_id) {
 //asettaa arvot databaseen (TESTI)
 //PostReview (9, "huono leffa", 23, 1);    
 
-async function PostReview(account_id, text, movie_id, rating) {
+async function postReview(account_id, text, movie_id, rating) {
     await pgPool.query(sql.POST_REVIEW, [account_id,text,movie_id,rating ]);
-
+    
 }
-
+//ajetaan kun käyttäjä poistetaan tietokannasta
 async function deleteReview(account_id){
-    await pgPool.query(sql.DELETE_REVIEW [account_id])
+    await pgPool.query(sql.DELETE_REVIEW, [account_id])
 }
-module.exports={getReviews, getReview, PostReview, deleteReview};
+module.exports={getReviews, getReview, postReview, deleteReview};
