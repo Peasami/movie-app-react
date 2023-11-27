@@ -5,8 +5,9 @@ const sql = {
   CREATE_GROUP: "INSERT INTO community(admin_id, community_name,community_desc) VALUES ($1, $2, $3) ",
   GET_GROUP_USERS: "SELECT account.username FROM account JOIN account_community ON account.account_id = account_community.account_id JOIN community ON account_community.community_id = community.community_id WHERE community.community_id = $1",
   REMOVE_USER: "DELETE from account_community WHERE account_id = $1",
+  ADD_USER: "INSERT INTO account_community(account_id, community_id) VALUES ($1, $2)",
  
-  GROUP_JOIN_REQEUST: "INSERT INTO request (account_id, community_id VALUES ($1, $2)",
+  GROUP_JOIN_REQEUST: "INSERT INTO request (account_id, community_id) VALUES ($1, $2)",
   DELETE_JOIN_REQUEST: "DELETE from request WHERE account_id = $1"
 };
 
@@ -49,7 +50,11 @@ async function removeUser(account_id){
 }
 //suorittaa liittymispyynnön ryhmään.
 async function joinRequest(account_id, community_id) {
-    await pgPool.query(sql.GROUP_JOIN_REQEUST, [account_id,community_id]);
+    try {
+        await pgPool.query(sql.GROUP_JOIN_REQEUST, [account_id,community_id]);
+    } catch (error) {
+        console.error("Error executing query:", error);
+    }
 }
 
 //poistaa liittymispyynnön, poistaessa käyttäjän.
@@ -57,4 +62,14 @@ async function deleteJoinRequest(account_id){
     await pgPool.query(sql.DELETE_JOIN_REQUEST,[account_id]);
 }
 
-module.exports= {getGroups,CreateGroup,getGroupUsers, removeUser, deleteJoinRequest,joinRequest};
+//lisää käyttäjän ryhmään
+//lisää välitaulun "account_community".
+async function addUser(account_id, community_id){
+    try {
+        await pgPool.query(sql.ADD_USER, [account_id, community_id]);
+    } catch (error) {
+        console.error("Error executing query:", error);
+    }
+}
+
+module.exports= {getGroups,CreateGroup,getGroupUsers, removeUser, deleteJoinRequest,joinRequest, addUser};
