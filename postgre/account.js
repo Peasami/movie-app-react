@@ -7,6 +7,7 @@ const{deleteNews} = require("./news")
 const sql = {
   REGISTER_USER: 'INSERT INTO account (username, pw) VALUES ($1, $2)',
   GET_PW: 'SELECT pw FROM account WHERE username=$1',
+  GET_USER_ID: 'SELECT account_id FROM account WHERE username=$1',
   DELETE_USER:"DELETE FROM account WHERE account_id = $1"
 };
 
@@ -56,4 +57,15 @@ const deleteAccount = async (account_id) => {
 
 };
 //deleteAccount(31);
-module.exports={register, checkLogin, deleteAccount};
+// Returns account_id of username
+async function getUserId(username){
+  const result = await pgPool.query(sql.GET_USER_ID, [username]);
+
+  if(result.rows.length > 0){
+      return result.rows[0].account_id;
+  }else{
+      return null;
+  }
+}
+
+module.exports={register, checkLogin, deleteAccount, getUserId};
