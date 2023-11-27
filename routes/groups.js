@@ -24,8 +24,10 @@ router.post("/createGroup", auth, async (req,res) =>{
             groupDesc: req.body.groupDesc,
             groupName: req.body.groupName
         }
+
         
-        // await CreateGroup(admin_id,community_name,community_desc);
+        
+        await CreateGroup(groupInfo.adminId,groupInfo.groupName,groupInfo.groupDesc);
         res.status(200).json({ groupInfo: groupInfo});
     } catch(error){
         console.log("Error executing query:", error)

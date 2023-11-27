@@ -9,7 +9,7 @@ function Groups() {
   return (
     <div>
       <h1>groups view</h1>
-      <CreateGroupForm />
+      {jwtToken.value.length===0 ? <h1>Log in to create group</h1> : <CreateGroupForm />} 
     </div>
   );
 }
