@@ -76,5 +76,16 @@ router.get("/favourite/:account_id", upload.none(), async (req,res) =>{
         
     }
 });
+
+router.post("/favourite/:account_id", upload.none(), async (req, res) =>{
+    try{
+        const account_id = req.params.account_id;
+        const movie_id = req.body.movie_id;
+        const result = await addFavourite(movie_id,account_id);
+        res.json(result.rows);
+    } catch(error) { 
+        console.error("Error executin query:", error)
+    }
+});
   
 module.exports = router;
