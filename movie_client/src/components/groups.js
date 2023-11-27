@@ -25,8 +25,10 @@ function CreateGroupForm(){
     headers: { Authorization: 'Bearer ' + jwtToken.value }
   }
 
+  const adminId = JSON.stringify(userInfo.value.userId);
+
   const bodyParameters = {
-    adminId: JSON.stringify(userInfo.value.userId),
+    adminId: adminId,
     groupDesc: groupDesc,
     groupName: groupName
   }
@@ -35,6 +37,11 @@ function CreateGroupForm(){
     axios.post('http://localhost:3001/groups/createGroup', bodyParameters, config)
       .then(res => console.log(res.data))
       .catch(err => console.log(err.response.data));
+  }
+
+  // button for testing
+  function print(){
+    console.log(adminId);
   }
   
   return (

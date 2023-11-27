@@ -20,7 +20,7 @@ function Login() {
     function login() {
       axios.postForm('http://localhost:3001/account/login', {username, pw})
         .then(res => jwtToken.value = res.data.jwtToken)
-        .catch(err => console.log(err.message));
+        .catch(err => console.log(err.response.data));
     }
 
     return (

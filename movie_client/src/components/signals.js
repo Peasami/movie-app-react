@@ -5,7 +5,7 @@ import axios from 'axios';
 // initializes token with value if there is one in sessionStorage
 const jwtToken = signal(getSessionToken());
 
-const userInfo = signal(null);
+const userInfo = signal(getSessionUserInfo());
 
 // returns jwtToken stored in sessionStorage
 function getSessionToken() {
@@ -15,10 +15,18 @@ function getSessionToken() {
   return t===null || t==='null' ? '' : t;
 }
 
+function getSessionUserInfo() {
+    const t = sessionStorage.getItem('userInfo');
+  
+    // if token is null, returns empty and not null value
+    return t===null || t==='null' ? '' : t;
+  }
+
 // updates every time jwtToken changes
 effect(() => {
     // store token in sessionStorage
     sessionStorage.setItem('jwtToken', jwtToken);
+    sessionStorage.setItem('userInfo', userInfo);
 
     // store new bearer token
     const config = {
