@@ -6,8 +6,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { createToken } = require('../Auth/auth');
 
-
-const {register,checkLogin} = require('../postgre/account');
+const {getFavourites, addFavourite,deleteFavourite} = require ('../postgre/favourite')
+const {register,checkLogin, deleteAccount} = require('../postgre/account');
 
 
 router.post("/register", upload.none(), async (req,res) =>{
@@ -24,22 +24,57 @@ router.post("/register", upload.none(), async (req,res) =>{
     }
 });
 
-router.post("/login"),upload.none(), async (req,res) => {
-    console.log("Received post request on /register")
-    const username = req.body.username;
-    let pw = req.body.pw
-    
-    const pwHash = checkLogin(username);
-    if (pwHast){
-        const isCorrect = await bcrypt.compare(pw,pwHash);
-        if(isCorrect) {
-            const token = createToken(username);
-            res.status(200).json({jwtToken:token});
-        } else {
-        res.status(401).json({error:"error"});
-        }
-    } else{
-        res.status(401).json({error: "wrong username"})};
-};
+router.post("/login", upload.none(), async (req, res) => {
+    console.log("Received POST request on /login");
 
+    const username = req.body.username;
+    const pw = req.body.pw;
+
+    try {
+
+        const pwhashpromise = checkLogin(username);
+        const pwhash = await pwhashpromise;
+
+        if (pwhash) {
+
+            console.log("user gave Password:", pw);
+            console.log("Stored Hashed Password:", pwhash);
+            const isCorrect = await bcrypt.compare(pw, pwhash);
+
+            if (isCorrect) {
+
+                const token = createToken(username);
+                res.status(200).json({ jwtToken: token });
+            } else {
+
+                res.status(401).json({ error: "Incorrect password" });
+            }
+        } else {
+
+            res.status(401).json({ error: "Username not found" });
+        }
+    } catch (error) {
+        console.error("Error during login:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+
+router.delete("/Delete/:account_id", async (req, res) => {
+    console.log("Received delete request on ");
+
+});
+
+
+router.get("/favourite/:account_id", upload.none(), async (req,res) =>{
+    try {
+        const account_id = req.params.account_id;
+        const result = await getFavourites(account_id);
+        res.json(result.rows);
+    } catch (error) {
+        console.error("Error executing query:", error);
+        
+    }
+});
+  
 module.exports = router;
