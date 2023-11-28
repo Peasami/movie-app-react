@@ -4,10 +4,11 @@ const multer = require('multer');
 const upload = multer({dest:'upload/'});
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { auth } = require('../Auth/auth');
 const { createToken } = require('../Auth/auth');
 
-const {getFavourites, addFavourite,deleteFavourite} = require ('../postgre/favourite')
-const {register,checkLogin, deleteAccount} = require('../postgre/account');
+const {getFavourites, addFavourite,deleteFavourite} = require ('../postgre/favourite');
+const {register,checkLogin, deleteAccount,getUserId} = require('../postgre/account');
 
 
 router.post("/register", upload.none(), async (req,res) =>{
@@ -39,11 +40,21 @@ router.post("/login", upload.none(), async (req, res) => {
 
             console.log("user gave Password:", pw);
             console.log("Stored Hashed Password:", pwhash);
-            const isCorrect = await bcrypt.compare(pw, pwhash);
+            
+            const userId = await getUserId(username);
+            console.log("userId: ", userId);
 
+            // data to be stored in jwtToken
+            const userData = {
+                username: username,
+                userId: userId
+            };
+
+            const isCorrect = await bcrypt.compare(pw, pwhash);
+            
             if (isCorrect) {
 
-                const token = createToken(username);
+                const token = jwt.sign(userData, process.env.JWT_SECRET_KEY);
                 res.status(200).json({ jwtToken: token });
             } else {
 
@@ -56,6 +67,21 @@ router.post("/login", upload.none(), async (req, res) => {
     } catch (error) {
         console.error("Error during login:", error);
         res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+
+// Returns personal data of user
+// token is checked with auth middleware
+router.get('/getUserInfo', auth, async (req,res)=>{
+    
+    try{
+        // res.locals.username is set in auth middleware
+        const username = res.locals.username;
+        const userId = await getUserId(username);
+        res.status(200).json({username: username, userId: userId});
+    }catch(err){
+        res.status(505).json({error: err.message});
     }
 });
 
