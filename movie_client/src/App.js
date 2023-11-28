@@ -1,13 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
-import Main from './components/main';
-import Reviews from './components/reviews';
-import Groups from './components/groups';
-import Login from './components/login';
-import Profile from './components/profile';
-import Register from './components/register';
-import Navigation from './components/navigation';
+import Main from './components/pages/main';
+import Reviews from './components/pages/reviews';
+import Groups from './components/pages/groups';
+import Login from './components/pages/login';
+import Profile from './components/pages/profile';
+import Register from './components/pages/register';
+import Navigation from './components/widgets/navigation';
 
 function App() {
   return (
