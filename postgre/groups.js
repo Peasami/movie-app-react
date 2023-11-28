@@ -5,10 +5,12 @@ const sql = {
   CREATE_GROUP: "INSERT INTO community(admin_id, community_name,community_desc) VALUES ($1, $2, $3) ",
   GET_GROUP_USERS: "SELECT account.username FROM account JOIN account_community ON account.account_id = account_community.account_id JOIN community ON account_community.community_id = community.community_id WHERE community.community_id = $1",
   REMOVE_USER: "DELETE from account_community WHERE account_id = $1",
-  ADD_USER: "INSERT INTO account_community(account_id, community_id) VALUES ($1, $2)",
+
+  ADD_USER: "INSERT INTO account_community(account_id, community_id, pending) VALUES ($1, $2, false)", // välitaulu, pending=false
+  ADD_REQUEST: "INSERT INTO account_community(account_id, community_id, pending) VALUES ($1, $2, true)", // välitaulu, pending=true
  
-  GROUP_JOIN_REQEUST: "INSERT INTO request (account_id, community_id) VALUES ($1, $2)",
-  DELETE_JOIN_REQUEST: "DELETE from request WHERE account_id = $1"
+  GROUP_JOIN_REQEUST: "INSERT INTO request (account_id, community_id) VALUES ($1, $2)", // deprecated
+  DELETE_JOIN_REQUEST: "DELETE from request WHERE account_id = $1" // deprecated
 };
 
 //getGroups();
@@ -48,22 +50,25 @@ async function getGroupUsers(community_id) {
 async function removeUser(account_id){
     await pgPool.query(sql.REMOVE_USER, [account_id]);
 }
-//suorittaa liittymispyynnön ryhmään.
+
+//liittymispyyntö
+//tekee välitaulun "account_community", pending = true
 async function joinRequest(account_id, community_id) {
     try {
-        await pgPool.query(sql.GROUP_JOIN_REQEUST, [account_id,community_id]);
+        await pgPool.query(sql.ADD_REQUEST, [account_id,community_id]);
     } catch (error) {
         console.error("Error executing query:", error);
     }
 }
 
 //poistaa liittymispyynnön, poistaessa käyttäjän.
+//deprecated
 async function deleteJoinRequest(account_id){
     await pgPool.query(sql.DELETE_JOIN_REQUEST,[account_id]);
 }
 
-//lisää käyttäjän ryhmään
-//lisää välitaulun "account_community".
+//lisää käyttäjän suoraan ryhmään
+//tekee välitaulun "account_community", pending = false
 async function addUser(account_id, community_id){
     try {
         await pgPool.query(sql.ADD_USER, [account_id, community_id]);

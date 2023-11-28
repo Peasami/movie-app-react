@@ -42,7 +42,7 @@ router.post("/addRequest", auth, async (req,res) =>{
             groupId: req.body.groupId
         }
 
-        // await joinRequest(requestBody.accountId, requestBody.groupId);
+        await joinRequest(requestBody.accountId, requestBody.groupId);
         res.status(200).json({ requestBody: requestBody});
     } catch (error) {
         console.log("Error executing query:", error)
