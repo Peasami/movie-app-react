@@ -1,3 +1,4 @@
+// Navigation bar at the top
 import { Link, Outlet } from "react-router-dom";
 
 const Navigation = () => {
