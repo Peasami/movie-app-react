@@ -8,7 +8,8 @@ const { auth } = require('../Auth/auth');
 const { createToken } = require('../Auth/auth');
 
 const {getFavourites, addFavourite,deleteFavourite} = require ('../postgre/favourite');
-const {register,checkLogin, deleteAccount,getUserId} = require('../postgre/account');
+const {register,checkLogin, deleteAccount,getUserId,} = require('../postgre/account');
+const { getCommunityAdmin } = require('../postgre/groups');
 
 
 router.post("/register", upload.none(), async (req,res) =>{
@@ -88,8 +89,28 @@ router.get('/getUserInfo', auth, async (req,res)=>{
 
 router.delete("/Delete/:account_id", async (req, res) => {
     console.log("Received delete request on ");
+    try {
+        const account_id = req.params.account_id;
+        
+        const result = await deleteAccount(account_id);
 
+        // Check if result is null or undefined
+        if (result === null || result === undefined) {
+            res.status(404).json({ error: "Account not found" });
+        } else {
+            // Check if deletion was successful
+            if (result.rows && result.rows.length > 0) {
+                res.json({ message: "Delete successful" });
+            } else {
+                res.status(404).json({ error: "Account not found" });
+            }
+        }
+    } catch (error) {
+        console.error("Error executing query:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
 });
+
 
 
 router.get("/favourite/:account_id", upload.none(), async (req,res) =>{
