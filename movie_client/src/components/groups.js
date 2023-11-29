@@ -10,7 +10,7 @@ function Groups() {
     <div>
       <h1>groups view</h1>
       {jwtToken.value.length === 0 ? <h1>Log in to create group</h1> : <CreateGroupForm />}
-      <ShowGroupsForm />
+      <ShowGroupsForm numberOfItems={10}/>
     </div>
   );
 
@@ -20,7 +20,7 @@ function Groups() {
 /*
 // Shows all groups
 */
-function ShowGroupsForm() {
+function ShowGroupsForm(props) {
 
   const [groups, setGroups] = useState([]);
 
@@ -42,6 +42,31 @@ function ShowGroupsForm() {
     )
   }
 
+  function JoinGroupButton(groupId) {
+
+    const requestBody = {
+      accountId: userInfo.value.userId,
+      groupId: groupId.groupId
+    }
+  
+    // stores jwtToken from signals.js
+    const config = {
+      headers: { Authorization: 'Bearer ' + jwtToken.value }
+    }
+    function joinGroup() {
+      console.log("hello")
+      axios.post('http://localhost:3001/groups/addRequest', requestBody, config)
+        .then(res => console.log(res.data))
+        .catch(err => console.log(err.response.data));
+    }
+  
+    return (
+      <div>
+        <button onClick={joinGroup}>Join Group</button>
+      </div>
+    )
+  }
+
   // gets groups when component is rendered
   useEffect(() => {
     getGroups();
@@ -50,40 +75,12 @@ function ShowGroupsForm() {
   return (
     // creates a form for each group
     <div>
-      {groups.map(group => groupForm(group))}
+      {groups.slice(0, props.numberOfItems).map(group => groupForm(group))}
     </div>
 
   )
 }
 
-
-/*
-// Creates a button to join a group
-*/
-function JoinGroupButton(groupId) {
-
-  const requestBody = {
-    accountId: userInfo.value.userId,
-    groupId: groupId.groupId
-  }
-
-  // stores jwtToken from signals.js
-  const config = {
-    headers: { Authorization: 'Bearer ' + jwtToken.value }
-  }
-  function joinGroup() {
-    console.log("hello")
-    axios.post('http://localhost:3001/groups/addRequest', requestBody, config)
-      .then(res => console.log(res.data))
-      .catch(err => console.log(err.response.data));
-  }
-
-  return (
-    <div>
-      <button onClick={joinGroup}>Join Group</button>
-    </div>
-  )
-}
 
 /*
 // Creates a group if user is logged in
@@ -126,4 +123,5 @@ function CreateGroupForm() {
   )
 }
 
+export { ShowGroupsForm };
 export default Groups;

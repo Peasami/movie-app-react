@@ -1,11 +1,11 @@
-
+import { ShowGroupsForm } from "./groups";
 
 function Main() {
     return (
         <div>
             <Trending />
             <Reviews />
-            <Groups />
+            <ShowGroupsForm numberOfItems={5} />
         </div>
     );
 }
