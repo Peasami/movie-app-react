@@ -29,7 +29,7 @@ function Login() {
         <input value={pw} onChange={e => setPassword(e.target.value)}/>
         <button onClick={login}>Login</button>
         <button onClick={() => jwtToken.value = ''}>Logout</button>
-        <button onClick={() => console.log('jwtToken: '+jwtToken.value+'\nuserInfo: '+ JSON.stringify(userInfo.value))}>value</button>
+        <button onClick={() => console.log('jwtToken: '+jwtToken.value+'\nuserInfo: '+ JSON.stringify(userInfo.value))}>logindata</button>
       </div>
     )
   }

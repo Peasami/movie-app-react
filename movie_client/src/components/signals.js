@@ -1,4 +1,4 @@
-// stores jwtoken
+// Stores jwtToken and userInfo in sessionStorage
 import { effect, signal } from '@preact/signals-react'
 import axios from 'axios';
 
