@@ -3,7 +3,7 @@ const multer = require('multer');
 const upload = multer({dest:'upload/'});
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { createToken } = require('../Auth/auth');
+const { createToken, auth} = require('../Auth/auth');
 
 const{getReviews, getReview, postReview, deleteReview} = require('../postgre/reviews')
 
@@ -33,7 +33,7 @@ router.post("/Review/:account_id", upload.none(), async (req,res) =>{
     }
 });
 
-router.get("/Review/:account_id", async (req, res) => {
+router.get("/Review/:account_id", auth async (req, res) => {
     const account_id = req.params.account_id;
     try {
         const result = await getReview(account_id);

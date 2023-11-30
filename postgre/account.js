@@ -52,10 +52,10 @@ async function deleteAccount(account_id) {
     }
 
     
-    await removeUser(account_id);
+    await removeGroupUsers(account_id);
     await deleteReview(account_id);
     await deleteFavourite(account_id);
-    await deleteJoinRequest(account_id);
+    //await deleteJoinRequest(account_id);
     await deleteNews(account_id);
     
     //poistaa käyttäjän account taulusta ja lopullisesti.

@@ -4,7 +4,7 @@ const sql = {
   GET_GROUPS: "SELECT * FROM community",
   CREATE_GROUP: "INSERT INTO community(admin_id, community_name,community_desc) VALUES ($1, $2, $3) RETURNING id ",
   GET_GROUP_USERS: "SELECT account.username FROM account JOIN account_community ON account.account_id = account_community.account_id JOIN community ON account_community.community_id = community.community_id WHERE community.community_id = $1",
-  REMOVE_USER: "DELETE FROM account_community WHERE community_id = $1",
+  REMOVE_USER: "DELETE FROM account_community WHERE account_id = $1",
   REMOVE_USERS: "DELETE FROM account_community WHERE community_id = $1",
   DELETE_GROUP: "DELETE FROM community WHERE admin_id = $1 AND community_id =$2",
   GROUP_JOIN_REQEUST: "INSERT INTO request (account_id, community_id VALUES ($1, $2)",
@@ -40,11 +40,11 @@ async function CreateGroup(admin_id, community_name, community_desc){
 }
 
 //deleteGroup(40);
-async function removeGroupUsers(community_id) {
+async function removeGroupUsers(account_id) {
     try {
         
             
-            await pgPool.query(sql.REMOVE_USERS, [community_id]);
+            await pgPool.query(sql.REMOVE_USER, [account_id]);
        
     } catch (error) {
         console.error('Error removing group users:', error);
@@ -89,10 +89,10 @@ const determineIfAdminLogic = async (account_id) => {
     const result = await pgPool.query(sql.CHECK_ADMIN, [account_id]);
     const isAdmin = result.rows.length > 0;
   const communityIds = isAdmin ? result.rows.map(row => row.community_id) : [];
-  console.log(communityIds);
+  console.log("käyttäjälle löydettiin groupit jossa se on admin =" +communityIds);
 
   return { isAdmin, communityIds };
 };
 
 
-module.exports= {getGroups,CreateGroup,determineIfAdminLogic,getGroupUsers, removeUser, deleteJoinRequest,joinRequest, deleteGroup, removeGroupUsers};
+module.exports= {getGroups,CreateGroup,determineIfAdminLogic,getGroupUsers, removeUser,joinRequest, deleteGroup, removeGroupUsers};
