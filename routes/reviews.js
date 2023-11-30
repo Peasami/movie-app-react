@@ -3,7 +3,7 @@ const multer = require('multer');
 const upload = multer({dest:'upload/'});
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { createToken } = require('../Auth/auth');
+const { createToken, auth} = require('../Auth/auth');
 
 const{getReviews, getReview, postReview, deleteReview} = require('../postgre/reviews')
 

@@ -3,7 +3,7 @@ const pgPool = require("./connection");
 const sql ={
     GET_FAVOURITE: "SELECT * FROM favourite WHERE account_id = $1",
     DELETE_FAVOURITE: "DELETE FROM favourite WHERE account_id =$1",
-    ADD_FAVOURITE: "INSERT INTO favourite (movie_id, account_id) VALUES ($1,$2)"
+    ADD_FAVOURITE: "INSERT INTO favourite (movie_id, account_id) VALUES ($1, $2)"
 };
 
 //hakee account_id perusteella käyttäjän lempileffat
