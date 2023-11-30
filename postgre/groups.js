@@ -106,6 +106,15 @@ const determineIfAdminLogic = async (account_id) => {
 
   return { isAdmin, communityIds };
 };
+//lisää käyttäjän suoraan ryhmään
+//tekee välitaulun "account_community", pending = false
+async function addUser(account_id, community_id){
+    try {
+        await pgPool.query(sql.ADD_USER, [account_id, community_id]);
+    } catch (error) {
+        console.error("Error executing query:", error);
+    }
+}
 
 
-module.exports= {getGroups,CreateGroup,determineIfAdminLogic,getGroupUsers, removeUser,joinRequest, deleteGroup, removeGroupUsers};
+module.exports= {getGroups,CreateGroup,determineIfAdminLogic,getGroupUsers, removeUser,joinRequest, deleteGroup, removeGroupUsers, addUser};

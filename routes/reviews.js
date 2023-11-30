@@ -33,7 +33,7 @@ router.post("/Review/:account_id", upload.none(), async (req,res) =>{
     }
 });
 
-router.get("/Review/:account_id", auth async (req, res) => {
+router.get("/Review/:account_id", async (req, res) => {
     const account_id = req.params.account_id;
     try {
         const result = await getReview(account_id);
