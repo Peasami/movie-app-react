@@ -4,6 +4,13 @@ const sql = {
   GET_GROUPS: "SELECT * FROM community",
   CREATE_GROUP: "INSERT INTO community(admin_id, community_name,community_desc) VALUES ($1, $2, $3) RETURNING id ",
   GET_GROUP_USERS: "SELECT account.username FROM account JOIN account_community ON account.account_id = account_community.account_id JOIN community ON account_community.community_id = community.community_id WHERE community.community_id = $1",
+  
+  ADD_USER: "INSERT INTO account_community(account_id, community_id, pending) VALUES ($1, $2, false)", // välitaulu, pending=false
+  ADD_REQUEST: "INSERT INTO account_community(account_id, community_id, pending) VALUES ($1, $2, true)", // välitaulu, pending=true
+
+  ACCEPT_REQUEST: "UPDATE account_community SET pending = false WHERE account_id = $1 AND community_id = $2",
+  GROUP_JOIN_REQEUST: "INSERT INTO request (account_id, community_id) VALUES ($1, $2)", // deprecated
+  DELETE_JOIN_REQUEST: "DELETE from request WHERE account_id = $1", // deprecated
   REMOVE_USER: "DELETE FROM account_community WHERE account_id = $1",
   REMOVE_USERS: "DELETE FROM account_community WHERE community_id = $1",
   DELETE_GROUP: "DELETE FROM community WHERE admin_id = $1 AND community_id =$2",
@@ -74,9 +81,15 @@ async function removeUser(community_id){
     await pgPool.query(sql.REMOVE_USERS, [community_id]);
 
 }
-//suorittaa liittymispyynnön ryhmään.
+
+//liittymispyyntö
+//tekee välitaulun "account_community", pending = true
 async function joinRequest(account_id, community_id) {
-    await pgPool.query(sql.GROUP_JOIN_REQEUST, [account_id,community_id]);
+    try {
+        await pgPool.query(sql.ADD_REQUEST, [account_id,community_id]);
+    } catch (error) {
+        console.error("Error executing query:", error);
+    }
 }
 
 //poistaa liittymispyynnön, poistaessa käyttäjän.

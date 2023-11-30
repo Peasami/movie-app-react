@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { createToken, auth } = require('../Auth/auth');
 
-const {getGroups,CreateGroup,getGroupUsers} = require('../postgre/groups');
+const {getGroups,CreateGroup,getGroupUsers, joinRequest} = require('../postgre/groups');
 
 router.get("/getGroups", upload.none(), async (req,res) =>{
     try {
@@ -24,12 +24,28 @@ router.post("/createGroup", auth, async (req,res) =>{
             groupDesc: req.body.groupDesc,
             groupName: req.body.groupName
         }
+
         
-        // await CreateGroup(admin_id,community_name,community_desc);
+        
+        await CreateGroup(groupInfo.adminId,groupInfo.groupName,groupInfo.groupDesc);
         res.status(200).json({ groupInfo: groupInfo});
     } catch(error){
         console.log("Error executing query:", error)
         
+    }
+});
+
+router.post("/addRequest", auth, async (req,res) =>{
+    try {
+        const requestBody = {
+            accountId: req.body.accountId,
+            groupId: req.body.groupId
+        }
+
+        await joinRequest(requestBody.accountId, requestBody.groupId);
+        res.status(200).json({ requestBody: requestBody});
+    } catch (error) {
+        console.log("Error executing query:", error)
     }
 });
 
