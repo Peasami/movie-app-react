@@ -10,6 +10,7 @@ function Groups() {
     <div>
       <h1>groups view</h1>
       {jwtToken.value.length === 0 ? <h1>Log in to create group</h1> : <CreateGroupForm />}
+      <ShowRequestsForm />
       <ShowGroupsForm />
     </div>
   );
@@ -34,7 +35,7 @@ function ShowGroupsForm() {
   // create form for a group
   function groupForm(props) {
     return (
-      <div key={props.community_id}>
+      <div key={props.community_id} style={{ width: "300px", height: "150px", border: "solid" }}>
         <h1>{props.community_name}</h1>
         <h3>{props.community_desc}</h3>
         {jwtToken.value.length === 0 ? <h1>Log in to join group</h1> : <JoinGroupButton groupId={props.community_id}/>}
@@ -125,5 +126,17 @@ function CreateGroupForm() {
     </div>
   )
 }
+
+/*
+// Show group requests for admin
+*/
+function ShowRequestsForm(){
+  return(
+    <div>
+      <h1>Requests</h1>
+    </div>
+  )
+}
+
 
 export default Groups;
