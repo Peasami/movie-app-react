@@ -16,12 +16,13 @@ const sql = {
   DELETE_GROUP: "DELETE FROM community WHERE admin_id = $1 AND community_id =$2",
   GROUP_JOIN_REQEUST: "INSERT INTO request (account_id, community_id VALUES ($1, $2)",
   //DELETE_JOIN_REQUEST: "DELETE from request WHERE account_id = $1",
-  CHECK_ADMIN: "SELECT * FROM community WHERE admin_id = $1"
+  CHECK_ADMIN: "SELECT * FROM community WHERE admin_id = $1",
 
-
-
-
-   
+  GET_REQUESTS: "SELECT account_community.community_id, account_community_id, community.community_name, account.username\
+    FROM account_community\
+    JOIN account ON account_community.account_id = account.account_id\
+    JOIN community ON account_community.community_id = community.community_id\
+    WHERE community.admin_id = $1 AND account_community.pending = true"
 };
 
 //getGroups();
@@ -116,5 +117,10 @@ async function addUser(account_id, community_id){
     }
 }
 
+//gets all requests for admin
+async function getRequests(admin_id){
+    const result = await pgPool.query(sql.GET_REQUESTS, [admin_id]);
+    return result.rows;
+}
 
-module.exports= {getGroups,CreateGroup,determineIfAdminLogic,getGroupUsers, removeUser,joinRequest, deleteGroup, removeGroupUsers, addUser};
+module.exports= {getGroups,CreateGroup,determineIfAdminLogic,getGroupUsers, removeUser,joinRequest, deleteGroup, removeGroupUsers, addUser, getRequests};
