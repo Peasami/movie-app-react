@@ -34,7 +34,7 @@ function TrendingObj({ movie }) {
 
 function Trending() {
   // State to store the list of trending movies
-  const [trendingMovies, setTrendingMovies] = useState([]);
+  const [trendingMovies, setTrendingMovies] = useState([""]);
 
   // API key for making requests to The Movie Database (TMDB) API
   const API_KEY = process.env.REACT_APP_TMBD_API_KEY;
