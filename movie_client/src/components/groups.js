@@ -1,7 +1,8 @@
 import { useParams } from "react-router-dom";
 import { jwtToken, userInfo } from "./signals";
-import axios from "axios";
+import axios, { all } from "axios";
 import { useEffect, useState } from "react";
+import { effect } from "@preact/signals-core";
 
 function Groups() {
 
@@ -132,33 +133,20 @@ function CreateGroupForm() {
 */
 function ShowRequestsForm(){
 
-  const [requests, setRequests] = useState([""]);
+  return(
+    <div>
+      <h1>Requests</h1>
+      {jwtToken.value.length === 0 ? <h1>Log in to see requests</h1> : <ShowRequests />}
+    </div>
+  )
 
-  function getRequests(){
-    console.log("userinfo value: "+userInfo.value.userId);
-    axios.get('http://localhost:3001/groups/getRequests/'+userInfo.value.userId)
-      .then(res => setRequests(res.data))
-      .catch(err => console.log(err));
-  }
-
-  useEffect(() => {
-    getRequests();
-  }, []);
-//
-  function RequestForm(props){
+  function ShowRequests(){
     return(
       <div>
-        <h1>{props.request.account_community_id +", "+ props.request.username +", "+ props.request.community_name}</h1>
+        <h1>Requests</h1>
       </div>
     )
   }
-
-  return(
-    <div>
-      <button onClick={getRequests}>Get Requests</button>
-      {requests?requests.map(request => <RequestForm request={request}/> ) : <h1>no requests</h1>}
-    </div>
-  )
 
 }
   
