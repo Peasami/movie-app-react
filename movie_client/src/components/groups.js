@@ -131,12 +131,37 @@ function CreateGroupForm() {
 // Show group requests for admin
 */
 function ShowRequestsForm(){
+
+  const [requests, setRequests] = useState([""]);
+
+  function getRequests(){
+    console.log("userinfo value: "+userInfo.value.userId);
+    axios.get('http://localhost:3001/groups/getRequests/'+userInfo.value.userId)
+      .then(res => setRequests(res.data))
+      .catch(err => console.log(err));
+  }
+
+  useEffect(() => {
+    getRequests();
+  }, []);
+//
+  function RequestForm(props){
+    return(
+      <div>
+        <h1>{props.request.account_community_id +", "+ props.request.username +", "+ props.request.community_name}</h1>
+      </div>
+    )
+  }
+
   return(
     <div>
-      <h1>Requests</h1>
+      <button onClick={getRequests}>Get Requests</button>
+      {requests?requests.map(request => <RequestForm request={request}/> ) : <h1>no requests</h1>}
     </div>
   )
+
 }
+  
 
 
 export default Groups;

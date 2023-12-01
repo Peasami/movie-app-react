@@ -4,7 +4,6 @@ import axios from 'axios';
 
 // initializes token with value if there is one in sessionStorage
 const jwtToken = signal(getSessionToken());
-
 const userInfo = signal(getSessionUserInfo());
 
 // returns jwtToken stored in sessionStorage
@@ -24,9 +23,10 @@ function getSessionUserInfo() {
 
 // updates every time jwtToken changes
 effect(() => {
+
+    console.log('effect1')
     // store token in sessionStorage
     sessionStorage.setItem('jwtToken', jwtToken);
-    sessionStorage.setItem('userInfo', userInfo);
 
     // store new bearer token
     const config = {
@@ -46,6 +46,12 @@ effect(() => {
         userInfo.value = null;
     }
 
+});
+
+// updates every time userInfo changes
+effect(() => {
+    console.log('effect2 ' + userInfo.value)
+    sessionStorage.setItem('userInfo', userInfo);
 });
 
 export { jwtToken, userInfo };

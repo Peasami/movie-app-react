@@ -54,7 +54,7 @@ router.get("/getRequests/:adminId", async (req,res) => {
         const result = await getRequests(req.params.adminId);
         res.status(200).json(result);
     }catch(error){
-        console.log("Error executing query:", error)
+        res.status(500).json({error: error});
     }
 });
 
