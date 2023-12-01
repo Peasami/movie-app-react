@@ -22,7 +22,6 @@ async function register(username, pw) {
 }
 
 
-
 async function checkLogin(username){
   const result = await pgPool.query(sql.GET_PW, [username]);
 
@@ -37,40 +36,32 @@ async function checkLogin(username){
 
 //functio, joka ajaa alla olevat functiot, kun käyttäjä poistaa tilinsä.
 async function deleteAccount(account_id) {
-  try {
-    //tarkistaa onko käyttäjän account_id sama kuin admin_id ja jos se on niin ajaa for osan.
-    const { isAdmin, communityIds } = await determineIfAdminLogic(account_id);
+  //tarkistaa onko käyttäjän account_id sama kuin admin_id ja jos se on niin ajaa for osan.
+  const { isAdmin, communityIds } = await determineIfAdminLogic(account_id);
 
-    if (isAdmin) {
-      
-      for (const community_id of communityIds) {
-        await removeUser(community_id);
-        await deleteGroup(account_id, community_id);
-      }
-
-      
-     // await pgPool.query(sql.REMOVE_ACCOUNTS_FROM_COMMUNITY, [account_id]);
+  if (isAdmin) {
+    
+    for (const community_id of communityIds) {
+      await removeUser(community_id);
+      await deleteGroup(account_id, community_id);
     }
 
     
-    await removeGroupUsers(account_id);
-    await deleteReview(account_id);
-    await deleteFavourite(account_id);
-    //await deleteJoinRequest(account_id);
-    await deleteNews(account_id);
-    
-    //poistaa käyttäjän account taulusta ja lopullisesti.
-    const result = await pgPool.query(sql.DELETE_USER, [account_id]);
-   
-    console.log("Käyttäjän poistaminen onnistui");
-  } catch (error) {
-    console.error("Käyttäjän poistaminen epäonnistui:", error);
-    
+    // await pgPool.query(sql.REMOVE_ACCOUNTS_FROM_COMMUNITY, [account_id]);
   }
+
+  
+  await removeGroupUsers(account_id);
+  await deleteReview(account_id);
+  await deleteFavourite(account_id);
+  //await deleteJoinRequest(account_id);
+  await deleteNews(account_id);
+  
+  //poistaa käyttäjän account taulusta ja lopullisesti.
+  await pgPool.query(sql.DELETE_USER, [account_id]);
+  
+  console.log("Käyttäjän poistaminen onnistui");
 }
-
-
-
 
 
 //deleteAccount(31);
