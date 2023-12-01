@@ -5,7 +5,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { createToken, auth } = require('../Auth/auth');
 
-const {getGroups,CreateGroup,getGroupUsers, joinRequest} = require('../postgre/groups');
+const {getGroups,CreateGroup,getGroupUsers, joinRequest,getAdmin, getGroup} = require('../postgre/groups');
+const { getNews } = require('../postgre/news');
 
 router.get("/getGroups", upload.none(), async (req,res) =>{
     try {
@@ -48,5 +49,25 @@ router.post("/addRequest", auth, async (req,res) =>{
         console.log("Error executing query:", error)
     }
 });
-
+//Ryhmän Sivu
+router.get("/:community_id",upload.none(), async (req,res) =>{
+try {
+    const community_id = req.params.community_id
+    const adminUsername =  await getAdmin(community_id);
+    const admin = adminUsername.rows[0];
+    const CommunityInfo = await getGroup(community_id);
+    const Community = CommunityInfo.rows
+    const GroupUsernames = await getGroupUsers(community_id);
+    const Users = GroupUsernames.rows
+    const filteredUsers = Users.filter(user => user.username !== admin.username);
+    const groupNews = await getNews(community_id);
+    const news = groupNews.rows;
+    
+    res.json({ Community,admin, Users:filteredUsers, news});
+   
+} catch(error){
+    console.log("Error executing query:", error)
+    
+}
+});
 module.exports = router;

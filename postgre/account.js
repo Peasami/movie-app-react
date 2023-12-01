@@ -1,8 +1,8 @@
 const pgPool = require("./connection");
-const {deleteFavourite} = require("./favourite");
+const {deleteFavourite, getFavourites} = require("./favourite");
 const {deleteReview} = require("./reviews")
-const {removeUser,deleteJoinRequest,deleteGroup,removeGroupUsers, getCommunityAdmin,determineIfAdminLogic} = require("./groups")
-const{deleteNews} = require("./news")
+const {removeUser,getUsersGroup,deleteJoinRequest,deleteGroup,removeGroupUsers, getCommunityAdmin,determineIfAdminLogic} = require("./groups")
+const{deleteNews, getNews,getNewsUserPage} = require("./news")
 
 
 const sql = {
@@ -10,6 +10,7 @@ const sql = {
   GET_PW: 'SELECT pw FROM account WHERE username=$1',
   GET_USER_ID: 'SELECT account_id FROM account WHERE username=$1',
   DELETE_USER:"DELETE FROM account WHERE account_id = $1",
+  
   //REMOVE_ACCOUNTS_FROM_COMMUNITY: "SELECT * FROM community JOIN account ON community.admin_id = account.account_id WHERE account.account_id =$1 "
 
 };
@@ -75,4 +76,21 @@ async function getUserId(username){
   }
 }
 
-module.exports={register, checkLogin, deleteAccount, getUserId};
+async function Userpage(account_id) {
+  try{
+    const favouritesResult = await getFavourites(account_id);
+    const newsResult = await getNewsUserPage(account_id);
+    const UserGroupResult = await getUsersGroup(account_id);
+    return {
+      Groups: UserGroupResult.rows,
+      favourites: favouritesResult.rows,
+      news: newsResult.rows,
+  };
+} catch (error) {
+  console.error("Käyttäjäsivun hakeminen epäonnistui:", error);
+  
+}
+}
+
+
+module.exports={register, checkLogin, deleteAccount, getUserId, Userpage,};
