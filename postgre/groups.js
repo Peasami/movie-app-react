@@ -3,7 +3,7 @@ const pgPool = require("./connection");
 //järkyttävä lista Sql queryja.
 const sql = {
   GET_GROUPS: "SELECT * FROM community",
-  GET_1_GROUP: "SELECT FROM community WHERE community_id = $1 ",
+  GET_1_GROUP: "SELECT community_name, community_desc FROM community WHERE community_id = $1 ",
   CREATE_GROUP: "INSERT INTO community(admin_id, community_name,community_desc) VALUES ($1, $2, $3) RETURNING community_id",
   GET_GROUP_USERS: "SELECT account.username FROM account JOIN account_community ON account.account_id = account_community.account_id JOIN community ON account_community.community_id = community.community_id WHERE community.community_id = $1",
   ADD_TO_ACCOUNT_COMMUNITY: "INSERT INTO account_community(account_id, community_id) VALUES ($1, $2)",

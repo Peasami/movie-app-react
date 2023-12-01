@@ -55,13 +55,15 @@ try {
     const community_id = req.params.community_id
     const adminUsername =  await getAdmin(community_id);
     const admin = adminUsername.rows[0];
+    const CommunityInfo = await getGroup(community_id);
+    const Community = CommunityInfo.rows
     const GroupUsernames = await getGroupUsers(community_id);
     const Users = GroupUsernames.rows
     const filteredUsers = Users.filter(user => user.username !== admin.username);
     const groupNews = await getNews(community_id);
     const news = groupNews.rows;
     
-    res.json({ admin, Users:filteredUsers, news});
+    res.json({ Community,admin, Users:filteredUsers, news});
    
 } catch(error){
     console.log("Error executing query:", error)
