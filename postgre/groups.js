@@ -18,7 +18,7 @@ const sql = {
   //DELETE_JOIN_REQUEST: "DELETE from request WHERE account_id = $1",
   CHECK_ADMIN: "SELECT * FROM community WHERE admin_id = $1",
 
-  GET_REQUESTS: "SELECT account_community.community_id, account_community_id, community.community_name, account.username\
+  GET_REQUESTS: "SELECT account_community.community_id, account_community_id, community.community_id, account.account_id, community.admin_id\
     FROM account_community\
     JOIN account ON account_community.account_id = account.account_id\
     JOIN community ON account_community.community_id = community.community_id\
