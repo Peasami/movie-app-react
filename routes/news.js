@@ -7,7 +7,7 @@ const { createToken, auth} = require('../Auth/auth');
 
 const {getNews,addNews,deleteNews} = require('../postgre/news')
 
-
+//listää uutisen 
 router.post("/AddNews", upload.none(), async (req,res) =>{
     try {
         const result = await addNews();
@@ -17,7 +17,7 @@ router.post("/AddNews", upload.none(), async (req,res) =>{
         
     }
 });
-
+//hakee ryhmälle uutiset 
 router.get('/groupNews', upload,none() ,async (req, res) =>{
     try{
         const result  = await getNews(community_id);
@@ -27,4 +27,5 @@ router.get('/groupNews', upload,none() ,async (req, res) =>{
         console.error("Error executing query:", error);
         
     }
+
 });
