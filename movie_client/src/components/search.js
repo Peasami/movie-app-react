@@ -71,6 +71,12 @@ const Search = () => {
                     <div className="search-result-content">
                       <b>{result.title || result.name}</b>
                       <p>{result.overview}</p>
+
+                      
+                      {window.location.pathname === '/reviews' && (
+                          <button>+ Create a review</button>
+                      )}
+
                     </div>
                   </a>
                 </li>

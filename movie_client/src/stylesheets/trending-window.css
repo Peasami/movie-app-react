@@ -1,3 +1,64 @@
+@media screen and (min-width: 460px) {
+    .flex-container {
+        margin: 50px;
+    }
+    .arrowRight {
+        position: absolute;
+        right: 1px;
+        top: 400px;
+        width: 1.25rem;
+        height: 1.25rem;
+        margin: 0 1rem;
+        transform: rotate(90deg);
+        z-index: 2;
+      }
+      .arrowRight span {
+        color: aliceblue;
+        top: 0.5rem;
+        position: absolute;
+        width: 0.75rem;
+        height: 0.1rem;
+        background-color: black;
+        display: inline-block;
+      }   
+      .arrowRight span:first-of-type {
+        left: 0;
+        transform: rotate(-45deg);
+      }   
+      .arrowRight span:last-of-type {
+        right: 0;
+        transform: rotate(45deg);
+      }
+
+      .arrowLeft {
+        position: absolute;
+        left: 1px;
+        top: 400px;
+        width: 1.25rem;
+        height: 1.25rem;
+        margin: 0 1rem;
+        transform: rotate(-90deg);
+        z-index: 2;
+      }
+      .arrowLeft span {
+        color: aliceblue;
+        top: 0.5rem;
+        position: absolute;
+        width: 0.75rem;
+        height: 0.1rem;
+        background-color: black;
+        display: inline-block;
+      }   
+      .arrowLeft span:first-of-type {
+        left: 0;
+        transform: rotate(-45deg);
+      }   
+      .arrowLeft span:last-of-type {
+        right: 0;
+        transform: rotate(45deg);
+      }
+}
+
 .flex-container {
     display: flex;
     flex-wrap: nowrap;

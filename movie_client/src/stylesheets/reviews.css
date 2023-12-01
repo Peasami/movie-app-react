@@ -1,0 +1,38 @@
+@media screen and (min-width: 640px) {
+    .reviews-list {
+        width: 45%;
+      }
+}
+.reviews-list {
+  list-style: none;
+  padding: 0;
+}
+  
+.review {
+  display: grid;
+  grid-template-columns: 8fr 1fr;
+  gap: 10px 10px;
+  border: solid;
+  margin: 20px;
+  border-radius: 20px
+}
+.title{
+  font-weight: bold;
+  font-size: 19px;
+  margin-bottom: 8px;
+  margin: 20px;
+}
+.username {
+  color: #777;
+  margin: 20px;
+}
+.text {
+  margin: 20px;
+}
+
+.rating {
+  margin: 20px;
+  margin-top: 50%;
+  font-weight: bold;
+}
+  

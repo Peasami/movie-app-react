@@ -8,7 +8,8 @@ const sql = {
   REGISTER_USER: 'INSERT INTO account (username, pw) VALUES ($1, $2)',
   GET_PW: 'SELECT pw FROM account WHERE username=$1',
   GET_USER_ID: 'SELECT account_id FROM account WHERE username=$1',
-  DELETE_USER:"DELETE FROM account WHERE account_id = $1"
+  DELETE_USER:"DELETE FROM account WHERE account_id = $1",
+  GET_USERNAME: "SELECT username FROM account WHERE account_id = $1"
 };
 
 
@@ -57,7 +58,7 @@ const deleteAccount = async (account_id) => {
 
 };
 //deleteAccount(31);
-// Returns account_id of username
+// Returns account_id of username 
 async function getUserId(username){
   const result = await pgPool.query(sql.GET_USER_ID, [username]);
 
@@ -68,4 +69,11 @@ async function getUserId(username){
   }
 }
 
-module.exports={register, checkLogin, deleteAccount, getUserId};
+// Gets username by id
+async function getUsername(account_id){
+  const result = await pgPool.query(sql.GET_USERNAME, [account_id]);
+  const rows = result.rows;
+  return result;
+}
+
+module.exports={register, checkLogin, deleteAccount, getUserId, getUsername};
