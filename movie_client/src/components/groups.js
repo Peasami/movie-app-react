@@ -133,6 +133,10 @@ function CreateGroupForm() {
 */
 function ShowRequestsForm(){
 
+  effect(() => {
+    console.log('effect3 ' + JSON.stringify(userInfo.value))
+  });
+
   return(
     <div>
       <h1>Requests</h1>
@@ -140,10 +144,24 @@ function ShowRequestsForm(){
     </div>
   )
 
+  function GetRequests(){
+    axios.get('http://localhost:3001/groups/getRequests/' + userInfo.value.userId)
+      .then(() => RequestForm())
+      .catch(err => console.log(err.response));
+  }
+  
+  function RequestForm() {
+    return(
+      <div>
+        <h1>RequestForm</h1>
+      </div>
+    )
+  }
+
   function ShowRequests(){
     return(
       <div>
-        <h1>Requests</h1>
+        {userInfo.value.userId?<GetRequests /> : <h1>userInfo has no value</h1>}
       </div>
     )
   }
