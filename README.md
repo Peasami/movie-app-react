@@ -6,15 +6,15 @@ Tietotekniikan ja viestinnän insinööri opiskelijoiden toisen vuoden projektei
 
 
 ## Vaatimukset
-* Käyttäjän luominen, sekä poistaminen\ 
-* Käyttäjän kirjautuminen\
-* Oman näkymän muokkaaminen\
-* Ryhmäsivun luonti\
-* Ryhmän jäsenien lisääminen/poistaminen\
-* Ryhmäsivun sisällön muokkaaminen\
-* Sivuston responsiivisuus\
-* Suodatettu haku elokuville/sarjoille\
-* Oman näkymän muokkaaminen ja sen jakaminen\
+* Käyttäjän luominen, sekä poistaminen
+* Käyttäjän kirjautuminen
+* Oman näkymän muokkaaminen
+* Ryhmäsivun luonti
+* Ryhmän jäsenien lisääminen/poistaminen
+* Ryhmäsivun sisällön muokkaaminen
+* Sivuston responsiivisuus
+* Suodatettu haku elokuville/sarjoille
+* Oman näkymän muokkaaminen ja sen jakaminen
 * Arvostelu ominaisuus
 
 
