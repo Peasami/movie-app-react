@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { jwtToken, userInfo } from "./signals";
 import axios, { all } from "axios";
 import { useEffect, useState } from "react";
-import { effect } from "@preact/signals-core";
+import { effect, signal } from "@preact/signals-core";
 
 function Groups() {
 
@@ -13,6 +13,7 @@ function Groups() {
       {jwtToken.value.length === 0 ? <h1>Log in to create group</h1> : <CreateGroupForm />}
       <ShowRequestsForm />
       <ShowGroupsForm />
+      <button onClick={() => console.log('userinfo: ' + JSON.stringify(userInfo.value))}>userinfo</button>
     </div>
   );
 
@@ -133,41 +134,57 @@ function CreateGroupForm() {
 */
 function ShowRequestsForm(){
 
-  effect(() => {
-    console.log('effect3 ' + JSON.stringify(userInfo.value))
-  });
+  const [requests, setRequests] = useState([""]);
+
+  function GetRequests(){
+
+    console.log('userInfo: ' + JSON.stringify(userInfo.value))
+
+    if(typeof userInfo.value.userId !== "undefined"){
+      axios.get('http://localhost:3001/groups/getRequests/' + JSON.stringify(userInfo.value.userId))
+        .then(res => {
+          setRequests(res.data)
+        })
+        .then(console.log('requests: '+requests))
+        .catch(err => console.log(err.response));
+    }else{
+      console.log("userInfo has no value")
+      setTimeout(GetRequests, 250);
+    }
+  }
+
+  useEffect(() => {
+    GetRequests();
+  }, []);
 
   return(
     <div>
       <h1>Requests</h1>
-      {jwtToken.value.length === 0 ? <h1>Log in to see requests</h1> : <ShowRequests />}
+      {requests.map(request => <h1>{request.username + "  " + request.community_name}</h1>)}
     </div>
   )
 
-  function GetRequests(){
-    axios.get('http://localhost:3001/groups/getRequests/' + userInfo.value.userId)
-      .then(() => RequestForm())
-      .catch(err => console.log(err.response));
-  }
   
-  function RequestForm() {
-    return(
-      <div>
-        <h1>RequestForm</h1>
-      </div>
-    )
-  }
+  
+  // function RequestForm() {
+  //   return(
+  //     <div>
+  //       <h1>RequestForm</h1>
+  //     </div>
+  //   )
+  // }
 
-  function ShowRequests(){
-    return(
-      <div>
-        {userInfo.value.userId?<GetRequests /> : <h1>userInfo has no value</h1>}
-      </div>
-    )
-  }
+  // function ShowRequests(){
+  //   return(
+  //     <div>
+  //       {userInfo.value.userId?<GetRequests /> : <h1>userInfo has no value</h1>}
+  //     </div>
+  //   )
+  // }
 
 }
-  
+
+
 
 
 export default Groups;

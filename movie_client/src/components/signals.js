@@ -24,7 +24,7 @@ function getSessionUserInfo() {
 // updates every time jwtToken changes
 effect(() => {
 
-    console.log('effect1')
+    // console.log('effect1')
     // store token in sessionStorage
     sessionStorage.setItem('jwtToken', jwtToken);
 
@@ -50,7 +50,7 @@ effect(() => {
 
 // updates every time userInfo changes
 effect(() => {
-    console.log('effect2 ' + userInfo.value)
+    // console.log('effect2 ' + JSON.stringify(userInfo.value))
     sessionStorage.setItem('userInfo', userInfo);
 });
 
