@@ -36,7 +36,7 @@ Visual Studio Code, PostgreSQL, Postman,
 
 
 
-### group_13
+### Tekijät
 
 
 HenriHyv - Henri Hyvärinen\
