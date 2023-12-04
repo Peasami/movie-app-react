@@ -12,6 +12,7 @@ function Groups() {
       <h1>groups view</h1>
       {jwtToken.value.length === 0 ? <h1>Log in to create group</h1> : <CreateGroupForm />}
       <ShowRequestsForm />
+      <YourGroupsForm />
       <ShowGroupsForm />
       <button onClick={() => console.log('userinfo: ' + JSON.stringify(userInfo.value))}>userinfo</button>
     </div>
@@ -139,9 +140,17 @@ function ShowRequestsForm(){
   const [requests, setRequests] = useState([""]);
 
   function GetRequests(){
+    if (userInfo.value === null) {
+      console.log("userInfo is null")
+      return;
+    }
+
+    const config = {
+      headers: { Authorization: 'Bearer ' + jwtToken.value }
+    }
 
     if(typeof userInfo.value.userId !== "undefined"){
-      axios.get('http://localhost:3001/groups/getRequests/' + JSON.stringify(userInfo.value.userId))
+      axios.get('http://localhost:3001/groups/getRequests/' + JSON.stringify(userInfo.value.userId), config)
         .then(res => {
           setRequests(res.data)
         })
@@ -165,6 +174,44 @@ function ShowRequestsForm(){
 
 }
 
+
+function YourGroupsForm(){
+
+  const [groups, setGroups] = useState([""]);
+
+  function GetGroups(){
+    if (userInfo.value === null) {
+      console.log("userInfo is null")
+      return;
+    }
+
+    const config = {
+      headers: { Authorization: 'Bearer ' + jwtToken.value }
+    }
+
+    if(typeof userInfo.value.userId !== "undefined"){
+      axios.get('http://localhost:3001/groups/getYourGroups/' + JSON.stringify(userInfo.value.userId))
+        .then(res => {
+          setGroups(res.data)
+        })
+        .catch(err => console.log(err.response));
+    }else{
+      console.log("userInfo has no values")
+      setTimeout(GetGroups, 250);
+    }
+  }
+
+  useEffect(() => {
+    GetGroups();
+  }, []);
+
+  return(
+    <div style={{border: "solid"}}>
+      <h1>Your Groups</h1>
+      {groups.map(group => <h1>{group.community_name}</h1>)}
+    </div>
+  )
+}
 
 
 

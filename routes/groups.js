@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { createToken, auth } = require('../Auth/auth');
 
-const {getGroups,CreateGroup,getGroupUsers, joinRequest, getRequests} = require('../postgre/groups');
+const {getGroups,CreateGroup,getGroupUsers, joinRequest, getRequests, getYourGroups} = require('../postgre/groups');
 
 router.get("/getGroups", upload.none(), async (req,res) =>{
     try {
@@ -49,7 +49,7 @@ router.post("/addRequest", auth, async (req,res) =>{
     }
 });
 
-router.get("/getRequests/:adminId", async (req,res) => {
+router.get("/getRequests/:adminId", auth, async (req,res) => {
     try{
         const result = await getRequests(req.params.adminId);
         res.status(200).json(result);
