@@ -5,27 +5,27 @@ Tietotekniikan ja viestinnän insinööri opiskelijoiden toisen vuoden projektei
 
 
 
-# Vaatimukset
--Käyttäjän luominen, sekä poistaminen\ 
--Käyttäjän kirjautuminen\
--Oman näkymän muokkaaminen\
--Ryhmäsivun luonti\
--Ryhmän jäsenien lisääminen/poistaminen\
--Ryhmäsivun sisällön muokkaaminen\
--Sivuston responsiivisuus\
--Suodatettu haku elokuville/sarjoille\
--Oman näkymän muokkaaminen ja sen jakaminen\
--Arvostelu ominaisuus
--
+## Vaatimukset
+* Käyttäjän luominen, sekä poistaminen\ 
+* Käyttäjän kirjautuminen\
+* Oman näkymän muokkaaminen\
+* Ryhmäsivun luonti\
+* Ryhmän jäsenien lisääminen/poistaminen\
+* Ryhmäsivun sisällön muokkaaminen\
+* Sivuston responsiivisuus\
+* Suodatettu haku elokuville/sarjoille\
+* Oman näkymän muokkaaminen ja sen jakaminen\
+* Arvostelu ominaisuus
 
 
-# Projekti
+
+## Projekti
 
 Projekti toteutettiin React-sovelluksena. Tietokantana toimi PostgreSQL, joka pyöri Render.com pilvipalvelussa. 
 
 
 
-# Ohjelmistot
+## Ohjelmistot
 
 Visual Studio Code, PostgreSQL, Postman, 
 
@@ -36,7 +36,7 @@ Visual Studio Code, PostgreSQL, Postman,
 
 
 
-# group_13
+### group_13
 
 
 HenriHyv - Henri Hyvärinen\
