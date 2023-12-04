@@ -58,4 +58,13 @@ router.get("/getRequests/:adminId", async (req,res) => {
     }
 });
 
+router.get("/getYourGroups/:adminId", async (req,res) => {
+    try{
+        const result = await getYourGroups(req.params.adminId);
+        res.status(200).json(result);
+    }catch(error){
+        res.status(500).json({error: error});
+    }
+});
+
 module.exports = router;

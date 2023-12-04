@@ -129,6 +129,8 @@ function CreateGroupForm() {
   )
 }
 
+
+
 /*
 // Show group requests for admin
 */
@@ -138,14 +140,11 @@ function ShowRequestsForm(){
 
   function GetRequests(){
 
-    console.log('userInfo: ' + JSON.stringify(userInfo.value))
-
     if(typeof userInfo.value.userId !== "undefined"){
       axios.get('http://localhost:3001/groups/getRequests/' + JSON.stringify(userInfo.value.userId))
         .then(res => {
           setRequests(res.data)
         })
-        .then(console.log('requests: '+requests))
         .catch(err => console.log(err.response));
     }else{
       console.log("userInfo has no value")
@@ -158,29 +157,11 @@ function ShowRequestsForm(){
   }, []);
 
   return(
-    <div>
+    <div style={{border: "solid"}}>
       <h1>Requests</h1>
       {requests.map(request => <h1>{request.username + "  " + request.community_name}</h1>)}
     </div>
   )
-
-  
-  
-  // function RequestForm() {
-  //   return(
-  //     <div>
-  //       <h1>RequestForm</h1>
-  //     </div>
-  //   )
-  // }
-
-  // function ShowRequests(){
-  //   return(
-  //     <div>
-  //       {userInfo.value.userId?<GetRequests /> : <h1>userInfo has no value</h1>}
-  //     </div>
-  //   )
-  // }
 
 }
 

@@ -23,7 +23,8 @@ const sql = {
     FROM account_community\
     JOIN account ON account_community.account_id = account.account_id\
     JOIN community ON account_community.community_id = community.community_id\
-    WHERE community.admin_id = $1 AND account_community.pending = true"
+    WHERE community.admin_id = $1 AND account_community.pending = true",
+  GET_YOUR_GROUPS: "SELECT * FROM community WHERE admin_id = $1"
 };
 
 //getGroups();
@@ -124,4 +125,10 @@ async function getRequests(admin_id){
     return result.rows;
 }
 
-module.exports= {getGroups,CreateGroup,determineIfAdminLogic,getGroupUsers, removeUser,joinRequest, deleteGroup, removeGroupUsers, addUser, getRequests};
+//gets groups where user is admin
+async function getYourGroups(admin_id){
+    const result = await pgPool.query(sql.GET_YOUR_GROUPS, [admin_id]);
+    return result.rows;
+}
+
+module.exports= {getGroups,CreateGroup,determineIfAdminLogic,getGroupUsers, removeUser,joinRequest, deleteGroup, removeGroupUsers, addUser, getRequests, getYourGroups};
