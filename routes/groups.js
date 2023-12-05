@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { createToken, auth } = require('../Auth/auth');
 
-const {getGroups,CreateGroup,getGroupUsers, joinRequest,getAdmin, getGroup} = require('../postgre/groups');
+const {getGroups,CreateGroup,getGroupUsers, joinRequest,getAdmin, getGroup, getRequests, getYourGroups, acceptRequest, rejectRequest} = require('../postgre/groups');
 const { getNews } = require('../postgre/news');
 
 router.get("/getGroups", upload.none(), async (req,res) =>{
@@ -70,4 +70,44 @@ try {
     
 }
 });
+// get all pending requests for groups where the user is admin
+router.get("/getRequests/:adminId", auth, async (req,res) => {
+    try{
+        const result = await getRequests(req.params.adminId);
+        res.status(200).json(result);
+    }catch(error){
+        res.status(500).json({error: error});
+    }
+});
+
+// get groups where the user is admin
+router.get("/getYourGroups/:adminId", async (req,res) => {
+    try{
+        const result = await getYourGroups(req.params.adminId);
+        res.status(200).json(result);
+    }catch(error){
+        res.status(500).json({error: error});
+    }
+});
+
+// accept request by updating "pending" -column to false
+router.put("/acceptRequest/:requestId", async (req,res) => {
+    try{
+        const result = await acceptRequest(req.params.requestId);
+        res.status(200).json(result);
+    }catch(error){
+        res.status(500).json({error: error});
+    }
+});
+
+// reject request by deleting it from database
+router.delete("/rejectRequest/:requestId", auth, async (req,res) => {
+    try {
+        const result = await rejectRequest(req.params.requestId);
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(500).json({error: error});
+    }
+});
+
 module.exports = router;

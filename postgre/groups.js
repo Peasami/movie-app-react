@@ -10,7 +10,8 @@ const sql = {
   ADD_USER: "INSERT INTO account_community(account_id, community_id, pending) VALUES ($1, $2, false)", // välitaulu, pending=false
   ADD_REQUEST: "INSERT INTO account_community(account_id, community_id, pending) VALUES ($1, $2, true)", // välitaulu, pending=true
   SELECT_ADMIN: "SELECT account.username FROM account JOIN account_community ON account.account_id = account_community.account_id JOIN community ON account_community.community_id = community.community_id WHERE community.community_id = $1 AND account.account_id = community.admin_id",
-  ACCEPT_REQUEST: "UPDATE account_community SET pending = false WHERE account_id = $1 AND community_id = $2",
+  ACCEPT_REQUEST: "UPDATE account_community SET pending = false WHERE account_community_id = $1",
+  REJECT_REQUEST: "DELETE FROM account_community WHERE pending = true AND account_community_id = $1",
   GROUP_JOIN_REQEUST: "INSERT INTO request (account_id, community_id) VALUES ($1, $2)", // deprecated
   DELETE_JOIN_REQUEST: "DELETE from request WHERE account_id = $1", // deprecated
   REMOVE_USER: "DELETE FROM account_community WHERE account_id = $1",
@@ -19,6 +20,14 @@ const sql = {
   GROUP_JOIN_REQEUST: "INSERT INTO request (account_id, community_id VALUES ($1, $2)",
   //DELETE_JOIN_REQUEST: "DELETE from request WHERE account_id = $1",
   CHECK_ADMIN: "SELECT * FROM community WHERE admin_id = $1",
+
+  GET_REQUESTS: "SELECT account_community.community_id, account_community_id, community.community_id, community.community_name,\
+    account.account_id, account.username, community.admin_id\
+    FROM account_community\
+    JOIN account ON account_community.account_id = account.account_id\
+    JOIN community ON account_community.community_id = community.community_id\
+    WHERE community.admin_id = $1 AND account_community.pending = true",
+  GET_YOUR_GROUPS: "SELECT * FROM community WHERE admin_id = $1",
   GET_USERS_GROUPS: "SELECT community_name, community_desc FROM community join account_community ON community.community_id = account_community.community_id WHERE account_community.account_id  =$1"
 };
 
@@ -154,5 +163,25 @@ async function getUsersGroup(account_id) {
     }
 }
 
+//gets all requests for admin
+async function getRequests(admin_id){
+    const result = await pgPool.query(sql.GET_REQUESTS, [admin_id]);
+    return result.rows;
+}
 
-module.exports= {getGroups,getUsersGroup,getAdmin,getGroup,CreateGroup,determineIfAdminLogic,getGroupUsers, removeUser,joinRequest, deleteGroup, removeGroupUsers, addUser};
+//gets groups where user is admin
+async function getYourGroups(admin_id){
+    const result = await pgPool.query(sql.GET_YOUR_GROUPS, [admin_id]);
+    return result.rows;
+}
+
+async function acceptRequest(account_community_id){
+    await pgPool.query(sql.ACCEPT_REQUEST, [account_community_id]);
+}
+
+async function rejectRequest(account_community_id){
+    await pgPool.query(sql.REJECT_REQUEST, [account_community_id]);
+}
+
+
+module.exports= {getGroups,getUsersGroup,getAdmin,getGroup,CreateGroup,determineIfAdminLogic,getGroupUsers, removeUser,joinRequest, deleteGroup, removeGroupUsers, addUser, getRequests, getYourGroups, acceptRequest, rejectRequest};
