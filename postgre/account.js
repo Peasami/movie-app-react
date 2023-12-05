@@ -1,8 +1,8 @@
 const pgPool = require("./connection");
 const {deleteFavourite, getFavourites} = require("./favourite");
-const {deleteReview} = require("./reviews")
+const {deleteReview, getReview} = require("./reviews")
 const {removeUser,getUsersGroup,deleteJoinRequest,deleteGroup,removeGroupUsers, getCommunityAdmin,determineIfAdminLogic} = require("./groups")
-const{deleteNews, getNews,getNewsUserPage} = require("./news")
+const{deleteNews,groupDeleteNews, getNews,getNewsUserPage} = require("./news")
 
 
 const sql = {
@@ -43,14 +43,14 @@ async function deleteAccount(account_id) {
     
     for (const community_id of communityIds) {
       await removeUser(community_id);
+      groupDeleteNews(community_id  )
       await deleteGroup(account_id, community_id);
+      
     }
 
     
     // await pgPool.query(sql.REMOVE_ACCOUNTS_FROM_COMMUNITY, [account_id]);
-  }
-
-  
+  } 
   await removeGroupUsers(account_id);
   await deleteReview(account_id);
   await deleteFavourite(account_id);
@@ -81,10 +81,12 @@ async function Userpage(account_id) {
     const favouritesResult = await getFavourites(account_id);
     const newsResult = await getNewsUserPage(account_id);
     const UserGroupResult = await getUsersGroup(account_id);
+    const UserReviewsResult = await getReview(account_id);
     return {
       Groups: UserGroupResult.rows,
       favourites: favouritesResult.rows,
       news: newsResult.rows,
+      Review: UserReviewsResult.rows
   };
 } catch (error) {
   console.error("Käyttäjäsivun hakeminen epäonnistui:", error);

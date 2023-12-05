@@ -136,5 +136,16 @@ router.post("/favourite/:account_id", upload.none(), async (req, res) =>{
         console.error("Error executin query:", error)
     }
 });
+
+
+router.get("/favourite/:account_id", upload.none(), async (req, res) =>{
+    try{
+        const account_id = req.params.account_id;
+        const result = await getFavourites(account_id)
+        res.json(result.rows);
+    } catch(error) { 
+        console.error("Error executin query:", error)
+    }
+});
   
 module.exports = router;
