@@ -22,7 +22,7 @@ function App() {
           <Route path="Profile/:username" element={<Profile />} />
           <Route path="Register" element={<Register />} />
           <Route path="Groups" element={<Groups />} />
-          <Route path="Groups/:community_id" element={<Group />} />
+          <Route path="Groups/:groupId" element={<Group />} />
         </Route>
       </Routes>
     </BrowserRouter>

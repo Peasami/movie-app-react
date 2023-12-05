@@ -5,9 +5,12 @@ import { useEffect, useState } from "react";
 import { effect, signal } from "@preact/signals-core";
 
 function Group(){
+    let { groupId } = useParams();
+    console.log(groupId);
+
     return(
         <div>
-            <h1>Group view</h1>
+            <h1>Group view: {groupId}</h1>
         </div>
     )
 }
