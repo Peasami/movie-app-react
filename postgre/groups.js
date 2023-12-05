@@ -19,12 +19,7 @@ const sql = {
   GROUP_JOIN_REQEUST: "INSERT INTO request (account_id, community_id VALUES ($1, $2)",
   //DELETE_JOIN_REQUEST: "DELETE from request WHERE account_id = $1",
   CHECK_ADMIN: "SELECT * FROM community WHERE admin_id = $1",
-  GET_USERS_GROUPS: "SELECT community.* FROM community join account_community ON community.community_id = account_community.community_id WHERE account_community.account_id  =$1"
-
-
-
-
-   
+  GET_USERS_GROUPS: "SELECT community_name, community_desc FROM community join account_community ON community.community_id = account_community.community_id WHERE account_community.account_id  =$1"
 };
 
 //Hakee kaikki ryhmät
@@ -134,7 +129,7 @@ const determineIfAdminLogic = async (account_id) => {
     const result = await pgPool.query(sql.CHECK_ADMIN, [account_id]);
     const isAdmin = result.rows.length > 0;
   const communityIds = isAdmin ? result.rows.map(row => row.community_id) : [];
-  console.log("käyttäjälle löydettiin groupit jossa se on admin =" +communityIds);
+  console.log("käyttäjälle löydettiin ryhmät jossa se on admin = " +communityIds);
 
   return { isAdmin, communityIds };
 };
