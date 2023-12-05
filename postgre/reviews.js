@@ -4,7 +4,7 @@ const sql = {
     GET_REVIEWS: "SELECT * FROM review",
     GET_REVIEW: "SELECT * FROM review WHERE account_id = $1",
     POST_REVIEW: "INSERT INTO review (account_id, text, movie_id, rating) VALUES  ($1, $2, $3, $4)",
-    DELETE_REVIEW: "DELETE from  review WHERE account_id = $1"
+    DELETE_REVIEW: "DELETE from review WHERE account_id = $1"
   };
     //Hakee kaikki arvostelut
   //getReviews();

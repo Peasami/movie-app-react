@@ -7,7 +7,7 @@ const Navigation = () => {
       <nav>
         <a href="/">Movie App</a>
         <Search />
-        <Link to="/register" className="signup-link">SignUp</Link>
+        <Link to="/login" className="login-link">Log in</Link>
       </nav>
       <Outlet />
     </>

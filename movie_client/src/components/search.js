@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../stylesheets/search-results.css";
 import "../stylesheets/navigation.css";
 
@@ -6,6 +8,8 @@ const Search = () => {
   // State to manage the search query and search results
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+
+	const navigate = useNavigate();
 
   useEffect(() => {
     // Function to fetch search results when the query changes
@@ -25,16 +29,14 @@ const Search = () => {
           Authorization: "Bearer " + API_KEY,
         },
       };
-
-      try {
-        // API request and update the search results state
-        const response = await fetch(searchEndpoint, options);
-        const data = await response.json();
-        setSearchResults(data.results);
-      } catch (error) {
-        console.error("Error fetching search results:", error);
-      }
-    };
+    try {
+      // // tmdb request and update the search results state
+      const response = await axios.get(searchEndpoint, options);
+      setSearchResults(response.data.results);
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+    }
+  };
     // Call the fetchSearchResults function when the query changes
     fetchSearchResults();
   }, [query]);
@@ -43,7 +45,17 @@ const Search = () => {
     const inputValue = event.target.value;
     setQuery(inputValue);
   };
+  const createReview = (mediaId) => {
+    setQuery("");
+    navigate(`/reviews?mediaId=${mediaId}`);
 
+    const createReviewElement = document.getElementById("createReviewView");
+    console.log(createReviewElement);
+    if (createReviewElement) {
+      createReviewElement.classList.remove("hidden");
+    }
+  };
+  
   return (
     <div>
       <input
@@ -71,14 +83,12 @@ const Search = () => {
                     <div className="search-result-content">
                       <b>{result.title || result.name}</b>
                       <p>{result.overview}</p>
-
-                      
-                      {window.location.pathname === '/reviews' && (
-                          <button>+ Create a review</button>
-                      )}
-
                     </div>
                   </a>
+									{window.location.pathname === "/reviews" &&
+                    result.media_type === "movie" && (
+                      <button id="createReview" onClick={() => createReview(result.id)}>Add a review</button>										
+                    )}
                 </li>
               ))}
           </ul>
