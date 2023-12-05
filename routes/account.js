@@ -8,7 +8,7 @@ const { auth } = require('../Auth/auth');
 const { createToken } = require('../Auth/auth');
 
 const {getFavourites, addFavourite,deleteFavourite} = require ('../postgre/favourite');
-const {register,checkLogin, deleteAccount,getUserId, getUsername} = require('../postgre/account');
+const {register,checkLogin, deleteAccount,getUserId, Userpage, getUsername} = require('../postgre/account');
 const { getCommunityAdmin } = require('../postgre/groups');
 
 router.post("/register", upload.none(), async (req,res) =>{
@@ -18,10 +18,9 @@ router.post("/register", upload.none(), async (req,res) =>{
     pw = await bcrypt.hash(pw,10);
     try {
         await register(username,pw);
-        res.end();
+        res.status(200).json({message: "Register successful"});
     } catch(error){
-        console.log("Virhe operaatiossa")
-        
+        res.status(403).json({ error: "Register error" });
     }
 });
 
@@ -91,19 +90,20 @@ router.delete("/Delete/:account_id", async (req, res) => {
     try {
         const account_id = req.params.account_id;
         
-        const result = await deleteAccount(account_id);
+        await deleteAccount(account_id);
+        res.status(200).json({ message: "Delete successful" });
 
-        // Check if result is null or undefined
-        if (result === null || result === undefined) {
-            res.status(404).json({ error: "Account not found" });
-        } else {
-            // Check if deletion was successful
-            if (result.rows && result.rows.length > 0) {
-                res.json({ message: "Delete successful" });
-            } else {
-                res.status(404).json({ error: "Account not found" });
-            }
-        }
+        // // Check if result is null or undefined
+        // if (result === null || result === undefined) {
+        //     res.status(404).json({ error: "Account not found" });
+        // } else {
+        //     // Check if deletion was successful
+        //     if (result.rows && result.rows.length > 0) {
+        //         res.status(200).json({ message: "Delete successful" });
+        //     } else {
+        //         res.status(404).json({ error: "Account not found" });
+        //     }
+        // }
     } catch (error) {
         console.error("Error executing query:", error);
         res.status(500).json({ error: "Internal Server Error" });
@@ -112,14 +112,38 @@ router.delete("/Delete/:account_id", async (req, res) => {
 
 
 
-router.get("/favourite/:account_id", upload.none(), async (req,res) =>{
+router.get("/:account_id", upload.none(), async (req,res) =>{
     try {
         const account_id = req.params.account_id;
-        const result = await getFavourites(account_id);
-        res.json(result.rows);
+        const result = await Userpage(account_id);
+        
+        
+        res.json(result);
     } catch (error) {
         console.error("Error executing query:", error);
         
+    }
+});
+
+router.post("/favourite/:account_id", upload.none(), async (req, res) =>{
+    try{
+        const account_id = req.params.account_id;
+        const movie_id = req.body.movie_id;
+        const result = await addFavourite(movie_id,account_id);
+        res.json(result.rows);
+    } catch(error) { 
+        console.error("Error executin query:", error)
+    }
+});
+
+
+router.get("/favourite/:account_id", upload.none(), async (req, res) =>{
+    try{
+        const account_id = req.params.account_id;
+        const result = await getFavourites(account_id)
+        res.json(result.rows);
+    } catch(error) { 
+        console.error("Error executin query:", error)
     }
 });
 
@@ -132,17 +156,6 @@ router.get("/getUsername/:account_id", upload.none(), async (req,res) =>{
     } catch (error) {
         console.error("Error executing query:", error);
             
-    }
-});
-
-router.post("/favourite/:account_id", upload.none(), async (req, res) =>{
-    try{
-        const account_id = req.params.account_id;
-        const movie_id = req.body.movie_id;
-        const result = await addFavourite(movie_id,account_id);
-        res.json(result.rows);
-    } catch(error) { 
-        console.error("Error executin query:", error)
     }
 });
   

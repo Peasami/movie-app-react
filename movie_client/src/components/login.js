@@ -6,6 +6,7 @@ function Login() {
   return (
     <div>
       <LoginForm />
+      {jwtToken.value.length === 0 ? <h1>Log in</h1> : <h1>Logged in as {userInfo.value ? JSON.stringify(userInfo.value.username) : ""}</h1>}
     </div>
   );
 }
