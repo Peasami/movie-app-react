@@ -19,7 +19,7 @@ router.get("/getReviews", upload.none(), async (req,res) =>{
     }
 });
     //osoite, jossa tehdään post komento, jossa ajetaan functio postReview
-router.post("/Review/:account_id", upload.none(), async (req,res) =>{
+router.post("/Review/:account_id", upload.none(),  async (req,res) =>{
         const account_id = req.params.account_id;
         const text = req.body.text
         const movie_id = req.body.movie_id
@@ -40,7 +40,7 @@ router.get("/Review/:account_id", async (req, res) => {
         res.json(result.rows);
     } catch (error) {
         console.error("Error executing query:", error);
-        res.status(500).json({ error: "Internal Server Error" }); // You can customize the error response as needed
+        res.status(500).json({ error: "Internal Server Error" });
     }
 });
 module.exports = router;

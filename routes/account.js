@@ -8,7 +8,7 @@ const { auth } = require('../Auth/auth');
 const { createToken } = require('../Auth/auth');
 
 const {getFavourites, addFavourite,deleteFavourite} = require ('../postgre/favourite');
-const {register,checkLogin, deleteAccount,getUserId,} = require('../postgre/account');
+const {register,checkLogin, deleteAccount,getUserId, Userpage,} = require('../postgre/account');
 const { getCommunityAdmin } = require('../postgre/groups');
 
 
@@ -113,11 +113,13 @@ router.delete("/Delete/:account_id", async (req, res) => {
 
 
 
-router.get("/favourite/:account_id", upload.none(), async (req,res) =>{
+router.get("/:account_id", upload.none(), async (req,res) =>{
     try {
         const account_id = req.params.account_id;
-        const result = await getFavourites(account_id);
-        res.json(result.rows);
+        const result = await Userpage(account_id);
+        
+        
+        res.json(result);
     } catch (error) {
         console.error("Error executing query:", error);
         
@@ -129,6 +131,17 @@ router.post("/favourite/:account_id", upload.none(), async (req, res) =>{
         const account_id = req.params.account_id;
         const movie_id = req.body.movie_id;
         const result = await addFavourite(movie_id,account_id);
+        res.json(result.rows);
+    } catch(error) { 
+        console.error("Error executin query:", error)
+    }
+});
+
+
+router.get("/favourite/:account_id", upload.none(), async (req, res) =>{
+    try{
+        const account_id = req.params.account_id;
+        const result = await getFavourites(account_id)
         res.json(result.rows);
     } catch(error) { 
         console.error("Error executin query:", error)
