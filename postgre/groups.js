@@ -9,7 +9,7 @@ const sql = {
   ADD_REQUEST: "INSERT INTO account_community(account_id, community_id, pending) VALUES ($1, $2, true)", // välitaulu, pending=true
 
   ACCEPT_REQUEST: "UPDATE account_community SET pending = false WHERE account_community_id = $1",
-  REJECT_REQUEST: "DELETE FROM account_community WHERE account_community_id = $1",
+  REJECT_REQUEST: "DELETE FROM account_community WHERE pending = true AND account_community_id = $1",
   GROUP_JOIN_REQEUST: "INSERT INTO request (account_id, community_id) VALUES ($1, $2)", // deprecated
   DELETE_JOIN_REQUEST: "DELETE from request WHERE account_id = $1", // deprecated
   REMOVE_USER: "DELETE FROM account_community WHERE account_id = $1",
