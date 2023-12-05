@@ -80,7 +80,7 @@ router.put("/acceptRequest/:requestId", async (req,res) => {
 });
 
 // reject request by deleting it from database
-router.delete("/rejectRequest/:requestId", async (req,res) => {
+router.delete("/rejectRequest/:requestId", auth, async (req,res) => {
     try {
         const result = await rejectRequest(req.params.requestId);
         res.status(200).json(result);

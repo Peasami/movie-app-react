@@ -139,6 +139,8 @@ function CreateGroupForm() {
 */
 function ShowRequestsForm(){
 
+  
+
   const [requests, setRequests] = useState([""]);
 
   function GetRequests(){
@@ -146,7 +148,6 @@ function ShowRequestsForm(){
       console.log("userInfo is null")
       return;
     }
-
     const config = {
       headers: { Authorization: 'Bearer ' + jwtToken.value }
     }
@@ -166,12 +167,30 @@ function ShowRequestsForm(){
   function RequestForm(props){
     return(
       <div style={{border: "solid", borderColor: "pink"}}>
-        <h1>{props.username + "  " + props.community_name}</h1>
-        <button>Accept request</button>
-        <button>Decline request</button>
+        <h1>{props.username + "  " + props.community_name + "  " + props.account_community_id}</h1>
+        <button onClick={() => acceptRequest(props.account_community_id)}>Accept request</button>
+        <button onClick={() => rejectRequest(props.account_community_id)}>Decline request</button>
       </div>
     );
+  }
+  const config = {
+    headers: { Authorization: 'Bearer ' + jwtToken.value }
+  }
 
+  function acceptRequest(requestId){
+    console.log("config: " + JSON.stringify(config));
+    axios.put('http://localhost:3001/groups/acceptRequest/' + requestId)
+      .then(res => console.log(res.data))
+      .then(() => console.log("request accepted"))
+      .then(() => GetRequests())
+      .catch(err => console.log(err.response));
+  }
+  function rejectRequest(requestId){
+    axios.delete('http://localhost:3001/groups/rejectRequest/' + requestId, config)
+      .then(res => console.log(res.data))
+      .then(() => console.log("request rejected"))
+      .then(() => GetRequests())
+      .catch(err => console.log(err.response));
   }
 
   useEffect(() => {
