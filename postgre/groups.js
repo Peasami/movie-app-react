@@ -8,7 +8,8 @@ const sql = {
   ADD_USER: "INSERT INTO account_community(account_id, community_id, pending) VALUES ($1, $2, false)", // välitaulu, pending=false
   ADD_REQUEST: "INSERT INTO account_community(account_id, community_id, pending) VALUES ($1, $2, true)", // välitaulu, pending=true
 
-  ACCEPT_REQUEST: "UPDATE account_community SET pending = false WHERE account_id = $1 AND community_id = $2",
+  ACCEPT_REQUEST: "UPDATE account_community SET pending = false WHERE account_community_id = $1",
+  REJECT_REQUEST: "DELETE FROM account_community WHERE account_community_id = $1",
   GROUP_JOIN_REQEUST: "INSERT INTO request (account_id, community_id) VALUES ($1, $2)", // deprecated
   DELETE_JOIN_REQUEST: "DELETE from request WHERE account_id = $1", // deprecated
   REMOVE_USER: "DELETE FROM account_community WHERE account_id = $1",
@@ -131,4 +132,13 @@ async function getYourGroups(admin_id){
     return result.rows;
 }
 
-module.exports= {getGroups,CreateGroup,determineIfAdminLogic,getGroupUsers, removeUser,joinRequest, deleteGroup, removeGroupUsers, addUser, getRequests, getYourGroups};
+async function acceptRequest(account_community_id){
+    await pgPool.query(sql.ACCEPT_REQUEST, [account_community_id]);
+}
+
+async function rejectRequest(account_community_id){
+    await pgPool.query(sql.REJECT_REQUEST, [account_community_id]);
+}
+
+
+module.exports= {getGroups,CreateGroup,determineIfAdminLogic,getGroupUsers, removeUser,joinRequest, deleteGroup, removeGroupUsers, addUser, getRequests, getYourGroups, acceptRequest, rejectRequest};

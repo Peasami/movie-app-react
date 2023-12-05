@@ -132,6 +132,8 @@ function CreateGroupForm() {
 
 
 
+
+
 /*
 // Show group requests for admin
 */
@@ -161,6 +163,17 @@ function ShowRequestsForm(){
     }
   }
 
+  function RequestForm(props){
+    return(
+      <div style={{border: "solid", borderColor: "pink"}}>
+        <h1>{props.username + "  " + props.community_name}</h1>
+        <button>Accept request</button>
+        <button>Decline request</button>
+      </div>
+    );
+
+  }
+
   useEffect(() => {
     GetRequests();
   }, []);
@@ -168,13 +181,18 @@ function ShowRequestsForm(){
   return(
     <div style={{border: "solid"}}>
       <h1>Requests</h1>
-      {requests.map(request => <h1>{request.username + "  " + request.community_name}</h1>)}
+      {requests.map(request => RequestForm(request))}
     </div>
   )
 
 }
 
 
+
+
+/*
+// Show groups where the user is admin
+*/
 function YourGroupsForm(){
 
   const [groups, setGroups] = useState([""]);
