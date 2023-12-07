@@ -38,7 +38,7 @@ function ShowGroupsForm() {
   // create form for a group
   function groupForm(props) {
     return (
-      <div key={props.community_id} style={{ width: "300px", height: "150px", border: "solid" }}>
+      <div key={props.community_id} style={{ width: "300px", height: "150px", border: "solid", margin: "12px"}}>
         <h1>{props.community_name}</h1>
         <h3>{props.community_desc}</h3>
         {jwtToken.value.length === 0 ? <h1>Log in to join group</h1> : <JoinGroupButton groupId={props.community_id}/>}
@@ -166,7 +166,7 @@ function ShowRequestsForm(){
   // create form for a single request
   function RequestForm(props){
     return(
-      <div style={{border: "solid", borderColor: "pink"}}>
+      <div style={{border: "solid", borderColor: "pink", margin: "12px"}}>
         <h1>{props.username + "  " + props.community_name + "  " + props.account_community_id}</h1>
         <button onClick={() => acceptRequest(props.account_community_id)}>Accept request</button>
         <button onClick={() => rejectRequest(props.account_community_id)}>Decline request</button>
@@ -202,7 +202,7 @@ function ShowRequestsForm(){
   }, []);
 
   return(
-    <div style={{border: "solid"}}>
+    <div style={{border: "solid", margin: "12px"}}>
       <h1>Requests</h1>
       {requests.map(request => RequestForm(request))}
     </div>
@@ -249,7 +249,7 @@ function YourGroupsForm(){
 
   function GroupForm(props){
     return(
-      <div style={{border: "solid"}}>
+      <div style={{border: "solid", margin: "20px"}}>
         <h1>{props.community_name}</h1>
         {
           props.pending ? <h2>PENDING</h2> : 
