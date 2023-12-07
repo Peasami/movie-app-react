@@ -139,10 +139,9 @@ function CreateGroupForm() {
 */
 function ShowRequestsForm(){
 
-  
-
   const [requests, setRequests] = useState([""]);
 
+  // get requests from database from groups where the user is admin
   function GetRequests(){
     if (userInfo.value === null) {
       console.log("userInfo is null")
@@ -164,6 +163,7 @@ function ShowRequestsForm(){
     }
   }
 
+  // create form for a single request
   function RequestForm(props){
     return(
       <div style={{border: "solid", borderColor: "pink"}}>
@@ -177,6 +177,7 @@ function ShowRequestsForm(){
     headers: { Authorization: 'Bearer ' + jwtToken.value }
   }
 
+  // change pending status to false in table account_community
   function acceptRequest(requestId){
     console.log("config: " + JSON.stringify(config));
     axios.put('http://localhost:3001/groups/acceptRequest/' + requestId)
@@ -185,6 +186,8 @@ function ShowRequestsForm(){
       .then(() => GetRequests())
       .catch(err => console.log(err.response));
   }
+
+  // delete table account_community from database
   function rejectRequest(requestId){
     axios.delete('http://localhost:3001/groups/rejectRequest/' + requestId, config)
       .then(res => console.log(res.data))
@@ -193,6 +196,7 @@ function ShowRequestsForm(){
       .catch(err => console.log(err.response));
   }
 
+  // get requests when component is rendered
   useEffect(() => {
     GetRequests();
   }, []);
@@ -210,7 +214,7 @@ function ShowRequestsForm(){
 
 
 /*
-// Show groups where the user is admin
+// Show groups where the user is member or admin
 */
 function YourGroupsForm(){
 
@@ -227,13 +231,14 @@ function YourGroupsForm(){
     }
 
     if(typeof userInfo.value.userId !== "undefined"){
-      axios.get('http://localhost:3001/groups/getYourGroups/' + JSON.stringify(userInfo.value.userId))
+      axios.get('http://localhost:3001/groups/getUsersGroup/' + JSON.stringify(userInfo.value.userId))
         .then(res => {
-          setGroups(res.data)
+          setGroups(res.data.rows);
+          console.log("groups: " + JSON.stringify(res.data))
         })
         .catch(err => console.log(err.response));
     }else{
-      console.log("userInfo has no values")
+      console.log("userInfo has no value")
       setTimeout(GetGroups, 250);
     }
   }
@@ -242,10 +247,19 @@ function YourGroupsForm(){
     GetGroups();
   }, []);
 
+  function GroupForm(props){
+    return(
+      <div style={{border: "solid"}}>
+        <h1>{props.community_name}</h1>
+        {props.admin_id===userInfo.value.userId ? <h2>ADMIN</h2> : <h2>MEMBER</h2>}
+      </div>
+    )
+  }
+
   return(
     <div style={{border: "solid"}}>
       <h1>Your Groups</h1>
-      {groups.map(group => <h1>{group.community_name}</h1>)}
+      {groups.map(group => <h1>{GroupForm(group)}</h1>)}
     </div>
   )
 }

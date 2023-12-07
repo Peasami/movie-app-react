@@ -12,12 +12,9 @@ const sql = {
   SELECT_ADMIN: "SELECT account.username FROM account JOIN account_community ON account.account_id = account_community.account_id JOIN community ON account_community.community_id = community.community_id WHERE community.community_id = $1 AND account.account_id = community.admin_id",
   ACCEPT_REQUEST: "UPDATE account_community SET pending = false WHERE account_community_id = $1",
   REJECT_REQUEST: "DELETE FROM account_community WHERE pending = true AND account_community_id = $1",
-  GROUP_JOIN_REQEUST: "INSERT INTO request (account_id, community_id) VALUES ($1, $2)", // deprecated
-  DELETE_JOIN_REQUEST: "DELETE from request WHERE account_id = $1", // deprecated
   REMOVE_USER: "DELETE FROM account_community WHERE account_id = $1",
   REMOVE_USERS: "DELETE FROM account_community WHERE community_id = $1",
   DELETE_GROUP: "DELETE FROM community WHERE admin_id = $1 AND community_id =$2",
-  GROUP_JOIN_REQEUST: "INSERT INTO request (account_id, community_id VALUES ($1, $2)",
   //DELETE_JOIN_REQUEST: "DELETE from request WHERE account_id = $1",
   CHECK_ADMIN: "SELECT * FROM community WHERE admin_id = $1",
 
@@ -28,7 +25,7 @@ const sql = {
     JOIN community ON account_community.community_id = community.community_id\
     WHERE community.admin_id = $1 AND account_community.pending = true",
   GET_YOUR_GROUPS: "SELECT * FROM community WHERE admin_id = $1",
-  GET_USERS_GROUPS: "SELECT community_name, community_desc FROM community join account_community ON community.community_id = account_community.community_id WHERE account_community.account_id  =$1"
+  GET_USERS_GROUPS: "SELECT community_name, community_desc, admin_id FROM community join account_community ON community.community_id = account_community.community_id WHERE account_community.account_id  =$1"
 };
 
 //Hakee kaikki ryhmät

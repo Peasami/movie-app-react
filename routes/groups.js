@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { createToken, auth } = require('../Auth/auth');
 
-const {getGroups,CreateGroup,getGroupUsers, joinRequest,getAdmin, getGroup, getRequests, getYourGroups, acceptRequest, rejectRequest} = require('../postgre/groups');
+const {getGroups,CreateGroup,getGroupUsers, joinRequest,getAdmin, getGroup, getRequests, getYourGroups, acceptRequest, rejectRequest, getUsersGroup} = require('../postgre/groups');
 const { getNews } = require('../postgre/news');
 
 router.get("/getGroups", upload.none(), async (req,res) =>{
@@ -107,6 +107,15 @@ router.delete("/rejectRequest/:requestId", auth, async (req,res) => {
         res.status(200).json(result);
     } catch (error) {
         res.status(500).json({error: error});
+    }
+});
+
+router.get("/getUsersGroup/:account_id", async (req,res) =>{
+    try {
+        const result = await getUsersGroup(req.params.account_id);
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(500).json({error: error, message: "Error getting users group"});
     }
 });
 
