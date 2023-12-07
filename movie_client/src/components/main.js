@@ -1,9 +1,10 @@
 import { Link, Outlet } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 import "../stylesheets/trending-window.css";
 import "../stylesheets/navigation.css";
-
+import Reviews from './reviews.js';
 // Main component rendering Trending, Reviews, and Groups components
 function Main() {
   return (
@@ -41,21 +42,17 @@ function Trending() {
 
   useEffect(() => {
     const fetchData = async () => {
-      // Fetch trending movies from TMDB API
-      const options = {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-          Authorization: "Bearer " + API_KEY,
-        },
-      };
       try {
-        const response = await fetch(
+        const response = await axios.get(
           "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",
-          options
+          {
+            headers: {
+              accept: "application/json",
+              Authorization: "Bearer " + API_KEY,
+            },
+          }
         );
-        const data = await response.json();
-        setTrendingMovies(data.results);
+        setTrendingMovies(response.data.results);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -66,34 +63,33 @@ function Trending() {
     <>
       <div>
         <h1>Trending Movies</h1>
-        <div className="flex-container">
+        <div id="arrow-container">
+            <span className="arrowRight" onClick={() => scroll(800)}>
+              <span></span>
+              <span></span>
+            </span>
+            <span className="arrowLeft" onClick={() => scroll(-800)}>
+              <span></span>
+              <span></span>
+            </span>
+          </div>
+        <div className="flex-container" id="trending-container">
           {trendingMovies.map((movie) => (
-            <TrendingObj movie={movie} />
+            <TrendingObj movie={movie} key={movie.id} />
           ))}
         </div>
       </div>
     </>
   );
-}
+ 
+  function scroll(i) {
+    const trendingContainer = document.getElementById("trending-container");
+    if (trendingContainer) {
+      trendingContainer.style.transition = "all 2s";
+      trendingContainer.scrollLeft += i;
 
-function Reviews() {
-  return (
-    <div>
-      <h1>
-        <Link to="/reviews" style={{ textDecoration: "none" }}>
-          Reviews
-        </Link>
-      </h1>
-      <div
-        style={{
-          width: "300px",
-          height: "250px",
-          border: "solid",
-          display: "flex",
-        }}
-      ></div>
-    </div>
-  );
+    }
+  }
 }
 
 function Groups() {

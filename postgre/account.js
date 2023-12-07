@@ -1,18 +1,16 @@
 const pgPool = require("./connection");
-const {deleteFavourite, getFavourites} = require("./favourite");
-const {deleteReview, getReview} = require("./reviews")
-const {removeUser,getUsersGroup,deleteJoinRequest,deleteGroup,removeGroupUsers, getCommunityAdmin,determineIfAdminLogic} = require("./groups")
-const{deleteNews,groupDeleteNews, getNews,getNewsUserPage} = require("./news")
-
+const {deleteFavourite} = require("./favourite");
+const {deleteReview} = require("./reviews")
+const {removeUser,deleteJoinRequest} = require("./groups")
+const{deleteNews} = require("./news")
 
 const sql = {
   REGISTER_USER: 'INSERT INTO account (username, pw) VALUES ($1, $2)',
   GET_PW: 'SELECT pw FROM account WHERE username=$1',
   GET_USER_ID: 'SELECT account_id FROM account WHERE username=$1',
   DELETE_USER:"DELETE FROM account WHERE account_id = $1",
-  
+  GET_USERNAME: "SELECT username FROM account WHERE account_id = $1"
   //REMOVE_ACCOUNTS_FROM_COMMUNITY: "SELECT * FROM community JOIN account ON community.admin_id = account.account_id WHERE account.account_id =$1 "
-
 };
 
 
@@ -65,7 +63,7 @@ async function deleteAccount(account_id) {
 
 
 //deleteAccount(31);
-// Returns account_id of username
+// Returns account_id of username 
 async function getUserId(username){
   const result = await pgPool.query(sql.GET_USER_ID, [username]);
 
@@ -95,4 +93,11 @@ async function Userpage(account_id) {
 }
 
 
-module.exports={register, checkLogin, deleteAccount, getUserId, Userpage,};
+// Gets username by id
+async function getUsername(account_id){
+  const result = await pgPool.query(sql.GET_USERNAME, [account_id]);
+  const rows = result.rows;
+  return result;
+}
+
+module.exports={register, checkLogin, deleteAccount, getUserId, Userpage, getUsername};
