@@ -1,8 +1,8 @@
 const pgPool = require("./connection");
-const {deleteFavourite} = require("./favourite");
-const {deleteReview} = require("./reviews")
-const {removeUser,deleteJoinRequest} = require("./groups")
-const{deleteNews} = require("./news")
+const {deleteFavourite, getFavourites} = require("./favourite");
+const {deleteReview,getReview} = require("./reviews")
+const {removeUser,deleteJoinRequest,getUsersGroup} = require("./groups")
+const{deleteNews, getNewsUserPage} = require("./news")
 
 const sql = {
   REGISTER_USER: 'INSERT INTO account (username, pw) VALUES ($1, $2)',

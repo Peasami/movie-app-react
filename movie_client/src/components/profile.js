@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { jwtToken, userInfo } from "./signals";
 //import "../stylesheets/profile.css";
 
+
 function Profile() {
   const { username } = useParams();
   const [Udata, setData] = useState([]);
@@ -19,7 +20,7 @@ function Profile() {
           console.log ("token = ", jwtToken.value);
 
           const account_id = userInfo.value.userId;
-
+          
           
           
 
@@ -54,7 +55,7 @@ function Profile() {
       </div>
     );
   }
-
+  
   return (
     <div>
       <h1>Profile for {username}</h1>
@@ -70,7 +71,7 @@ function Profile() {
 function ShowUserData({ userDATA }) {
   return (
     <div>
-      <h2>User Data</h2>
+      
       
       {/* Ryhmät */}
       <div>
@@ -82,29 +83,21 @@ function ShowUserData({ userDATA }) {
           </div>  
         ))}
       </div>
-
+     
       {/* Lempi elokuvat */}
       <div>
         <h3>Favourites</h3>
         {userDATA.favourites && userDATA.favourites.map((favourite) => (
           <div key={favourite.favourite_id}>
-            <p>Favourite ID: {favourite.favourite_id}</p>
+            
             <p>Movie ID: {favourite.movie_id}</p>
-            <p>Account ID: {favourite.account_id}</p>
+           
           </div>
         ))}
       </div>
 
-      {/*Uutiset */}
-      <div>
-        <h3>News</h3>
-        {userDATA.news && userDATA.news.map((news) => (
-          <div key={news.news_url}>
-            <p>News URL: {news.news_url}</p>
-          </div>
-        ))}
-      </div>
-
+      
+        
       {/* arvostelut */}
       <div>
         <h3>Reviews</h3>

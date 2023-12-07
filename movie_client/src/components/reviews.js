@@ -55,6 +55,7 @@ const Reviews = () => {
       fetchData(mediaId);
     }
   }, [mediaId]);
+  
 
 
   //post reviews
