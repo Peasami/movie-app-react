@@ -11,8 +11,8 @@ function Groups() {
     <div>
       <h1>groups view</h1>
       {jwtToken.value.length === 0 ? <h1>Log in to create group</h1> : <CreateGroupForm />}
-      <ShowRequestsForm />
-      <YourGroupsForm />
+      {jwtToken.value.length === 0 ?<h1></h1> : <ShowRequestsForm />}
+      {jwtToken.value.length === 0 ?<h1></h1> : <YourGroupsForm />}
       <ShowGroupsForm />
       <button onClick={() => console.log('userinfo: ' + JSON.stringify(userInfo.value))}>userinfo</button>
     </div>
@@ -251,7 +251,10 @@ function YourGroupsForm(){
     return(
       <div style={{border: "solid"}}>
         <h1>{props.community_name}</h1>
-        {props.admin_id===userInfo.value.userId ? <h2>ADMIN</h2> : <h2>MEMBER</h2>}
+        {
+          props.pending ? <h2>PENDING</h2> : 
+          props.admin_id===userInfo.value.userId ? <h2>ADMIN</h2> : <h2>MEMBER</h2>
+        }
       </div>
     )
   }
