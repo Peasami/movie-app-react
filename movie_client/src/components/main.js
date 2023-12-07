@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import "../stylesheets/trending-window.css";
 import "../stylesheets/navigation.css";
 
+
 // Main component rendering Trending, Reviews, and Groups components
 function Main() {
   return (

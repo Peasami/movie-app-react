@@ -1,0 +1,37 @@
+/* styles.css */
+
+/* Overall container styles */
+div {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Header styles */
+  h2 {
+    color: #333;
+  }
+  
+  /* Section styles */
+  h3 {
+    margin-top: 10px;
+    color: #555;
+  }
+  
+  /* Individual item styles */
+  div > div {
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  /* Item property styles */
+  p {
+    margin: 5px 0;
+    color: #777;
+  }
+  
+  /* Add more specific styles as needed */
+  
