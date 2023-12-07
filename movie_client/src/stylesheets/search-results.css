@@ -68,3 +68,12 @@ a {
 .search-result-content {
     width: 100%;
 }
+
+#createReview {
+    width: auto;
+    height: auto;
+    max-height: 40px;
+    border-radius: 16px;
+    background-color: transparent;
+
+}

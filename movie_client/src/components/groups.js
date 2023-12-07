@@ -1,7 +1,8 @@
 import { useParams } from "react-router-dom";
 import { jwtToken, userInfo } from "./signals";
-import axios from "axios";
+import axios, { all } from "axios";
 import { useEffect, useState } from "react";
+import { effect, signal } from "@preact/signals-core";
 
 function Groups() {
 
@@ -11,7 +12,9 @@ function Groups() {
       <h1>groups view</h1>  
       {jwtToken.value.length === 0 ? <h1>Log in to create group</h1> : <CreateGroupForm />}
       <ShowRequestsForm />
+      <YourGroupsForm />
       <ShowGroupsForm />
+      <button onClick={() => console.log('userinfo: ' + JSON.stringify(userInfo.value))}>userinfo</button>
     </div>
   );
 
@@ -127,16 +130,126 @@ function CreateGroupForm() {
   )
 }
 
+
+
+
+
 /*
 // Show group requests for admin
 */
 function ShowRequestsForm(){
+
+  
+
+  const [requests, setRequests] = useState([""]);
+
+  function GetRequests(){
+    if (userInfo.value === null) {
+      console.log("userInfo is null")
+      return;
+    }
+    const config = {
+      headers: { Authorization: 'Bearer ' + jwtToken.value }
+    }
+
+    if(typeof userInfo.value.userId !== "undefined"){
+      axios.get('http://localhost:3001/groups/getRequests/' + JSON.stringify(userInfo.value.userId), config)
+        .then(res => {
+          setRequests(res.data)
+        })
+        .catch(err => console.log(err.response));
+    }else{
+      console.log("userInfo has no value")
+      setTimeout(GetRequests, 250);
+    }
+  }
+
+  function RequestForm(props){
+    return(
+      <div style={{border: "solid", borderColor: "pink"}}>
+        <h1>{props.username + "  " + props.community_name + "  " + props.account_community_id}</h1>
+        <button onClick={() => acceptRequest(props.account_community_id)}>Accept request</button>
+        <button onClick={() => rejectRequest(props.account_community_id)}>Decline request</button>
+      </div>
+    );
+  }
+  const config = {
+    headers: { Authorization: 'Bearer ' + jwtToken.value }
+  }
+
+  function acceptRequest(requestId){
+    console.log("config: " + JSON.stringify(config));
+    axios.put('http://localhost:3001/groups/acceptRequest/' + requestId)
+      .then(res => console.log(res.data))
+      .then(() => console.log("request accepted"))
+      .then(() => GetRequests())
+      .catch(err => console.log(err.response));
+  }
+  function rejectRequest(requestId){
+    axios.delete('http://localhost:3001/groups/rejectRequest/' + requestId, config)
+      .then(res => console.log(res.data))
+      .then(() => console.log("request rejected"))
+      .then(() => GetRequests())
+      .catch(err => console.log(err.response));
+  }
+
+  useEffect(() => {
+    GetRequests();
+  }, []);
+
   return(
-    <div>
+    <div style={{border: "solid"}}>
       <h1>Requests</h1>
+      {requests.map(request => RequestForm(request))}
+    </div>
+  )
+
+}
+
+
+
+
+/*
+// Show groups where the user is admin
+*/
+function YourGroupsForm(){
+
+  const [groups, setGroups] = useState([""]);
+
+  function GetGroups(){
+    if (userInfo.value === null) {
+      console.log("userInfo is null")
+      return;
+    }
+
+    const config = {
+      headers: { Authorization: 'Bearer ' + jwtToken.value }
+    }
+
+    if(typeof userInfo.value.userId !== "undefined"){
+      axios.get('http://localhost:3001/groups/getYourGroups/' + JSON.stringify(userInfo.value.userId))
+        .then(res => {
+          setGroups(res.data)
+        })
+        .catch(err => console.log(err.response));
+    }else{
+      console.log("userInfo has no values")
+      setTimeout(GetGroups, 250);
+    }
+  }
+
+  useEffect(() => {
+    GetGroups();
+  }, []);
+
+  return(
+    <div style={{border: "solid"}}>
+      <h1>Your Groups</h1>
+      {groups.map(group => <h1>{group.community_name}</h1>)}
     </div>
   )
 }
+
 
 
 export default Groups;
