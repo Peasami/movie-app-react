@@ -1,118 +1,124 @@
-import { useParams, } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { jwtToken, userInfo } from "./signals";
-//import "../stylesheets/profile.css";
+import { userInfo, jwtToken } from "./signals"; 
 
-
-function Profile() {
-  const { username } = useParams();
-  const [Udata, setData] = useState([]);
-  
-  const [accessDeniedMessage, setAccessDeniedMessage] = useState(null);
-
+function UserProfile() {
+  const [userReviews, setUserReviews] = useState([]);
+  const [personalGroups, setPersonalGroups] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const GetUserData = async () => {
+    const fetchUserReviews = async () => {
       try {
-        if (jwtToken.value.length > 0 && userInfo.value.userId !== undefined) {
-          console.log("UserInfo = ", userInfo.value.userId);
-          console.log ("token = ", jwtToken.value);
+     
+       
+        if (userInfo.value && userInfo.value.userId) {
+          const accountId = userInfo.value.userId;
+          console.log(accountId);
+          console.log("tässä on token " +jwtToken);
+          const response = await axios.get(`http://localhost:3001/reviews/Review/${accountId}`);
 
-          const account_id = userInfo.value.userId;
-          
-          
-          
+          if (response.data) {
+            const movieIds = response.data.map((review) => review.movie_id);
+            const movieDetailsPromises = movieIds.map((movieId) => fetchMovieDetails(movieId));
+            const movieDetails = await Promise.all(movieDetailsPromises);
 
-          
-          if (username && userInfo.value.username !== username) {
-            
-            console.log("Access denied - Mismatch between username in URL and token");
-            // Redirect to an access denied page or handle it as needed
-            setAccessDeniedMessage("Access denied");
-          return;
+            const userReviewsWithDetails = response.data.map((review, index) => ({
+              ...review,
+              movieDetails: movieDetails[index],
+            }));
+
+            setUserReviews(userReviewsWithDetails);
+
+
            
           }
-
-          // Käy hakemassa käyttäjän datan
-          const response = await axios.get(`http://localhost:3001/account/${account_id}`);
-          setData(response.data);
         }
       } catch (error) {
-        console.error("API request error: ", error);
-        console.error("API response data: ", error.response.data);
-      } 
+        console.error("Error fetching user reviews:", error);
+      
+      }
     };
 
-    // Fetch user data on component mount
-    GetUserData();
-  }, [jwtToken.value, userInfo.value.userId, username,]);
+    const fetchPersonalGroups = async () => {
+      try {
+       
+        if (userInfo.value && userInfo.value.userId) {
+          const accountId = userInfo.value.userId;
+          const response = await axios.get(`http://localhost:3001/groups/getYourGroups/${accountId}`);
 
-  if (accessDeniedMessage) {
-    return (
-      <div>
-        <h1>{accessDeniedMessage}</h1>
-      </div>
-    );
-  }
-  
+          if (response.data) {
+            setPersonalGroups(response.data);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching personal groups:", error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserReviews();
+    fetchPersonalGroups();
+  }, []);
+  const fetchMovieDetails = async (movieId) => {
+    const API_KEY = process.env.REACT_APP_TMBD_API_KEY;
+    const tmdbEndpoint = `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`;
+
+    try {
+      const response = await axios.get(tmdbEndpoint, {
+        headers: {
+          accept: "application/json",
+          Authorization: "Bearer " + API_KEY,
+        },
+      });
+
+      if (response.status === 404) {
+        console.error("No data received from the API");
+        return null;
+      }
+
+      const movieDetails = response.data;
+      console.log("Fetched movie details:", movieDetails);
+
+      return movieDetails;
+    } catch (error) {
+      console.error("Error fetching movie details", error);
+      return null;
+    }
+  };
+ 
   return (
     <div>
-      <h1>Profile for {username}</h1>
-      
-        <ShowUserData userDATA={Udata} />
-      
-    </div>
-  );
-}
-
-
-
-function ShowUserData({ userDATA }) {
-  return (
-    <div>
-      
-      
-      {/* Ryhmät */}
-      <div>
-        <h3>Groups</h3>
-        {userDATA.Groups && userDATA.Groups.map((group) => (
-          <div key={group.community_name}>
-            <p>Name: {group.community_name}</p>
-            <p>Description: {group.community_desc}</p>
-          </div>  
-        ))}
-      </div>
-     
-      {/* Lempi elokuvat */}
-      <div>
-        <h3>Favourites</h3>
-        {userDATA.favourites && userDATA.favourites.map((favourite) => (
-          <div key={favourite.favourite_id}>
-            
-            <p>Movie ID: {favourite.movie_id}</p>
-           
-          </div>
-        ))}
-      </div>
-
-      
-        
-      {/* arvostelut */}
-      <div>
-        <h3>Reviews</h3>
-        {userDATA.Review && userDATA.Review.map((review) => (
-          <div key={review.review_id}>
-            <p>Review ID: {review.review_id}</p>
-            <p>Account ID: {review.account_id}</p>
-            <p>Text: {review.text}</p>
-            <p>Movie ID: {review.movie_id}</p>
+      <h1>User Profile</h1>
+      <h2>Reviews by {userInfo.value.username}</h2>
+      <ul>
+        {userReviews.map((review) => (
+          <li key={review.review_id}>
+            <h3>Review for {review.movieDetails ? review.movieDetails.title : "Movie Title not available"}</h3>
+            {review.movieDetails && (
+              <img
+                src={`https://image.tmdb.org/t/p/w500/${review.movieDetails.poster_path}`}
+                alt={`Poster for ${review.movieDetails.title || "Movie Title not available"}`}
+              />
+            )}
+            {/* arvostelu*/}
             <p>Rating: {review.rating}</p>
-          </div>
+            <p>Text: {review.text}</p>
+          </li>
         ))}
-      </div>
+      </ul>
+
+      {/* ryhmät */}
+      <h2>Personal Groups</h2>
+      <ul>
+        {personalGroups.map((group) => (
+          <li key={group.community_id}>
+            <h3>{group.community_name}</h3>
+            <p>{group.community_desc}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
-
-export default Profile;
+export default UserProfile;
