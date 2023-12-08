@@ -234,7 +234,6 @@ function YourGroupsForm(){
       axios.get('http://localhost:3001/groups/getUsersGroup/' + JSON.stringify(userInfo.value.userId))
         .then(res => {
           setGroups(res.data.rows);
-          console.log("groups: " + JSON.stringify(res.data))
         })
         .catch(err => console.log(err.response));
     }else{
@@ -265,7 +264,7 @@ function YourGroupsForm(){
   return(
     <div style={{border: "solid"}}>
       <h1>Your Groups</h1>
-      {groups.map(group => <h1>{GroupForm(group)}</h1>)}
+      {groups.map(group => <h1 key={group.community_id}>{GroupForm(group)}</h1>)}
     </div>
   )
 }

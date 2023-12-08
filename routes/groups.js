@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { createToken, auth } = require('../Auth/auth');
 
-const {getGroups,CreateGroup,getGroupUsers, joinRequest,getAdmin, getGroup, getRequests, getYourGroups, acceptRequest, rejectRequest, getUsersGroup} = require('../postgre/groups');
+const {getMembers, getGroups,CreateGroup,getGroupUsers, joinRequest,getAdmin, getGroup, getRequests, getYourGroups, acceptRequest, rejectRequest, getUsersGroup} = require('../postgre/groups');
 const { getNews } = require('../postgre/news');
 
 router.get("/getGroups", upload.none(), async (req,res) =>{
@@ -119,12 +119,21 @@ router.get("/getUsersGroup/:account_id", async (req,res) =>{
     }
 });
 
-router.get("/getGroupUsers/:community_id", async (req,res) =>{
+router.get("/getMembers/:community_id", async (req,res) =>{
     try {
-        const result = await getGroupUsers(req.params.community_id);
+        const result = await getMembers(req.params.community_id);
         res.status(200).json(result.rows);
     } catch (error) {
         res.status(500).json({error: error, message: "Error getting group's users"});
+    }
+});
+
+router.get("/getAdmin/:community_id", async (req,res) =>{
+    try {
+        const result = await getAdmin(req.params.community_id);
+        res.status(200).json(result.rows);
+    } catch (error) {
+        res.status(500).json({error: error, message: "Error getting group's admin"});
     }
 });
 
