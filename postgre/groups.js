@@ -9,7 +9,7 @@ const sql = {
   GET_GROUP_USERS: "SELECT account.username, account.account_id FROM account JOIN account_community ON account.account_id = account_community.account_id JOIN community ON account_community.community_id = community.community_id WHERE community.community_id = $1",
   ADD_USER: "INSERT INTO account_community(account_id, community_id, pending) VALUES ($1, $2, false)", // välitaulu, pending=false
   ADD_REQUEST: "INSERT INTO account_community(account_id, community_id, pending) VALUES ($1, $2, true)", // välitaulu, pending=true
-  SELECT_ADMIN: "SELECT account.username, FROM account JOIN account_community ON account.account_id = account_community.account_id JOIN community ON account_community.community_id = community.community_id WHERE community.community_id = $1 AND account.account_id = community.admin_id",
+  SELECT_ADMIN: "SELECT account.username, account.account_id FROM account JOIN account_community ON account.account_id = account_community.account_id JOIN community ON account_community.community_id = community.community_id WHERE community.community_id = $1 AND account.account_id = community.admin_id",
   ACCEPT_REQUEST: "UPDATE account_community SET pending = false WHERE account_community_id = $1",
   REJECT_REQUEST: "DELETE FROM account_community WHERE pending = true AND account_community_id = $1",
   REMOVE_USER: "DELETE FROM account_community WHERE account_id = $1",
