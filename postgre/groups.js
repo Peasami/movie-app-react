@@ -6,7 +6,6 @@ const sql = {
   GET_1_GROUP: "SELECT community_name, community_desc FROM community WHERE community_id = $1 ",
   CREATE_GROUP: "INSERT INTO community(admin_id, community_name,community_desc) VALUES ($1, $2, $3) RETURNING community_id",
   GET_GROUP_USERS: "SELECT account.username FROM account JOIN account_community ON account.account_id = account_community.account_id JOIN community ON account_community.community_id = community.community_id WHERE community.community_id = $1",
-  ADD_TO_ACCOUNT_COMMUNITY: "INSERT INTO account_community(account_id, community_id) VALUES ($1, $2)",
   ADD_USER: "INSERT INTO account_community(account_id, community_id, pending) VALUES ($1, $2, false)", // välitaulu, pending=false
   ADD_REQUEST: "INSERT INTO account_community(account_id, community_id, pending) VALUES ($1, $2, true)", // välitaulu, pending=true
   SELECT_ADMIN: "SELECT account.username FROM account JOIN account_community ON account.account_id = account_community.account_id JOIN community ON account_community.community_id = community.community_id WHERE community.community_id = $1 AND account.account_id = community.admin_id",
@@ -69,7 +68,7 @@ async function CreateGroup(admin_id, community_name, community_desc) {
     const community_id = result.rows[0].community_id; // Assuming community_id is returned in the result
     console.log('Query vastaus:', result);
     // lisätään saatu admin_id ja community_id, joka saatiin luodessa uusi ryhmä.
-    await pgPool.query(sql.ADD_TO_ACCOUNT_COMMUNITY, [admin_id, community_id]);
+    await pgPool.query(sql.ADD_USER, [admin_id, community_id]);
   } catch (error) {
     console.error('Error executing CreateGroup:', error);
     throw error; 

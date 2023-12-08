@@ -1,8 +1,9 @@
 const pgPool = require("./connection");
 const {deleteFavourite, getFavourites} = require("./favourite");
 const {deleteReview,getReview} = require("./reviews")
-const {removeUser,deleteJoinRequest,getUsersGroup} = require("./groups")
-const{deleteNews, getNewsUserPage} = require("./news")
+const {removeUser,removeGroupUsers,deleteGroup,getUsersGroup, determineIfAdminLogic} = require("./groups")
+const{deleteNews, getNewsUserPage,groupDeleteNews} = require("./news")
+
 
 const sql = {
   REGISTER_USER: 'INSERT INTO account (username, pw) VALUES ($1, $2)',
@@ -41,7 +42,7 @@ async function deleteAccount(account_id) {
     
     for (const community_id of communityIds) {
       await removeUser(community_id);
-      groupDeleteNews(community_id  )
+      await groupDeleteNews(community_id  )
       await deleteGroup(account_id, community_id);
       
     }
@@ -59,7 +60,9 @@ async function deleteAccount(account_id) {
   await pgPool.query(sql.DELETE_USER, [account_id]);
   
   console.log("Käyttäjän poistaminen onnistui");
+ 
 }
+
 
 
 //deleteAccount(31);

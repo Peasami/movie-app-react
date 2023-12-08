@@ -18,7 +18,7 @@ function App() {
           <Route path="Reviews" element={<Reviews />} />
           <Route path="Groups" element={<Groups />} />
           <Route path="Login" element={<Login />} />
-          <Route path="/profile/:username" element={<Profile />} />
+          <Route path="profile/:username" element={<Profile />} />
           <Route path="Register" element={<Register />} />
           <Route path="Groups" element={<Groups />} />
         </Route>

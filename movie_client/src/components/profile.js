@@ -2,20 +2,24 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { userInfo, jwtToken } from "./signals"; 
 
+
 function UserProfile() {
   const [userReviews, setUserReviews] = useState([]);
   const [personalGroups, setPersonalGroups] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  
 
   useEffect(() => {
+    console.log("UserProfile component mounted");
+    
     const fetchUserReviews = async () => {
+      console.log("Fetching user reviews");
       try {
-     
-       
         if (userInfo.value && userInfo.value.userId) {
           const accountId = userInfo.value.userId;
-          console.log(accountId);
-          console.log("tässä on token " +jwtToken);
+          console.log("Account ID:", accountId);
+          console.log("Token:", jwtToken);
+
           const response = await axios.get(`http://localhost:3001/reviews/Review/${accountId}`);
 
           if (response.data) {
@@ -29,20 +33,16 @@ function UserProfile() {
             }));
 
             setUserReviews(userReviewsWithDetails);
-
-
-           
           }
         }
       } catch (error) {
         console.error("Error fetching user reviews:", error);
-      
       }
     };
 
     const fetchPersonalGroups = async () => {
+      console.log("Fetching user groups");
       try {
-       
         if (userInfo.value && userInfo.value.userId) {
           const accountId = userInfo.value.userId;
           const response = await axios.get(`http://localhost:3001/groups/getYourGroups/${accountId}`);
@@ -59,7 +59,11 @@ function UserProfile() {
 
     fetchUserReviews();
     fetchPersonalGroups();
-  }, []);
+    // Cleanup function
+    return () => {
+      console.log("UserProfile component unmounted");
+    };
+  }, [userInfo.value.userId]);
   const fetchMovieDetails = async (movieId) => {
     const API_KEY = process.env.REACT_APP_TMBD_API_KEY;
     const tmdbEndpoint = `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`;
@@ -86,11 +90,32 @@ function UserProfile() {
       return null;
     }
   };
+  const handleDeleteAccount = async () => {
+    try {
+      console.log("käy täällä");
+      if (userInfo.value && userInfo.value.userId) {
+        const accountId = userInfo.value.userId;
+        const response = await axios.delete(`http://localhost:3001/account/Delete/${accountId}`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
+  
+        // Assuming your backend returns a success message upon successful deletion
+
+        // Redirect to the main page
+        window.location.href = 'http://localhost:3000/';
+      }
+    } catch (error) {
+      console.error("Error deleting account:", error);
+    }
+  };
  
   return (
     <div>
-      <h1>User Profile</h1>
-      <h2>Reviews by {userInfo.value.username}</h2>
+      <button onClick={() => { handleDeleteAccount(); jwtToken.value = ''; }}>Delete Account</button>
+       <h1>User {userInfo.value ? userInfo.value.username : "Unknown User"}</h1>
+    <h2>My reviews</h2>
       <ul>
         {userReviews.map((review) => (
           <li key={review.review_id}>
@@ -109,7 +134,7 @@ function UserProfile() {
       </ul>
 
       {/* ryhmät */}
-      <h2>Personal Groups</h2>
+      <h2>My Groups</h2>
       <ul>
         {personalGroups.map((group) => (
           <li key={group.community_id}>
