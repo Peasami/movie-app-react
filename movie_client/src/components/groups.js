@@ -27,24 +27,27 @@ function Groups() {
 function ShowGroupsForm() {
 
   const [groups, setGroups] = useState([]);
-
+  
   // gets groups from database
   function getGroups() {
-    axios.get('http://localhost:3001/groups/getGroups')
+    axios.get('http://localhost:3001/groups/getGroupsWithAdmin')
       .then(res => setGroups(res.data))
       .catch(err => console.log(err.response.data));
   }
+  
 
   // create form for a group
   function groupForm(props) {
     return (
-      <div key={props.community_id} style={{ width: "300px", height: "150px", border: "solid", margin: "12px"}}>
+      <div key={props.community_id} style={{ width: "300px", height: "130px", border: "solid", margin: "12px"}}>
         <h1>{props.community_name}</h1>
         <h3>{props.community_desc}</h3>
+        <h4>{"Admin: "+props.username}</h4>
         {jwtToken.value.length === 0 ? <h1>Log in to join group</h1> : <JoinGroupButton groupId={props.community_id}/>}
       </div>
     )
   }
+
 
   // gets groups when component is rendered
   useEffect(() => {

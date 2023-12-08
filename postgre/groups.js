@@ -3,12 +3,13 @@ const pgPool = require("./connection");
 //järkyttävä lista Sql queryja.
 const sql = {
   GET_GROUPS: "SELECT * FROM community",
+  GET_GROUPS_WITH_ADMIN: "SELECT community.community_id, community_name, community_desc, admin_id, account.username FROM community JOIN account ON community.admin_id = account.account_id",
   GET_1_GROUP: "SELECT community_name, community_desc FROM community WHERE community_id = $1 ",
   CREATE_GROUP: "INSERT INTO community(admin_id, community_name,community_desc) VALUES ($1, $2, $3) RETURNING community_id",
   GET_GROUP_USERS: "SELECT account.username, account.account_id FROM account JOIN account_community ON account.account_id = account_community.account_id JOIN community ON account_community.community_id = community.community_id WHERE community.community_id = $1",
   ADD_USER: "INSERT INTO account_community(account_id, community_id, pending) VALUES ($1, $2, false)", // välitaulu, pending=false
   ADD_REQUEST: "INSERT INTO account_community(account_id, community_id, pending) VALUES ($1, $2, true)", // välitaulu, pending=true
-  SELECT_ADMIN: "SELECT account.username, account.account_id FROM account JOIN account_community ON account.account_id = account_community.account_id JOIN community ON account_community.community_id = community.community_id WHERE community.community_id = $1 AND account.account_id = community.admin_id",
+  SELECT_ADMIN: "SELECT account.username, FROM account JOIN account_community ON account.account_id = account_community.account_id JOIN community ON account_community.community_id = community.community_id WHERE community.community_id = $1 AND account.account_id = community.admin_id",
   ACCEPT_REQUEST: "UPDATE account_community SET pending = false WHERE account_community_id = $1",
   REJECT_REQUEST: "DELETE FROM account_community WHERE pending = true AND account_community_id = $1",
   REMOVE_USER: "DELETE FROM account_community WHERE account_id = $1",
@@ -42,6 +43,11 @@ async function getGroups() {
     } catch (error) {
         console.error("Error executing query:", error);
     }
+}
+
+async function getGroupsWithAdmin() {
+    const result = await pgPool.query(sql.GET_GROUPS_WITH_ADMIN);
+    return result
 }
 
 //hakee yhden valitun ryhmän tiedot.
@@ -190,4 +196,4 @@ async function rejectRequest(account_community_id){
 }
 
 
-module.exports= {getMembers, getGroups,getUsersGroup,getAdmin,getGroup,CreateGroup,determineIfAdminLogic,getGroupUsers, removeUser,joinRequest, deleteGroup, removeGroupUsers, addUser, getRequests, getYourGroups, acceptRequest, rejectRequest};
+module.exports= {getMembers, getGroups,getUsersGroup,getAdmin,getGroup,CreateGroup,determineIfAdminLogic,getGroupUsers, removeUser,joinRequest, deleteGroup, removeGroupUsers, addUser, getRequests, getYourGroups, acceptRequest, rejectRequest, getGroupsWithAdmin};

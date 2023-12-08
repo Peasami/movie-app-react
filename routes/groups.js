@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { createToken, auth } = require('../Auth/auth');
 
-const {getMembers, getGroups,CreateGroup,getGroupUsers, joinRequest,getAdmin, getGroup, getRequests, getYourGroups, acceptRequest, rejectRequest, getUsersGroup} = require('../postgre/groups');
+const {getMembers, getGroups,CreateGroup,getGroupUsers, joinRequest,getAdmin, getGroup, getRequests, getYourGroups, acceptRequest, rejectRequest, getUsersGroup, getGroupsWithAdmin} = require('../postgre/groups');
 const { getNews } = require('../postgre/news');
 
 router.get("/getGroups", upload.none(), async (req,res) =>{
@@ -14,6 +14,16 @@ router.get("/getGroups", upload.none(), async (req,res) =>{
         res.json(result.rows);
     } catch (error) {
         console.error("Error executing query:", error);
+        
+    }
+});
+
+router.get("/getGroupsWithAdmin", upload.none(), async (req,res) =>{
+    try {
+        const result = await getGroupsWithAdmin();
+        res.json(result.rows);
+    } catch (error) {
+        console.error("Error getting groups with admin:", error);
         
     }
 });
