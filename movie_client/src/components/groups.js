@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { jwtToken, userInfo } from "./signals";
 import axios, { all } from "axios";
 import { useEffect, useState } from "react";
@@ -248,14 +248,17 @@ function YourGroupsForm(){
   }, []);
 
   function GroupForm(props){
+    const groupLink = "http://localhost:3000/groups/" + props.community_id;
     return(
-      <div style={{border: "solid", margin: "20px"}}>
-        <h1>{props.community_name}</h1>
-        {
-          props.pending ? <h2>PENDING</h2> : 
-          props.admin_id===userInfo.value.userId ? <h2>ADMIN</h2> : <h2>MEMBER</h2>
-        }
-      </div>
+      <Link to={groupLink}>
+        <div style={{border: "solid", margin: "5px"}}>
+          <h1>{props.community_name}</h1>
+          {
+            props.pending ? <h2>PENDING</h2> : 
+            props.admin_id===userInfo.value.userId ? <h2>ADMIN</h2> : <h2>MEMBER</h2>
+          }
+        </div>
+      </Link>
     )
   }
 

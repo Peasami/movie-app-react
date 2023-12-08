@@ -5,7 +5,7 @@ const sql = {
   GET_GROUPS: "SELECT * FROM community",
   GET_1_GROUP: "SELECT community_name, community_desc FROM community WHERE community_id = $1 ",
   CREATE_GROUP: "INSERT INTO community(admin_id, community_name,community_desc) VALUES ($1, $2, $3) RETURNING community_id",
-  GET_GROUP_USERS: "SELECT account.username FROM account JOIN account_community ON account.account_id = account_community.account_id JOIN community ON account_community.community_id = community.community_id WHERE community.community_id = $1",
+  GET_GROUP_USERS: "SELECT account.username, account.account_id FROM account JOIN account_community ON account.account_id = account_community.account_id JOIN community ON account_community.community_id = community.community_id WHERE community.community_id = $1",
   ADD_TO_ACCOUNT_COMMUNITY: "INSERT INTO account_community(account_id, community_id) VALUES ($1, $2)",
   ADD_USER: "INSERT INTO account_community(account_id, community_id, pending) VALUES ($1, $2, false)", // välitaulu, pending=false
   ADD_REQUEST: "INSERT INTO account_community(account_id, community_id, pending) VALUES ($1, $2, true)", // välitaulu, pending=true
@@ -25,7 +25,7 @@ const sql = {
     JOIN community ON account_community.community_id = community.community_id\
     WHERE community.admin_id = $1 AND account_community.pending = true",
   GET_YOUR_GROUPS: "SELECT * FROM community WHERE admin_id = $1",
-  GET_USERS_GROUPS: "SELECT community_name, community_desc, admin_id, account_community.pending FROM community join account_community ON community.community_id = account_community.community_id WHERE account_community.account_id  =$1"
+  GET_USERS_GROUPS: "SELECT community.community_id, community_name, community_desc, admin_id, account_community.pending FROM community join account_community ON community.community_id = account_community.community_id WHERE account_community.account_id  =$1"
 };
 
 //Hakee kaikki ryhmät

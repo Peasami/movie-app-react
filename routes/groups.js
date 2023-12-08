@@ -119,4 +119,13 @@ router.get("/getUsersGroup/:account_id", async (req,res) =>{
     }
 });
 
+router.get("/getGroupUsers/:community_id", async (req,res) =>{
+    try {
+        const result = await getGroupUsers(req.params.community_id);
+        res.status(200).json(result.rows);
+    } catch (error) {
+        res.status(500).json({error: error, message: "Error getting group's users"});
+    }
+});
+
 module.exports = router;
