@@ -6,7 +6,7 @@ import { userInfo, jwtToken } from "./signals";
 function UserProfile() {
   const [userReviews, setUserReviews] = useState([]);
   const [personalGroups, setPersonalGroups] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  
   
 
   useEffect(() => {
@@ -53,7 +53,7 @@ function UserProfile() {
         }
       } catch (error) {
         console.error("Error fetching personal groups:", error);
-        setIsLoading(false);
+       
       }
     };
 
@@ -101,9 +101,7 @@ function UserProfile() {
           },
         });
   
-        // Assuming your backend returns a success message upon successful deletion
-
-        // Redirect to the main page
+      
         window.location.href = 'http://localhost:3000/';
       }
     } catch (error) {
@@ -113,7 +111,6 @@ function UserProfile() {
  
   return (
     <div>
-      <button onClick={() => { handleDeleteAccount(); jwtToken.value = ''; }}>Delete Account</button>
        <h1>User {userInfo.value ? userInfo.value.username : "Unknown User"}</h1>
     <h2>My reviews</h2>
       <ul>
@@ -143,6 +140,7 @@ function UserProfile() {
           </li>
         ))}
       </ul>
+      <div><button onClick={() => { handleDeleteAccount(); jwtToken.value = ''; }}>Delete Account</button></div>
     </div>
   );
 }
