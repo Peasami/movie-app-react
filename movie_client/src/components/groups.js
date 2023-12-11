@@ -142,6 +142,7 @@ function CreateGroupForm() {
 */
 function ShowRequestsForm(){
 
+
   // stores requests from database
   const [requests, setRequests] = useState([""]);
 
@@ -166,12 +167,18 @@ function ShowRequestsForm(){
         .catch(err => console.log(err.response));
     }else{
       console.log("userInfo has no value")
+      console.log("requests: " + JSON.stringify(requests[0]))
       setTimeout(GetRequests, 250);
     }
   }
 
   // create form for a single request
   function RequestForm(props){
+    // if props is empty, return nothing
+    if (props === "") {
+      return <></>;
+    }
+
     return(
       <div style={{border: "solid", borderColor: "pink", margin: "12px"}}>
         <h1>{props.username + "  " + props.community_name + "  " + props.account_community_id}</h1>
@@ -180,6 +187,8 @@ function ShowRequestsForm(){
       </div>
     );
   }
+
+  // stores jwtToken from signals.js
   const config = {
     headers: { Authorization: 'Bearer ' + jwtToken.value }
   }
@@ -201,6 +210,7 @@ function ShowRequestsForm(){
       .then(res => console.log(res.data))
       .then(() => console.log("request rejected"))
       .then(() => GetRequests())
+      .then(() => showNoteForTime("Request rejected", 3000))
       .catch(err => console.log(err.response));
   }
 
@@ -216,12 +226,13 @@ function ShowRequestsForm(){
     GetRequests();
   }, []);
 
+
   return(
     <div style={{border: "solid", margin: "12px"}}>
       <h1>Requests</h1>
       <button onClick={() => showNoteForTime("wazup", 3000)}>test</button>
       {showNote ? <NotificationForm note={showNote}/> : <></>}
-      {requests.request !== undefined ? requests.map(request => RequestForm(request)) : <h1>helo</h1>}
+      {requests.map(request => RequestForm(request))}
     </div>
   )
 
