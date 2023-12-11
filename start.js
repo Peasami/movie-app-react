@@ -3,6 +3,7 @@ const express = require('express');
 const accountRoute = require('./routes/account');
 const groupsRoute = require('./routes/groups');
 const reviewRoute = require('./routes/reviews');
+const groupRoute = require('./routes/group');
 
 const cors = require('cors');
 
@@ -20,6 +21,7 @@ app.use(express.static('public'));
 app.use('/account', accountRoute );
 app.use('/groups', groupsRoute );
 app.use('/reviews',reviewRoute );
+app.use('/group', groupRoute );
 
 //Start server
 const PORT = process.env.PORT || 3001;
