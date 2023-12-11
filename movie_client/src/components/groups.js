@@ -39,7 +39,7 @@ function ShowGroupsForm() {
   // create form for a group
   function groupForm(props) {
     return (
-      <div key={props.community_id} style={{ width: "300px", height: "130px", border: "solid", margin: "12px"}}>
+      <div key={props.community_id} style={{ width: "300px", height: "auto", border: "solid", margin: "12px"}}>
         <h1>{props.community_name}</h1>
         <h3>{props.community_desc}</h3>
         <h4>{"Admin: "+props.username}</h4>
@@ -142,7 +142,11 @@ function CreateGroupForm() {
 */
 function ShowRequestsForm(){
 
+  // stores requests from database
   const [requests, setRequests] = useState([""]);
+
+  // Shows notification
+  const [showNote, setShowNote] = useState("");
 
   // get requests from database from groups where the user is admin
   function GetRequests(){
@@ -187,6 +191,7 @@ function ShowRequestsForm(){
       .then(res => console.log(res.data))
       .then(() => console.log("request accepted"))
       .then(() => GetRequests())
+      .then(() => showNoteForTime("Request accepted", 3000))
       .catch(err => console.log(err.response));
   }
 
@@ -199,6 +204,13 @@ function ShowRequestsForm(){
       .catch(err => console.log(err.response));
   }
 
+  function showNoteForTime(note, time){
+    setShowNote(note);
+    setTimeout(() => setShowNote(null), time);
+  }
+
+
+
   // get requests when component is rendered
   useEffect(() => {
     GetRequests();
@@ -207,12 +219,23 @@ function ShowRequestsForm(){
   return(
     <div style={{border: "solid", margin: "12px"}}>
       <h1>Requests</h1>
-      {requests.map(request => RequestForm(request))}
+      <button onClick={() => showNoteForTime("wazup", 3000)}>test</button>
+      {showNote ? <NotificationForm note={showNote}/> : <></>}
+      {requests.request !== undefined ? requests.map(request => RequestForm(request)) : <h1>helo</h1>}
     </div>
   )
 
 }
 
+
+function NotificationForm(props){
+
+  return(
+    <div style={{margin: "12px", backgroundColor: "lightgreen", border: "solid"}}>
+      <h1>{props.note}</h1>
+    </div>
+  )
+}
 
 
 
