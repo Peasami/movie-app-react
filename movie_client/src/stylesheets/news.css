@@ -1,0 +1,73 @@
+.newsList  {
+  margin: 5%;
+}
+
+#listArticle {
+  list-style: none;
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+#articleImage {
+  border-radius: 4px;
+}
+
+#articleTitle {
+  font-size: 1.5em;
+  color: #333;
+}
+
+#date {
+  color: #888;
+}
+#link {
+  color: #007bff;
+  font-size: inherit;
+  text-decoration: none;
+  display: inline-block;
+}
+#share {
+  float: right;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 12px;
+  margin: 10px;
+}
+#groupDropdown {
+  float: right;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 12px;
+  margin: 10px;
+}
+#groupDropdown {
+  display: flex;
+  align-items: center;
+}
+
+select {
+  margin-right: 10px;
+}
+
+.groupButtonsContainer {
+  position: fixed;
+  top: 45%;
+  right: 5%;
+  display: flex;
+  flex-direction: column;
+}
+
+.groupButtons {
+  background-color: #4c65af;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 10px;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+#noGroups {
+float: right;
+}
