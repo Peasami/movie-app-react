@@ -76,6 +76,7 @@ async function CreateGroup(admin_id, community_name, community_desc) {
     console.log('Query vastaus:', result);
     // lisätään saatu admin_id ja community_id, joka saatiin luodessa uusi ryhmä.
     await pgPool.query(sql.ADD_USER, [admin_id, community_id]);
+    await pgPool.query(sql.ADD_USER, [admin_id, community_id]);
   } catch (error) {
     console.error('Error executing CreateGroup:', error);
     throw error; 
@@ -103,7 +104,7 @@ async function deleteGroup(account_id,community_id){
 // Hakee sekä liittyneet käyttäjät, että käyttäjät jotka ovat lähettäneet liittymispyynnön.
 async function getGroupUsers(community_id) {
     try {
-        const result = await pgPool.query(sql.GET_GROUP_USERS, [community_id]);
+        const result = await pgPool.query(sql. GET_USERS_GROUPS, [community_id]);
         const rows = result.rows;
         return result;
     } catch (error) {

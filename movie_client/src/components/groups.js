@@ -9,7 +9,7 @@ function Groups() {
   // shows loginForm only if user has jwtToken (logged in)
   return (
     <div>
-      <h1>groups view</h1>
+      <h1>groups view</h1>  
       {jwtToken.value.length === 0 ? <h1>Log in to create group</h1> : <CreateGroupForm />}
       {jwtToken.value.length === 0 ?<h1></h1> : <ShowRequestsForm />}
       {jwtToken.value.length === 0 ?<h1></h1> : <YourGroupsForm />}

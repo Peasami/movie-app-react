@@ -85,7 +85,7 @@ router.get('/getUserInfo', auth, async (req,res)=>{
 });
 
 
-router.delete("/Delete/:account_id", async (req, res) => {
+router.delete("/Delete/:account_id", auth, async (req, res) => {
     console.log("Received delete request on ");
     try {
         const account_id = req.params.account_id;
