@@ -15,6 +15,7 @@ const sql = {
   REMOVE_USER: "DELETE FROM account_community WHERE account_id = $1",
   REMOVE_USERS: "DELETE FROM account_community WHERE community_id = $1",
   DELETE_GROUP: "DELETE FROM community WHERE admin_id = $1 AND community_id =$2",
+  REMOVE_USER_FROM_GROUP: "DELETE FROM account_community WHERE account_id = $1 AND community_id = $2",
   //DELETE_JOIN_REQUEST: "DELETE from request WHERE account_id = $1",
   CHECK_ADMIN: "SELECT * FROM community WHERE admin_id = $1",
 
