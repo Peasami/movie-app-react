@@ -18,21 +18,23 @@ describe('Account route', function(){
         expect(res.body.error).to.equal('Username not found');
     })
 
+    it('should create a new user and return 200', async function(){
+      const res = await request(start)
+        .post('/account/register')
+        .send({ username: 'test_test', pw: 'test_test' });
+      expect(res.statusCode).to.equal(200);
+  })
+
     it('should return 401 "Incorrect password" if password is wrong', async function(){
         const res = await request(start)
           .post('/account/login')
-          .send({ username: 'test', pw: 'undefined' });
+          .send({ username: 'test_test', pw: 'undefined' });
         expect(res.statusCode).to.equal(401);
         expect(res.body).to.have.property('error');
         expect(res.body.error).to.equal('Incorrect password');
     })
 
-    it('should create a new user and return 200', async function(){
-        const res = await request(start)
-          .post('/account/register')
-          .send({ username: 'test_test', pw: 'test_test' });
-        expect(res.statusCode).to.equal(200);
-    })
+
 
     it('should return jwt token', async function(){
         const res = await request(start)
@@ -46,7 +48,7 @@ describe('Account route', function(){
     it('should return 400 "Username already exists" if username already exists', async function(){
         const res = await request(start)
           .post('/account/register')
-          .send({ username: 'test', pw: 'test' });
+          .send({ username: 'test_test', pw: 'test_test' });
         expect(res.statusCode).to.equal(403);
         expect(res.body).to.have.property('error');
         expect(res.body.error).to.equal('Register error');
