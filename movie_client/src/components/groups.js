@@ -227,13 +227,18 @@ function ShowRequestsForm(){
   }, []);
 
 
-  return(
-    <div style={{border: "solid", margin: "12px"}}>
-      <h1>Requests</h1>
-      <button onClick={() => showNoteForTime("wazup", 3000)}>test</button>
-      {showNote ? <NotificationForm note={showNote}/> : <></>}
-      {requests.map(request => RequestForm(request))}
-    </div>
+  return (
+    <>
+      {requests && requests.length
+        ?
+          <div id="requests-form" style={{ border: "solid", margin: "12px" }}>
+            <h1>Requests</h1>
+            {showNote ? <NotificationForm note={showNote} /> : <></>}
+            {requests.map(request => RequestForm(request))}
+          </div>
+        : <></>
+      }
+    </>
   )
 
 }
