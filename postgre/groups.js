@@ -24,7 +24,6 @@ const sql = {
     JOIN account ON account_community.account_id = account.account_id\
     JOIN community ON account_community.community_id = community.community_id\
     WHERE community.admin_id = $1 AND account_community.pending = true",
-  GET_YOUR_GROUPS: "SELECT * FROM community WHERE admin_id = $1",
   GET_USERS_GROUPS: "SELECT community.community_id, community_name, community_desc, admin_id, account_community.pending\
     FROM community JOIN account_community ON community.community_id = account_community.community_id WHERE account_community.account_id  =$1",
   GET_MEMBERS: "SELECT account.account_id, account.username FROM account\
