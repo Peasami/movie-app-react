@@ -16,10 +16,7 @@ const Navigation = () => {
         {userInfo.value && (
           <>
             <Link to={`/profile/${userInfo.value.username}`} className="profile-link">Profile</Link>
-            <button className="buttonn" onClick={handleLogout}>
-  Logout  
-  
-</button>
+            <button className="buttonn" onClick={handleLogout}>Logout</button>
             
           </>
         )}
