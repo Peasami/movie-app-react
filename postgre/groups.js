@@ -103,7 +103,7 @@ async function deleteGroup(account_id,community_id){
 // Hakee sekä liittyneet käyttäjät, että käyttäjät jotka ovat lähettäneet liittymispyynnön.
 async function getGroupUsers(community_id) {
     try {
-        const result = await pgPool.query(sql.GET_GROUP_USERS, [community_id]);
+        const result = await pgPool.query(sql. GET_USERS_GROUPS, [community_id]);
         const rows = result.rows;
         return result;
     } catch (error) {
