@@ -201,4 +201,4 @@ async function removeUserFromGroup(account_id, community_id){
     await pgPool.query(sql.REMOVE_USER_FROM_GROUP, [account_id, community_id]);
 }
 
-module.exports= {removeGroupUsers,getMembers, getGroups,getUsersGroup,getAdmin,getGroup,CreateGroup,determineIfAdminLogic,getGroupUsers, removeUser,joinRequest, deleteGroup, removeGroupUsers, addUser, getRequests, getYourGroups, acceptRequest, rejectRequest, getGroupsWithAdmin};
+module.exports= {removeUserFromGroup,getMembers, getGroups,getUsersGroup,getAdmin,getGroup,CreateGroup,determineIfAdminLogic,getGroupUsers, removeUser,joinRequest, deleteGroup, removeGroupUsers, addUser, getRequests, getYourGroups, acceptRequest, rejectRequest, getGroupsWithAdmin};
