@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { jwtToken, userInfo } from "./signals";
 import axios, { all } from "axios";
 import { useEffect, useState } from "react";
@@ -11,8 +11,8 @@ function Groups() {
     <div>
       <h1>groups view</h1>
       {jwtToken.value.length === 0 ? <h1>Log in to create group</h1> : <CreateGroupForm />}
-      <ShowRequestsForm />
-      <YourGroupsForm />
+      {jwtToken.value.length === 0 ?<h1></h1> : <ShowRequestsForm />}
+      {jwtToken.value.length === 0 ?<h1></h1> : <YourGroupsForm />}
       <ShowGroupsForm />
       <button onClick={() => console.log('userinfo: ' + JSON.stringify(userInfo.value))}>userinfo</button>
     </div>
@@ -27,24 +27,27 @@ function Groups() {
 function ShowGroupsForm() {
 
   const [groups, setGroups] = useState([]);
-
+  
   // gets groups from database
   function getGroups() {
-    axios.get('http://localhost:3001/groups/getGroups')
+    axios.get('http://localhost:3001/groups/getGroupsWithAdmin')
       .then(res => setGroups(res.data))
       .catch(err => console.log(err.response.data));
   }
+  
 
   // create form for a group
   function groupForm(props) {
     return (
-      <div key={props.community_id} style={{ width: "300px", height: "150px", border: "solid" }}>
+      <div key={props.community_id} style={{ width: "300px", height: "auto", border: "solid", margin: "12px"}}>
         <h1>{props.community_name}</h1>
         <h3>{props.community_desc}</h3>
+        <h4>{"Admin: "+props.username}</h4>
         {jwtToken.value.length === 0 ? <h1>Log in to join group</h1> : <JoinGroupButton groupId={props.community_id}/>}
       </div>
     )
   }
+
 
   // gets groups when component is rendered
   useEffect(() => {
@@ -139,10 +142,14 @@ function CreateGroupForm() {
 */
 function ShowRequestsForm(){
 
-  
 
+  // stores requests from database
   const [requests, setRequests] = useState([""]);
 
+  // Shows notification
+  const [showNote, setShowNote] = useState("");
+
+  // get requests from database from groups where the user is admin
   function GetRequests(){
     if (userInfo.value === null) {
       console.log("userInfo is null")
@@ -160,46 +167,71 @@ function ShowRequestsForm(){
         .catch(err => console.log(err.response));
     }else{
       console.log("userInfo has no value")
+      console.log("requests: " + JSON.stringify(requests[0]))
       setTimeout(GetRequests, 250);
     }
   }
 
+  // create form for a single request
   function RequestForm(props){
+    // if props is empty, return nothing
+    if (props === "") {
+      return <></>;
+    }
+
     return(
-      <div style={{border: "solid", borderColor: "pink"}}>
+      <div style={{border: "solid", borderColor: "pink", margin: "12px"}}>
         <h1>{props.username + "  " + props.community_name + "  " + props.account_community_id}</h1>
         <button onClick={() => acceptRequest(props.account_community_id)}>Accept request</button>
         <button onClick={() => rejectRequest(props.account_community_id)}>Decline request</button>
       </div>
     );
   }
+
+  // stores jwtToken from signals.js
   const config = {
     headers: { Authorization: 'Bearer ' + jwtToken.value }
   }
 
+  // change pending status to false in table account_community
   function acceptRequest(requestId){
     console.log("config: " + JSON.stringify(config));
     axios.put('http://localhost:3001/groups/acceptRequest/' + requestId)
       .then(res => console.log(res.data))
       .then(() => console.log("request accepted"))
       .then(() => GetRequests())
+      .then(() => showNoteForTime("Request accepted", 3000))
       .catch(err => console.log(err.response));
   }
+
+  // delete table account_community from database
   function rejectRequest(requestId){
     axios.delete('http://localhost:3001/groups/rejectRequest/' + requestId, config)
       .then(res => console.log(res.data))
       .then(() => console.log("request rejected"))
       .then(() => GetRequests())
+      .then(() => showNoteForTime("Request rejected", 3000))
       .catch(err => console.log(err.response));
   }
 
+  function showNoteForTime(note, time){
+    setShowNote(note);
+    setTimeout(() => setShowNote(null), time);
+  }
+
+
+
+  // get requests when component is rendered
   useEffect(() => {
     GetRequests();
   }, []);
 
+
   return(
-    <div style={{border: "solid"}}>
+    <div style={{border: "solid", margin: "12px"}}>
       <h1>Requests</h1>
+      <button onClick={() => showNoteForTime("wazup", 3000)}>test</button>
+      {showNote ? <NotificationForm note={showNote}/> : <></>}
       {requests.map(request => RequestForm(request))}
     </div>
   )
@@ -207,10 +239,19 @@ function ShowRequestsForm(){
 }
 
 
+function NotificationForm(props){
+
+  return(
+    <div style={{margin: "12px", backgroundColor: "lightgreen", border: "solid"}}>
+      <h1>{props.note}</h1>
+    </div>
+  )
+}
+
 
 
 /*
-// Show groups where the user is admin
+// Show groups where the user is member or admin
 */
 function YourGroupsForm(){
 
@@ -227,13 +268,13 @@ function YourGroupsForm(){
     }
 
     if(typeof userInfo.value.userId !== "undefined"){
-      axios.get('http://localhost:3001/groups/getYourGroups/' + JSON.stringify(userInfo.value.userId))
+      axios.get('http://localhost:3001/groups/getUsersGroup/' + JSON.stringify(userInfo.value.userId))
         .then(res => {
-          setGroups(res.data)
+          setGroups(res.data.rows);
         })
         .catch(err => console.log(err.response));
     }else{
-      console.log("userInfo has no values")
+      console.log("userInfo has no value")
       setTimeout(GetGroups, 250);
     }
   }
@@ -242,10 +283,25 @@ function YourGroupsForm(){
     GetGroups();
   }, []);
 
+  function GroupForm(props){
+    const groupLink = "http://localhost:3000/groups/" + props.community_id;
+    return(
+      <Link to={groupLink}>
+        <div style={{border: "solid", margin: "5px"}}>
+          <h1>{props.community_name}</h1>
+          {
+            props.pending ? <h2>PENDING</h2> : 
+            props.admin_id===userInfo.value.userId ? <h2>ADMIN</h2> : <h2>MEMBER</h2>
+          }
+        </div>
+      </Link>
+    )
+  }
+
   return(
     <div style={{border: "solid"}}>
       <h1>Your Groups</h1>
-      {groups.map(group => <h1>{group.community_name}</h1>)}
+      {groups.map(group => <h1 key={group.community_id}>{GroupForm(group)}</h1>)}
     </div>
   )
 }
