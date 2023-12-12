@@ -23,12 +23,13 @@
 	flex: 1;
 }
 
-img {
+#reviewImage  {
 	margin: 0;
 	border-radius: inherit;
 	object-fit: contain;
 	width: 30%;
 	height: inherit;
+	
 }
 
 .title-and-rating {
