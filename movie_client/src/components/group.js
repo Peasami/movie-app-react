@@ -21,18 +21,37 @@ import { effect, signal } from "@preact/signals-core";
 function Group(){
     // save group id from url to variable
     const { groupId } = useParams();
-    let [userInGroup, setUserInGroup] = useState(false);
+    const [userInGroup, setUserInGroup] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     // when component is rendered, check if user is in the group
     useEffect(() => {
         const checkGroupMembership = async () => {
-            let isTrue = await checkIfUserIsInGroup(groupId);
-            setUserInGroup(isTrue);
-            console.log("userInGroup: " + isTrue);
+            let isMember = await checkIfUserIsInGroup(groupId);
+            setUserInGroup(isMember);
+            console.log("userInGroup: " + isMember);
+        };
+
+        const checkAdmin = async () => {
+            await axios.get('http://localhost:3001/groups/getAdmin/' + groupId)
+            .then(res => {
+                console.log("checkAdmin res.data: " + res.data)
+                console.log("admin_id: " + res.data[0].account_id + "userinfo: " + userInfo.value.userId + "groupId: " + groupId);
+                return res;
+            })
+            .then(res => res ? setIsAdmin(res.data[0].account_id === userInfo.value.userId) : setIsAdmin(false))
+            .catch(err => console.log(err.response.data));
+            
         };
     
         checkGroupMembership();
+        checkAdmin();
     }, []);
+
+    useEffect(() => {
+        console.log("user is admin: ", isAdmin)
+    }, [isAdmin]);
+
 
 
     return(
@@ -41,7 +60,8 @@ function Group(){
                 userInGroup ? 
                 <div>
                     <h1>Group view: {groupId}</h1>
-                    <GroupMembersForm />
+                    {isAdmin ? <h1>YOU ARE ADMIN</h1> : <></>}
+                    <GroupMembersForm isAdmin={isAdmin}/>
                     <GroupNewsForm />
                 </div>
                 :
@@ -54,7 +74,7 @@ function Group(){
 }
 
 
-function GroupMembersForm(){
+function GroupMembersForm(adminProps){
     const { groupId } = useParams();
     const [members, setMembers] = useState([]);
     const [adminId, setAdminId] = useState(0);
@@ -70,12 +90,16 @@ function GroupMembersForm(){
     }, [adminId]);
 
     useEffect(() => {
+        getMembers();
+    }, []);
+
+    function getMembers(){
         // console.log("members: "+ members)
         axios.get('http://localhost:3001/groups/getMembers/' + groupId)
             .then(res => setMembers(res.data))
             .then(() => getAdminId())
             .catch(err => console.log(err.response.data));
-    }, []);
+    }
 
     function getAdminId(){
         axios.get("http://localhost:3001/groups/getAdmin/" + groupId)
@@ -84,14 +108,22 @@ function GroupMembersForm(){
             .catch(err => console.log(err.response.data));
     }
 
-    function MemberForm(props) {
+    function MemberForm(userProps) {
         return (
-          <div key={props.account_id} style={{ border: "solid", margin: "12px"}}>
-            <h1>{props.username}</h1>
-            <h3>{props.account_id}</h3>
-            {props.account_id === adminId ? <h1>Admin</h1> : <h1></h1>}
+          <div key={userProps.account_id} style={{ border: "solid", margin: "12px"}}>
+            <h1>{userProps.username}</h1>
+            <h3>{userProps.account_id}</h3>
+            {userProps.account_id === adminId ? <h1>Admin</h1> : <h1></h1>}
+            {adminProps.isAdmin && userProps.account_id != adminId? <button onClick={() => removeUserFromGroup(userProps.account_id)}>Remove user</button> : <></>}
           </div>
         )
+    }
+
+    function removeUserFromGroup(userId){
+        axios.delete("http://localhost:3001/groups/removeUserFromGroup/" + userId + "/" + groupId)
+            .then(res => console.log(res))
+            .then(() => getMembers())
+            .catch(err => console.log(err.response.data));
     }
 
     return(
