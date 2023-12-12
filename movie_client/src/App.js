@@ -9,6 +9,7 @@ import Profile from './components/profile';
 import Register from './components/register';
 import Navigation from './components/navigation';
 import Group from './components/group';
+import News from './components/news';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="Register" element={<Register />} />
           <Route path="Groups" element={<Groups />} />
           <Route path="Groups/:groupId" element={<Group />} />
+          <Route path="News" element={<News />} />
         </Route>
       </Routes>
     </BrowserRouter>
