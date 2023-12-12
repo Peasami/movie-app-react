@@ -114,7 +114,12 @@ function GroupMembersForm(adminProps){
             <h1>{userProps.username}</h1>
             <h3>{userProps.account_id}</h3>
             {userProps.account_id === adminId ? <h1>Admin</h1> : <h1></h1>}
-            {adminProps.isAdmin && userProps.account_id != adminId? <button onClick={() => removeUserFromGroup(userProps.account_id)}>Remove user</button> : <></>}
+            {adminProps.isAdmin 
+                ? userProps.account_id != adminId
+                    ? <button onClick={() => removeUserFromGroup(userProps.account_id)}>Remove user</button>
+                    : <></> 
+                : <></>
+            }
           </div>
         )
     }
