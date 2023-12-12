@@ -121,9 +121,9 @@ const Reviews = () => {
   const sortReviews = (reviews, order) => {
     return reviews.sort((a, b) => {
       if (order === "high") {
-          return a.rating - b.rating;
-      } else if (order === "low") {
           return b.rating - a.rating;
+      } else if (order === "low") {
+          return a.rating - b.rating;
       }
     });
   };
@@ -185,18 +185,20 @@ const Reviews = () => {
         {reviews.map((reviewItem, index) => (
           <li className="review" key={index}>
             {reviewItem.movieDetails && (
-              <img
+              <img id="reviewImage"
                 src={`https://image.tmdb.org/t/p/w500/${reviewItem.movieDetails.poster_path}`}
                 alt={`Poster for ${reviewItem.movieDetails.title || reviewItem.movieDetails.name}`}
               />
             )}
             <div className="card-content">
               <div className="title-and-rating">
-                <div className="title">
+                <a className="title"
+                  target="_blank"
+                  href={`https://www.themoviedb.org/movie/${reviewItem.movieDetails.id}`}>                      
                   {reviewItem.movieDetails
                     ? reviewItem.movieDetails.title
                     : 'Title not available'}
-                </div>
+                </a>
                 <div className="rating">{reviewItem.rating}/5</div>
               </div>
               <div className="text">{reviewItem.text}</div>
@@ -207,6 +209,7 @@ const Reviews = () => {
           </li>
         ))}
       </ul>
+      
     </div>
   );
 };

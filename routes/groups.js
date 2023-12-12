@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { createToken, auth } = require('../Auth/auth');
 
-const {getMembers, getGroups,CreateGroup,getGroupUsers, joinRequest,getAdmin, getGroup, getRequests, getYourGroups, acceptRequest, rejectRequest, getUsersGroup, getGroupsWithAdmin} = require('../postgre/groups');
+const {removeUserFromGroup, getMembers, getGroups,CreateGroup,getGroupUsers, joinRequest,getAdmin, getGroup, getRequests, getYourGroups, acceptRequest, rejectRequest, getUsersGroup, getGroupsWithAdmin} = require('../postgre/groups');
 const { getNews } = require('../postgre/news');
 
 router.get("/getGroups", upload.none(), async (req,res) =>{
@@ -144,6 +144,15 @@ router.get("/getAdmin/:community_id", async (req,res) =>{
         res.status(200).json(result.rows);
     } catch (error) {
         res.status(500).json({error: error, message: "Error getting group's admin"});
+    }
+});
+
+router.delete("/removeUserFromGroup/:account_id/:community_id", async (req,res) =>{
+    try {
+        const result = await removeUserFromGroup(req.params.account_id, req.params.community_id);
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(500).json({error: error, message: "Error removing user from group"});
     }
 });
 
