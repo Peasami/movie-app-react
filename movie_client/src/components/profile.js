@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { userInfo, jwtToken } from "./signals"; 
+import { Link } from "react-router-dom"; 
+//import "../stylesheets/userProfile.css";
 
 
 function UserProfile() {
@@ -59,11 +61,17 @@ function UserProfile() {
 
     fetchUserReviews();
     fetchPersonalGroups();
-    // Cleanup function
     return () => {
       console.log("UserProfile component unmounted");
+  
+      if (userInfo.value && userInfo.value.userId) {
+        console.log("Cleaning up with user ID:", userInfo.value.userId);
+        // ... (cleanup logic)
+      } else {
+        console.log("User ID is undefined");
+      }
     };
-  }, [userInfo.value.userId]);
+  }, [userInfo.value?.userId]);
   const fetchMovieDetails = async (movieId) => {
     const API_KEY = process.env.REACT_APP_TMBD_API_KEY;
     const tmdbEndpoint = `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`;
@@ -103,6 +111,7 @@ function UserProfile() {
   
       
         window.location.href = 'http://localhost:3000/';
+        jwtToken.value = '';
       }
     } catch (error) {
       console.error("Error deleting account:", error);
@@ -135,12 +144,14 @@ function UserProfile() {
       <ul>
         {personalGroups.map((group) => (
           <li key={group.community_id}>
-            <h3>{group.community_name}</h3>
-            <p>{group.community_desc}</p>
+            <h4>
+              <Link to={`/groups/${group.community_id}`}>{group.community_name}</Link>
+            </h4>
+            <p>ABOUT: {group.community_desc}</p>
           </li>
         ))}
       </ul>
-      <div><button onClick={() => { handleDeleteAccount(); jwtToken.value = ''; }}>Delete Account</button></div>
+      <div><button onClick={() => { handleDeleteAccount()}}>Delete Account</button></div>
     </div>
   );
 }
