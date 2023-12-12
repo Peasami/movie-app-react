@@ -8,9 +8,8 @@ const { auth } = require('../Auth/auth');
 const { createToken } = require('../Auth/auth');
 
 const {getFavourites, addFavourite,deleteFavourite} = require ('../postgre/favourite');
-const {register,checkLogin, deleteAccount,getUserId, Userpage,} = require('../postgre/account');
+const {register,checkLogin, deleteAccount,getUserId, Userpage, getUsername} = require('../postgre/account');
 const { getCommunityAdmin } = require('../postgre/groups');
-
 
 router.post("/register", upload.none(), async (req,res) =>{
     const username = req.body.username;
@@ -145,6 +144,18 @@ router.get("/favourite/:account_id", upload.none(), async (req, res) =>{
         res.json(result.rows);
     } catch(error) { 
         console.error("Error executin query:", error)
+    }
+});
+
+router.get("/getUsername/:account_id", upload.none(), async (req,res) =>{
+    try {
+        const account_id = req.params.account_id;
+        const result = await getUsername(account_id);
+        console.log(result);
+        res.json(result.rows);
+    } catch (error) {
+        console.error("Error executing query:", error);
+            
     }
 });
   
