@@ -11,8 +11,8 @@ function Groups() {
     <div>
       <h1>groups view</h1>  
       {jwtToken.value.length === 0 ? <h1>Log in to create group</h1> : <CreateGroupForm />}
-      {jwtToken.value.length === 0 ?<h1></h1> : <ShowRequestsForm />}
-      {jwtToken.value.length === 0 ?<h1></h1> : <YourGroupsForm />}
+      {jwtToken.value.length === 0 ?<></> : <ShowRequestsForm />}
+      {jwtToken.value.length === 0 ?<></> : <YourGroupsForm />}
       <ShowGroupsForm />
       <button onClick={() => console.log('userinfo: ' + JSON.stringify(userInfo.value))}>userinfo</button>
     </div>
@@ -34,19 +34,6 @@ function ShowGroupsForm() {
       .then(res => setGroups(res.data))
       .catch(err => console.log(err.response.data));
   }
-  
-
-  // create form for a group
-  function groupForm(props) {
-    return (
-      <div key={props.community_id} style={{ width: "300px", height: "auto", border: "solid", margin: "12px"}}>
-        <h1>{props.community_name}</h1>
-        <h3>{props.community_desc}</h3>
-        <h4>{"Admin: "+props.username}</h4>
-        {jwtToken.value.length === 0 ? <h1>Log in to join group</h1> : <JoinGroupButton groupId={props.community_id}/>}
-      </div>
-    )
-  }
 
 
   // gets groups when component is rendered
@@ -55,9 +42,16 @@ function ShowGroupsForm() {
   }, []);
 
   return (
-    // creates a form for each group
+    // creates a div for each group
     <div>
-      {groups.map(group => groupForm(group))}
+      {groups.map(group =>
+        <div key={group.community_id} style={{ width: "300px", height: "auto", border: "solid", margin: "12px" }}>
+          <h1>{group.community_name}</h1>
+          <h3>{group.community_desc}</h3>
+          <h4>{"Admin: " + group.username}</h4>
+          {jwtToken.value.length === 0 ? <h1>Log in to join group</h1> : <JoinGroupButton groupId={group.community_id} />}
+        </div>
+      )}
     </div>
 
   )
@@ -119,11 +113,6 @@ function CreateGroupForm() {
       .catch(err => console.log(err.response.data));
   }
 
-  // assign to button for testing
-  function print() {
-    console.log(adminId);
-  }
-
   return (
     <div>
       <input value={groupName} onChange={e => setGroupName(e.target.value)} />
@@ -167,7 +156,7 @@ function ShowRequestsForm(){
         .catch(err => console.log(err.response));
     }else{
       console.log("userInfo has no value")
-      console.log("requests: " + JSON.stringify(requests[0]))
+      // console.log("requests: " + JSON.stringify(requests[0]))
       setTimeout(GetRequests, 250);
     }
   }
@@ -229,13 +218,15 @@ function ShowRequestsForm(){
 
   return (
     <>
-      {requests && requests.length
+      {requests && requests.length > 0
         ?
-          <div id="requests-form" style={{ border: "solid", margin: "12px" }}>
-            <h1>Requests</h1>
-            {showNote ? <NotificationForm note={showNote} /> : <></>}
-            {requests.map(request => RequestForm(request))}
-          </div>
+        <div id="requests-form" style={{ border: "solid", margin: "12px" }}>
+          <h1>Requests</h1>
+          {console.log("requests: " + JSON.stringify(requests))}
+          {requests.map((request) => (RequestForm(request)
+          ))}
+          {showNote ? <NotificationForm note={showNote} /> : <></>}
+        </div>
         : <></>
       }
     </>
