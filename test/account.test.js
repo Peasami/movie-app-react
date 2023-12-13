@@ -67,7 +67,8 @@ describe('Account route', function(){
     it('should delete user', async function(){
         console.log('userId: ', userId);
         const res = await request(start)
-          .delete('/account/Delete/' + userId);
+          .delete('/account/Delete/' + userId)
+          .set('Authorization', 'Bearer ' + token);
         expect(res.statusCode).to.equal(200);
         expect(res.body).to.have.property('message');
         expect(res.body.message).to.equal('Delete successful');

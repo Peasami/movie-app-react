@@ -180,7 +180,7 @@ function ShowRequestsForm(){
     }
 
     return(
-      <div style={{border: "solid", borderColor: "pink", margin: "12px"}}>
+      <div id={props.username} style={{border: "solid", borderColor: "pink", margin: "12px"}}>
         <h1>{props.username + "  " + props.community_name + "  " + props.account_community_id}</h1>
         <button onClick={() => acceptRequest(props.account_community_id)}>Accept request</button>
         <button onClick={() => rejectRequest(props.account_community_id)}>Decline request</button>

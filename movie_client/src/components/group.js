@@ -62,7 +62,7 @@ function Group(){
                     <h1>Group view: {groupId}</h1>
                     {isAdmin ? <h1>YOU ARE ADMIN</h1> : <></>}
                     <GroupMembersForm isAdmin={isAdmin}/>
-                    <GroupNewsForm />
+                    <GroupNewsForm groupId={groupId}/>
                 </div>
                 :
                 <div>
@@ -141,10 +141,37 @@ function GroupMembersForm(adminProps){
 
 
 
-function GroupNewsForm(){
+function GroupNewsForm(props){
+
+    const [news, setNews] = useState([]);
+
+    // Get news url and id
+    function getGroupNews(){
+        axios.get('http://localhost:3001/news/groupNews/' + props.groupId)
+            .then(res => setNews(res.data.rows))
+            .catch(err => console.log(err.response.data));
+    }
+
+    // get news news shared with the group
+    // when props.groupId changes.
+    useEffect(() => {
+        getGroupNews();
+        console.log("group news: " + props.groupId)
+    }, [props.groupId]);
+
+    useEffect(() => {
+        console.log("news: "+ typeof(news) + " " + JSON.stringify(news[0]) + " " + news.length);
+        
+    }, [news]);
+
     return(
         <div>
             <h1>Group news</h1>
+            {news && news.map(news => 
+                <a href={news.news_url} key={news.news_id} style={{ border: "solid", margin: "12px"}}>
+                    <h3>{news.news_url}</h3>
+                </a>
+            )}
         </div>
     )
 
