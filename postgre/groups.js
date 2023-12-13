@@ -1,4 +1,5 @@
 const pgPool = require("./connection");
+const { groupDeleteNews } = require("./news");
 
 //järkyttävä lista Sql queryja.
 const sql = {
@@ -94,11 +95,21 @@ async function removeGroupUsers(account_id) {
     }
 }
 
+// deletes group and all users, pending requests, and news.
+async function deleteGroupAndDependencies(account_id,community_id){
+    console.log("deleting group")
+    await removeUser(community_id);
+    await groupDeleteNews(community_id);
+    await deleteGroup(account_id, community_id);
+}
 
-
+// deletes group, but doesn't delete users or pending requests.
+// if you want to delete group completely, use deleteGroupAndDependencies instead.
 async function deleteGroup(account_id,community_id){
     await pgPool.query(sql.DELETE_GROUP, [account_id, community_id]);
 }
+
+
 //hakee käyttäjät community_id avulla.
 // Hakee sekä liittyneet käyttäjät, että käyttäjät jotka ovat lähettäneet liittymispyynnön.
 async function getGroupUsers(community_id) {
@@ -201,4 +212,4 @@ async function removeUserFromGroup(account_id, community_id){
     await pgPool.query(sql.REMOVE_USER_FROM_GROUP, [account_id, community_id]);
 }
 
-module.exports= {removeUserFromGroup,getMembers, getGroups,getUsersGroup,getAdmin,getGroup,CreateGroup,determineIfAdminLogic,getGroupUsers, removeUser,joinRequest, deleteGroup, removeGroupUsers, addUser, getRequests, getYourGroups, acceptRequest, rejectRequest, getGroupsWithAdmin};
+module.exports= {deleteGroupAndDependencies, removeUserFromGroup,getMembers, getGroups,getUsersGroup,getAdmin,getGroup,CreateGroup,determineIfAdminLogic,getGroupUsers, removeUser,joinRequest, deleteGroup, removeGroupUsers, addUser, getRequests, getYourGroups, acceptRequest, rejectRequest, getGroupsWithAdmin};
