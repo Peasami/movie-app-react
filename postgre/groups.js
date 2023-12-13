@@ -14,8 +14,8 @@ const sql = {
   REJECT_REQUEST: "DELETE FROM account_community WHERE pending = true AND account_community_id = $1",
   REMOVE_USER: "DELETE FROM account_community WHERE account_id = $1",
   REMOVE_USERS: "DELETE FROM account_community WHERE community_id = $1",
-  REMOVE_USER_FROM_GROUP: "DELETE FROM account_community WHERE account_id = $1 AND community_id = $2",
   DELETE_GROUP: "DELETE FROM community WHERE admin_id = $1 AND community_id =$2",
+  REMOVE_USER_FROM_GROUP: "DELETE FROM account_community WHERE account_id = $1 AND community_id = $2",
   //DELETE_JOIN_REQUEST: "DELETE from request WHERE account_id = $1",
   CHECK_ADMIN: "SELECT * FROM community WHERE admin_id = $1",
 
@@ -25,7 +25,6 @@ const sql = {
     JOIN account ON account_community.account_id = account.account_id\
     JOIN community ON account_community.community_id = community.community_id\
     WHERE community.admin_id = $1 AND account_community.pending = true",
-  GET_YOUR_GROUPS: "SELECT * FROM community WHERE admin_id = $1",
   GET_USERS_GROUPS: "SELECT community.community_id, community_name, community_desc, admin_id, account_community.pending\
     FROM community JOIN account_community ON community.community_id = account_community.community_id WHERE account_community.account_id  =$1",
   GET_MEMBERS: "SELECT account.account_id, account.username FROM account\
@@ -120,7 +119,7 @@ async function getMembers(community_id){
 }
 
 async function getAdmin(community_id) {
-    // console.log("kay taalla");
+    console.log("kay taalla");
     const result = await pgPool.query(sql.SELECT_ADMIN, [community_id]);
     const rows = result.rows;
     return result;
@@ -185,7 +184,7 @@ async function getRequests(admin_id){
 
 //gets groups where user is admin
 async function getYourGroups(admin_id){
-    const result = await pgPool.query(sql.GET_YOUR_GROUPS, [admin_id]);
+    const result = await pgPool.query(sql.GET_USERS_GROUPS, [admin_id]);
     return result.rows;
 }
 
@@ -202,4 +201,4 @@ async function removeUserFromGroup(account_id, community_id){
     await pgPool.query(sql.REMOVE_USER_FROM_GROUP, [account_id, community_id]);
 }
 
-module.exports= {removeUserFromGroup, getMembers, getGroups,getUsersGroup,getAdmin,getGroup,CreateGroup,determineIfAdminLogic,getGroupUsers, removeUser,joinRequest, deleteGroup, removeGroupUsers, addUser, getRequests, getYourGroups, acceptRequest, rejectRequest, getGroupsWithAdmin};
+module.exports= {removeUserFromGroup,getMembers, getGroups,getUsersGroup,getAdmin,getGroup,CreateGroup,determineIfAdminLogic,getGroupUsers, removeUser,joinRequest, deleteGroup, removeGroupUsers, addUser, getRequests, getYourGroups, acceptRequest, rejectRequest, getGroupsWithAdmin};
