@@ -108,6 +108,22 @@ function GroupMembersForm(adminProps){
             .catch(err => console.log(err.response.data));
     }
 
+    function MemberForm(userProps) {
+        return (
+          <div key={userProps.account_id} style={{ border: "solid", margin: "12px"}}>
+            <h1>{userProps.username}</h1>
+            <h3>{userProps.account_id}</h3>
+            {userProps.account_id === adminId ? <h1>Admin</h1> : <h1></h1>}
+            {adminProps.isAdmin 
+                ? userProps.account_id != adminId
+                    ? <button onClick={() => removeUserFromGroup(userProps.account_id)}>Remove user</button>
+                    : <></> 
+                : <></>
+            }
+          </div>
+        )
+    }
+
     function removeUserFromGroup(userId){
         axios.delete("http://localhost:3001/groups/removeUserFromGroup/" + userId + "/" + groupId)
             .then(res => console.log(res))
@@ -118,19 +134,7 @@ function GroupMembersForm(adminProps){
     return(
         <div>
             <h1>Group members</h1>
-            {members.length === 0 ? <h1>No members</h1> : members.map(member =>
-                <div key={member.account_id} style={{ border: "solid", margin: "12px" }}>
-                    <h1>{member.username}</h1>
-                    <h3>{member.account_id}</h3>
-                    {member.account_id === adminId ? <h1>Admin</h1> : <h1></h1>}
-                    {adminProps.isAdmin
-                        ? member.account_id != adminId
-                            ? <button onClick={() => removeUserFromGroup(member.account_id)}>Remove user</button>
-                            : <></>
-                        : <></>
-                    }
-                </div>
-            )}
+            {members.length === 0 ? <h1>No members</h1> : members.map(member => MemberForm(member))}
         </div>
     )
 }
