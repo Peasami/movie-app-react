@@ -21,10 +21,11 @@ router.post("/AddNews/:account_id", upload.none(), async (req,res) =>{
     });
     
 //hakee ryhmälle uutiset 
-router.get('/groupNews', upload.none() ,async (req, res) =>{
+router.get('/groupNews/:community_id', upload.none() ,async (req, res) =>{
+    const community_id = req.params.community_id;
     try{
         const result  = await getNews(community_id);
-        res.json(result);
+        res.status(200).json(result);
     }
     catch (error) {
         console.error("Error executing query:", error);

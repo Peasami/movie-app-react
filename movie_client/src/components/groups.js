@@ -11,8 +11,8 @@ function Groups() {
     <div>
       <h1>groups view</h1>  
       {jwtToken.value.length === 0 ? <h1>Log in to create group</h1> : <CreateGroupForm />}
-      {jwtToken.value.length === 0 ?<h1></h1> : <ShowRequestsForm />}
-      {jwtToken.value.length === 0 ?<h1></h1> : <YourGroupsForm />}
+      {jwtToken.value.length === 0 ?<></> : <ShowRequestsForm />}
+      {jwtToken.value.length === 0 ?<></> : <YourGroupsForm />}
       <ShowGroupsForm />
       <button onClick={() => console.log('userinfo: ' + JSON.stringify(userInfo.value))}>userinfo</button>
     </div>
@@ -27,23 +27,21 @@ function Groups() {
 function ShowGroupsForm() {
 
   const [groups, setGroups] = useState([]);
-  
+
   // gets groups from database
   function getGroups() {
     axios.get('http://localhost:3001/groups/getGroupsWithAdmin')
       .then(res => setGroups(res.data))
       .catch(err => console.log(err.response.data));
   }
-  
 
-  // create form for a group
-  function groupForm(props) {
+  function GroupForm(props) {
     return (
-      <div key={props.community_id} style={{ width: "300px", height: "auto", border: "solid", margin: "12px"}}>
+      <div key={props.community_id} style={{ width: "300px", height: "auto", border: "solid", margin: "12px" }}>
         <h1>{props.community_name}</h1>
         <h3>{props.community_desc}</h3>
-        <h4>{"Admin: "+props.username}</h4>
-        {jwtToken.value.length === 0 ? <h1>Log in to join group</h1> : <JoinGroupButton groupId={props.community_id}/>}
+        <h4>{"Admin: " + props.username}</h4>
+        {jwtToken.value.length === 0 ? <h1>Log in to join props</h1> : <JoinGroupButton groupId={props.community_id} />}
       </div>
     )
   }
@@ -55,9 +53,9 @@ function ShowGroupsForm() {
   }, []);
 
   return (
-    // creates a form for each group
+    // creates a div for each group
     <div>
-      {groups.map(group => groupForm(group))}
+      {groups.map(group => GroupForm(group))}
     </div>
 
   )
@@ -119,11 +117,6 @@ function CreateGroupForm() {
       .catch(err => console.log(err.response.data));
   }
 
-  // assign to button for testing
-  function print() {
-    console.log(adminId);
-  }
-
   return (
     <div>
       <input value={groupName} onChange={e => setGroupName(e.target.value)} />
@@ -167,7 +160,7 @@ function ShowRequestsForm(){
         .catch(err => console.log(err.response));
     }else{
       console.log("userInfo has no value")
-      console.log("requests: " + JSON.stringify(requests[0]))
+      // console.log("requests: " + JSON.stringify(requests[0]))
       setTimeout(GetRequests, 250);
     }
   }
@@ -180,7 +173,7 @@ function ShowRequestsForm(){
     }
 
     return(
-      <div style={{border: "solid", borderColor: "pink", margin: "12px"}}>
+      <div id={props.username} style={{border: "solid", borderColor: "pink", margin: "12px"}}>
         <h1>{props.username + "  " + props.community_name + "  " + props.account_community_id}</h1>
         <button onClick={() => acceptRequest(props.account_community_id)}>Accept request</button>
         <button onClick={() => rejectRequest(props.account_community_id)}>Decline request</button>
@@ -227,13 +220,20 @@ function ShowRequestsForm(){
   }, []);
 
 
-  return(
-    <div style={{border: "solid", margin: "12px"}}>
-      <h1>Requests</h1>
-      <button onClick={() => showNoteForTime("wazup", 3000)}>test</button>
-      {showNote ? <NotificationForm note={showNote}/> : <></>}
-      {requests.map(request => RequestForm(request))}
-    </div>
+  return (
+    <>
+      {requests && requests.length > 0
+        ?
+        <div id="requests-form" style={{ border: "solid", margin: "12px" }}>
+          <h1>Requests</h1>
+          {console.log("requests: " + JSON.stringify(requests))}
+          {requests.map((request) => (RequestForm(request)
+          ))}
+          {showNote ? <NotificationForm note={showNote} /> : <></>}
+        </div>
+        : <></>
+      }
+    </>
   )
 
 }
