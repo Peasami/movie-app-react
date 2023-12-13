@@ -54,23 +54,40 @@ function Group(){
 
 
 
-    return(
+    return (
         <div>
             {jwtToken.value.length === 0 ? <h1>Please log in</h1> :
-                userInGroup ? 
-                <div>
-                    <h1>Group view: {groupId}</h1>
-                    {isAdmin ? <h1>YOU ARE ADMIN</h1> : <></>}
-                    <GroupMembersForm isAdmin={isAdmin}/>
-                    <GroupNewsForm groupId={groupId}/>
-                </div>
-                :
-                <div>
-                    <h1>You are not in this group</h1>
-                </div>
+                userInGroup
+                    ? <div>
+                        <h1>Group view: {groupId}</h1>
+                        {isAdmin
+                            ? <div id="admin-section">
+                                <h1>YOU ARE ADMIN</h1>
+                                <button id="delete-group-button" onClick={() => handleDeleteGroup(groupId)}>Delete group</button>
+                            </div>
+                            : <></>
+                        }
+                        <GroupMembersForm isAdmin={isAdmin} />
+                        <GroupNewsForm groupId={groupId} />
+                    </div>
+                    : <div>
+                        <h1>You are not in this group</h1>
+                    </div>
             }
         </div>
     )
+}
+
+
+function handleDeleteGroup(groupId){
+    const config = {
+        headers: { Authorization: 'Bearer ' + jwtToken.value }
+    }
+
+    axios.delete("http://localhost:3001/groups/deleteGroup/" + userInfo.value.userId + "/" + groupId, config)
+        .then(res => console.log(res))
+        .then(() => window.location.href = "/groups")
+        .catch(err => console.log(err.response.data));
 }
 
 
