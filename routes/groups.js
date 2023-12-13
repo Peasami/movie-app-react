@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { createToken, auth } = require('../Auth/auth');
 
-const {removeUserFromGroup, getMembers, getGroups,CreateGroup,getGroupUsers, joinRequest,getAdmin, getGroup, getRequests, getYourGroups, acceptRequest, rejectRequest, getUsersGroup, getGroupsWithAdmin} = require('../postgre/groups');
+const {deleteGroupAndDependencies, removeUserFromGroup, getMembers, getGroups,CreateGroup,getGroupUsers, joinRequest,getAdmin, getGroup, getRequests, getYourGroups, acceptRequest, rejectRequest, getUsersGroup, getGroupsWithAdmin} = require('../postgre/groups');
 const { getNews } = require('../postgre/news');
 
 router.get("/getGroups", upload.none(), async (req,res) =>{
@@ -42,6 +42,19 @@ router.post("/createGroup", auth, async (req,res) =>{
         res.status(200).json({ groupInfo: groupInfo});
     } catch(error){
         console.log("Error executing query:", error)
+        
+    }
+});
+
+// Deletes: Group, Group users, Pending requests, Group news
+router.delete("/deleteGroup/:admin_id/:community_id", auth, async (req,res) =>{
+    try {
+        const community_id = req.params.community_id;
+        const admin_id = req.params.admin_id;
+        await deleteGroupAndDependencies(admin_id, community_id);
+        res.status(200).json({ message: "Group deleted"});
+    } catch(error){
+        console.log("Error deleting group:", error)
         
     }
 });
