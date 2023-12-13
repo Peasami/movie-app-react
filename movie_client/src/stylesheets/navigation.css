@@ -1,30 +1,137 @@
+@media (min-width: 700px) {
+	.logo {
+		font-size: 23px;
+	}
+	.nav-button {
+		font-size: 23px;
+	}
+}
+
 nav {
-    background-color: white;
-    box-shadow: 0 4px 6px #0000001a;
-    padding: 16px 20px 30px 20px;
-    display: grid;
-    grid-template-columns: 1fr 2fr .3fr;
-    gap: 10px 10px;
-    
+	box-shadow: 0 4px 6px #0000001a;
+	padding: 16px 20px 30px 20px;
+	display: grid;
+	grid-template-columns: repeat(5, auto);
+	justify-items: flex-start;
 }
-a {
-    color: black;
-    text-decoration: none;
-    font-size: 26px    
+
+.logo {
+	color: black;
+	text-decoration: none;
+	font-weight: bold;
 }
+
+.nav-button {
+	color: black;
+	text-decoration: none;
+}
+
 .signup-link {
-    color: black;
-    text-decoration: none;
-    font-size: 16px;
-    margin-left: 0;
+	color: black;
+	text-decoration: none;
+	font-size: 16px;
+	margin-left: 0;
 }
+
 .buttonn {
-    font-size: 15px;
-    padding: 10px 30px;
-    width: 15%;
-    height: 30%;
-    display: flex;
-    align-items: center;
-    margin-left: 100%;
-    justify-content: center;
+	font-size: 15px;
+	padding: 10px 30px;
+	width: 15%;
+	height: 30%;
+	display: flex;
+	align-items: center;
+	margin-left: 100%;
+	justify-content: center;
+}
+
+.menu-toggle {
+	display: none;
+}
+
+.menu-button {
+	cursor: pointer;
+	font-size: 26px
+}
+
+.menu-close-button {
+	cursor: pointer;
+	padding: 20px;
+	font-size: 26px
+}
+
+.menu {
+	position: fixed;
+	top: 0;
+	right: -250px;
+	width: 250px;
+	height: 100%;
+	backdrop-filter: blur(50px);
+	padding-top: 60px;
+	transition: right 0.3s ease-in-out;
+	z-index: 999;
+}
+
+.menu ul {
+	list-style: none;
+	padding: 20px;
+	margin: 0;
+}
+
+.menu li {
+	padding: 15px;
+	text-align: center;
+	border-bottom: 1px solid #b4b4b4;
+}
+
+/* Show menu when the checkbox is checked */
+.menu-toggle:checked~.menu {
+	right: 0;
+}
+
+a {
+	color: #000;
+}
+
+.dark-mode {
+	background-color: #131313;
+	color: white;
+}
+
+.dark-mode .nav-button {
+	color: white;
+}
+
+.dark-mode .arrowRight span {
+	background-color: white;
+	color: white;
+}
+
+.dark-mode .arrowLeft span {
+	background-color: white;
+	color: white;
+}
+
+.dark-mode #logo {
+	color: white
+}
+
+.dark-mode a {
+	color: white
+}
+
+.dark-mode .search-container {
+	color: white
+}
+
+.dark-mode footer {
+	color: white
+}
+
+.dark-mode #createReview {
+	color: white
+}
+
+.dark-mode #listArticle {
+	background-color: #000;
+	color: white
 }
