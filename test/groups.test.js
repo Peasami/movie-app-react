@@ -51,6 +51,18 @@ describe('Groups route', function () {
         expect(res.body[0]).to.have.property('admin_id');
     })
 
+    it('should create a new group', async function () {
+        const res = await request(start)
+            .post('/groups/createGroup')
+            .set('Authorization', 'Bearer ' + token)
+            .send({ adminId: userId, groupName: 'test_group', groupDesc: 'test_desc' });
+        expect(res.statusCode).to.equal(200);
+        expect(res.body).to.have.property('groupInfo');
+        expect(res.body.groupInfo).to.have.property('adminId');
+        expect(res.body.groupInfo).to.have.property('groupName');
+        expect(res.body.groupInfo).to.have.property('groupDesc');
+    })
+
     it('should delete user', async function () {
         console.log('userId: ', userId);
         const res = await request(start)
