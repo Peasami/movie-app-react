@@ -2,7 +2,7 @@ const pgPool = require("./connection");
 
 const sql = {
     ADD_NEWS: "INSERT INTO news (account_id, community_id, news_url) VALUES ($1, $2,$3) ",
-    GET_NEWS_GROUP: "SELECT news_url FROM news WHERE community_id = $1",
+    GET_NEWS_GROUP: "SELECT news_url, news_id FROM news WHERE community_id = $1",
     GET_NEWS_USER: "SELECT news_url FROM news WHERE account_id = $1",
     DELETE_NEWS: "DELETE FROM news WHERE account_id = $1",
     GROUP_DELETE_NEWS: " DELETE FROM news WHERE community_id = $1"
