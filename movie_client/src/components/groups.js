@@ -27,12 +27,23 @@ function Groups() {
 function ShowGroupsForm() {
 
   const [groups, setGroups] = useState([]);
-  
+
   // gets groups from database
   function getGroups() {
     axios.get('http://localhost:3001/groups/getGroupsWithAdmin')
       .then(res => setGroups(res.data))
       .catch(err => console.log(err.response.data));
+  }
+
+  function GroupForm(props) {
+    return (
+      <div key={props.community_id} style={{ width: "300px", height: "auto", border: "solid", margin: "12px" }}>
+        <h1>{props.community_name}</h1>
+        <h3>{props.community_desc}</h3>
+        <h4>{"Admin: " + props.username}</h4>
+        {jwtToken.value.length === 0 ? <h1>Log in to join props</h1> : <JoinGroupButton groupId={props.community_id} />}
+      </div>
+    )
   }
 
 
@@ -44,14 +55,7 @@ function ShowGroupsForm() {
   return (
     // creates a div for each group
     <div>
-      {groups.map(group =>
-        <div key={group.community_id} style={{ width: "300px", height: "auto", border: "solid", margin: "12px" }}>
-          <h1>{group.community_name}</h1>
-          <h3>{group.community_desc}</h3>
-          <h4>{"Admin: " + group.username}</h4>
-          {jwtToken.value.length === 0 ? <h1>Log in to join group</h1> : <JoinGroupButton groupId={group.community_id} />}
-        </div>
-      )}
+      {groups.map(group => GroupForm(group))}
     </div>
 
   )
