@@ -1,5 +1,4 @@
 const pgPool = require("./connection");
-const {deleteFavourite, getFavourites} = require("./favourite");
 const {deleteReview,getReview} = require("./reviews")
 const {removeUser,removeGroupUsers,deleteGroup,getUsersGroup, determineIfAdminLogic} = require("./groups")
 const{deleteNews, getNewsUserPage,groupDeleteNews} = require("./news")
@@ -52,7 +51,6 @@ async function deleteAccount(account_id) {
   } 
   await removeGroupUsers(account_id);
   await deleteReview(account_id);
-  await deleteFavourite(account_id);
   //await deleteJoinRequest(account_id);
   await deleteNews(account_id);
   
@@ -79,13 +77,13 @@ async function getUserId(username){
 
 async function Userpage(account_id) {
   try{
-    const favouritesResult = await getFavourites(account_id);
+    
     const newsResult = await getNewsUserPage(account_id);
     const UserGroupResult = await getUsersGroup(account_id);
     const UserReviewsResult = await getReview(account_id);
     return {
       Groups: UserGroupResult.rows,
-      favourites: favouritesResult.rows,
+      
       news: newsResult.rows,
       Review: UserReviewsResult.rows
   };

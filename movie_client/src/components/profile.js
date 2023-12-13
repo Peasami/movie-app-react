@@ -120,39 +120,46 @@ function UserProfile() {
  
   return (
     <div>
-       <h1>User {userInfo.value ? userInfo.value.username : "Unknown User"}</h1>
-    <h2>My reviews</h2>
-      <ul>
-        {userReviews.map((review) => (
-          <li key={review.review_id}>
-            <h3>Review for {review.movieDetails ? review.movieDetails.title : "Movie Title not available"}</h3>
-            {review.movieDetails && (
-              <img
-                src={`https://image.tmdb.org/t/p/w500/${review.movieDetails.poster_path}`}
-                alt={`Poster for ${review.movieDetails.title || "Movie Title not available"}`}
-              />
-            )}
-            {/* arvostelu*/}
-            <p>Rating: {review.rating}</p>
-            <p>Text: {review.text}</p>
-          </li>
-        ))}
-      </ul>
-
-      {/* ryhmät */}
-      <h2>My Groups</h2>
-      <ul>
-        {personalGroups.map((group) => (
-          <li key={group.community_id}>
-            <h4>
-              <Link to={`/groups/${group.community_id}`}>{group.community_name}</Link>
-            </h4>
-            <p>ABOUT: {group.community_desc}</p>
-          </li>
-        ))}
-      </ul>
-      <div><button onClick={() => { handleDeleteAccount()}}>Delete Account</button></div>
+      {userInfo.value && userInfo.value.userId ? (
+        <div>
+          <h1>{userInfo.value.username}</h1>
+          
+          <h2>My reviews</h2>
+          <ul>
+            {userReviews.map((review) => (
+              <li key={review.review_id}>
+                <h3>Review for {review.movieDetails ? review.movieDetails.title : "Movie Title not available"}</h3>
+                {review.movieDetails && (
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500/${review.movieDetails.poster_path}`}
+                    alt={`Poster for ${review.movieDetails.title || "Movie Title not available"}`}
+                  />
+                )}
+                {/* arvostelu*/}
+                <p>Rating: {review.rating}</p>
+                <p>Text: {review.text}</p>
+              </li>
+            ))}
+          </ul>
+  
+          {/* ryhmät */}
+          <h2>My Groups</h2>
+          <ul>
+            {personalGroups.map((group) => (
+              <li key={group.community_id}>
+                <h4>
+                  <Link to={`/groups/${group.community_id}`}>{group.community_name}</Link>
+                </h4>
+                <p>ABOUT: {group.community_desc}</p>
+              </li>
+            ))}
+          </ul>
+          <div><button onClick={() => { handleDeleteAccount()}}>Delete Account</button></div>
+        </div>
+      ) : (
+        <h1>Please log in</h1>
+      )}
     </div>
   );
-}
+      }
 export default UserProfile;

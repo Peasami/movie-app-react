@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const { auth } = require('../Auth/auth');
 const { createToken } = require('../Auth/auth');
 
-const {getFavourites, addFavourite,deleteFavourite} = require ('../postgre/favourite');
+
 const {register,checkLogin, deleteAccount,getUserId, Userpage, getUsername} = require('../postgre/account');
 const { getCommunityAdmin } = require('../postgre/groups');
 
@@ -125,27 +125,7 @@ router.get("/:account_id", upload.none(), async (req,res) =>{
     }
 });
 
-router.post("/favourite/:account_id", upload.none(), async (req, res) =>{
-    try{
-        const account_id = req.params.account_id;
-        const movie_id = req.body.movie_id;
-        const result = await addFavourite(movie_id,account_id);
-        res.json(result.rows);
-    } catch(error) { 
-        console.error("Error executin query:", error)
-    }
-});
 
-
-router.get("/favourite/:account_id", upload.none(), async (req, res) =>{
-    try{
-        const account_id = req.params.account_id;
-        const result = await getFavourites(account_id)
-        res.json(result.rows);
-    } catch(error) { 
-        console.error("Error executin query:", error)
-    }
-});
 
 router.get("/getUsername/:account_id", upload.none(), async (req,res) =>{
     try {
