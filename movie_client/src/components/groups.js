@@ -13,10 +13,7 @@ function Groups() {
       {jwtToken.value.length === 0 ?<h1></h1> : <CreateGroupForm />}
       {jwtToken.value.length === 0 ?<h1></h1> : <ShowRequestsForm />}
       {jwtToken.value.length === 0 ?<h1></h1> : <YourGroupsForm />}
-      <ShowGroupsForm />
-			{/* 
-      <button onClick={() => console.log('userinfo: ' + JSON.stringify(userInfo.value))}>userinfo</button>
-			*/}    
+      <ShowGroupsForm />   
 		</div>
   );
 
@@ -85,7 +82,6 @@ function JoinGroupButton(groupId) {
     headers: { Authorization: 'Bearer ' + jwtToken.value }
   }
   function joinGroup() {
-    console.log("hello")
     axios.post('http://localhost:3001/groups/addRequest', requestBody, config)
       .then(res => console.log(res.data))
       .catch(err => console.log(err.response.data));
@@ -217,6 +213,7 @@ function ShowRequestsForm(){
       .catch(err => console.log(err.response));
   }
 
+  // Shows note for a certain time
   function showNoteForTime(note, time){
     setShowNote(note);
     setTimeout(() => setShowNote(null), time);
@@ -252,18 +249,19 @@ function ShowRequestsForm(){
 
 }
 
+// Shows any notification
+// props.note = notification text
+function NotificationForm(props) {
 
-function NotificationForm(props){
-
-  return(
+  return (
     <div>
-    {window.location.pathname === "/groups" && (
-      
-      <div>
-      <h1>{props.note}</h1>
-      </div>
-          
-    )}
+      {window.location.pathname === "/groups" && (
+
+        <div>
+          <h1>{props.note}</h1>
+        </div>
+
+      )}
     </div>
 
   )
