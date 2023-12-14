@@ -17,7 +17,7 @@ import { jwtToken, userInfo } from "./signals";
 import axios, { all } from "axios";
 import { useEffect, useState } from "react";
 import { effect, signal } from "@preact/signals-core";
-
+import '../stylesheets/groups.css'
 function Group(){
     // save group id from url to variable
     const { groupId } = useParams();
@@ -58,10 +58,11 @@ function Group(){
         <div>
             {jwtToken.value.length === 0 ? <h1>Please log in</h1> :
                 userInGroup ? 
-                <div>
+                <div className='group-item'>
                     <h1>Group view: {groupId}</h1>
                     {isAdmin ? <h1>YOU ARE ADMIN</h1> : <></>}
                     <GroupMembersForm isAdmin={isAdmin}/>
+                    
                     <GroupNewsForm groupId={groupId}/>
                 </div>
                 :
@@ -110,10 +111,11 @@ function GroupMembersForm(adminProps){
 
     function MemberForm(userProps) {
         return (
-          <div key={userProps.account_id} style={{ border: "solid", margin: "12px"}}>
-            <h1>{userProps.username}</h1>
+          <div id=".group-list" key={userProps.account_id}>
+            <h3>- {userProps.username}{userProps.account_id === adminId ? (<span id="group-admin"> (Admin)</span>) : null}</h3>
+            {/* 
             <h3>{userProps.account_id}</h3>
-            {userProps.account_id === adminId ? <h1>Admin</h1> : <h1></h1>}
+            */}
             {adminProps.isAdmin 
                 ? userProps.account_id != adminId
                     ? <button onClick={() => removeUserFromGroup(userProps.account_id)}>Remove user</button>
@@ -168,7 +170,7 @@ function GroupNewsForm(props){
         <div>
             <h1>Group news</h1>
             {news && news.map(news => 
-                <a href={news.news_url} key={news.news_id} style={{ border: "solid", margin: "12px"}}>
+                <a href={news.news_url} key={news.news_id}>
                     <h3>{news.news_url}</h3>
                 </a>
             )}

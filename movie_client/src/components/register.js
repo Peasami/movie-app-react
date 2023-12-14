@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { jwtToken } from "./signals";
-
+import '../stylesheets/login-register.css'
 function Register({}) {
   const [username, setUsername] = useState("");
   const [pw, setPassword] = useState("");
