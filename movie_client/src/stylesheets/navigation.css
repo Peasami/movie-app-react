@@ -83,7 +83,6 @@ nav {
 	border-bottom: 1px solid #b4b4b4;
 }
 
-/* Show menu when the checkbox is checked */
 .menu-toggle:checked~.menu {
 	right: 0;
 }
