@@ -26,18 +26,20 @@ function Register({}) {
   }
 
   return (
-    <div>
+    <div id='auth-form'>
       <h1>Sign up</h1>
       <input value={username} onChange={e => setUsername(e.target.value)} placeholder="Username" />
-      <input
-        type={showPassword ? "text" : "password"}
-        value={pw}
-        onChange={e => setPassword(e.target.value)}
-        placeholder="Password"
-      />
-      <button onClick={() => setShowPassword(!showPassword)}>
-        {showPassword ? "Hide" : "Show"} Password
-      </button>
+      <div id='pw'>
+				<input
+      	  type={showPassword ? "text" : "password"}
+      	  value={pw}
+      	  onChange={e => setPassword(e.target.value)}
+      	  placeholder="Password"
+      	/>
+      	<button onClick={() => setShowPassword(!showPassword)}>
+      	  {showPassword ? "Hide" : "Show"}
+      	</button>
+			</div>
       <button onClick={register}>Register</button>
       {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
       {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}

@@ -3,24 +3,24 @@ import { jwtToken, userInfo } from "./signals";
 import axios, { all } from "axios";
 import { useEffect, useState } from "react";
 import { effect, signal } from "@preact/signals-core";
-
+import '../stylesheets/groups.css'
 function Groups() {
 
   // shows loginForm only if user has jwtToken (logged in)
   return (
     <div>
-      <h1>groups view</h1>  
-      {jwtToken.value.length === 0 ? <h1>Log in to create group</h1> : <CreateGroupForm />}
-      {jwtToken.value.length === 0 ?<></> : <ShowRequestsForm />}
-      {jwtToken.value.length === 0 ?<></> : <YourGroupsForm />}
+      <a id="home-page-link" href="/groups">Groups:</a>
+      {jwtToken.value.length === 0 ?<h1></h1> : <CreateGroupForm />}
+      {jwtToken.value.length === 0 ?<h1></h1> : <ShowRequestsForm />}
+      {jwtToken.value.length === 0 ?<h1></h1> : <YourGroupsForm />}
       <ShowGroupsForm />
+			{/* 
       <button onClick={() => console.log('userinfo: ' + JSON.stringify(userInfo.value))}>userinfo</button>
-    </div>
+			*/}    
+		</div>
   );
 
 }
-
-
 /*
 // Shows all groups
 */
@@ -37,12 +37,14 @@ function ShowGroupsForm() {
 
   function GroupForm(props) {
     return (
-      <div key={props.community_id} style={{ width: "300px", height: "auto", border: "solid", margin: "12px" }}>
-        <h1>{props.community_name}</h1>
-        <h3>{props.community_desc}</h3>
-        <h4>{"Admin: " + props.username}</h4>
-        {jwtToken.value.length === 0 ? <h1>Log in to join props</h1> : <JoinGroupButton groupId={props.community_id} />}
-      </div>
+
+          <div className='group-item' key={props.community_id}>
+            <h1 id="group-name">{props.community_name}</h1>
+            <p id="group-desc">{props.community_desc}</p>
+            <p id='group-admin'>{"Admin: "+props.username}</p>
+            {jwtToken.value.length === 0 ? <p>Log in to join group</p> : <JoinGroupButton groupId={props.community_id}/>}
+          </div>
+
     )
   }
 
@@ -53,14 +55,14 @@ function ShowGroupsForm() {
   }, []);
 
   return (
-    // creates a div for each group
-    <div>
-      {groups.map(group => GroupForm(group))}
-    </div>
-
+    // creates a form for each group
+      <ul className='group-list'>
+        <li >
+          {groups.map(group => GroupForm(group))}
+        </li>
+      </ul>
   )
 }
-
 
 /*
 // Creates a button to join a group
@@ -85,7 +87,7 @@ function JoinGroupButton(groupId) {
 
   return (
     <div>
-      <button onClick={joinGroup}>Join Group</button>
+      <button id='group-btn' onClick={joinGroup}>Join Group</button>
     </div>
   )
 }
@@ -119,16 +121,16 @@ function CreateGroupForm() {
 
   return (
     <div>
-      <input value={groupName} onChange={e => setGroupName(e.target.value)} />
-      <input value={groupDesc} onChange={e => setGroupDesc(e.target.value)} />
-      <button onClick={createGroup}>Create Group</button>
+    {window.location.pathname === "/groups" && (   
+      <div id='create-group'>
+        <input placeholder="Add Group Name" value={groupName} onChange={e => setGroupName(e.target.value)} />
+        <input placeholder="Add Group Description" value={groupDesc} onChange={e => setGroupDesc(e.target.value)} />
+        <button id='group-btn' onClick={createGroup}>Create Group</button>
+      </div>
+    )}
     </div>
   )
 }
-
-
-
-
 
 /*
 // Show group requests for admin
@@ -173,11 +175,18 @@ function ShowRequestsForm(){
     }
 
     return(
-      <div id={props.username} style={{border: "solid", borderColor: "pink", margin: "12px"}}>
-        <h1>{props.username + "  " + props.community_name + "  " + props.account_community_id}</h1>
-        <button onClick={() => acceptRequest(props.account_community_id)}>Accept request</button>
-        <button onClick={() => rejectRequest(props.account_community_id)}>Decline request</button>
+      <div>
+      {window.location.pathname === "/groups" && (
+        
+        <div style={{border: "solid", borderColor: "pink", margin: "12px"}}>
+          <h1>{props.username + "  " + props.community_name + "  " + props.account_community_id}</h1>
+          <button id='group-btn'onClick={() => acceptRequest(props.account_community_id)}>Accept request</button>
+          <button id='group-btn'onClick={() => rejectRequest(props.account_community_id)}>Decline request</button>
+        </div>    
+        
+      )}
       </div>
+
     );
   }
 
@@ -220,8 +229,10 @@ function ShowRequestsForm(){
   }, []);
 
 
-  return (
-    <>
+  return(
+    <div>
+    {window.location.pathname === "/groups" && (
+      <div>
       {requests && requests.length > 0
         ?
         <div id="requests-form" style={{ border: "solid", margin: "12px" }}>
@@ -233,7 +244,9 @@ function ShowRequestsForm(){
         </div>
         : <></>
       }
-    </>
+      </div>
+    )}
+    </div>
   )
 
 }
@@ -242,9 +255,16 @@ function ShowRequestsForm(){
 function NotificationForm(props){
 
   return(
-    <div style={{margin: "12px", backgroundColor: "lightgreen", border: "solid"}}>
+    <div>
+    {window.location.pathname === "/groups" && (
+      
+      <div>
       <h1>{props.note}</h1>
+      </div>
+          
+    )}
     </div>
+
   )
 }
 
@@ -286,23 +306,37 @@ function YourGroupsForm(){
   function GroupForm(props){
     const groupLink = "http://localhost:3000/groups/" + props.community_id;
     return(
-      <Link to={groupLink}>
-        <div style={{border: "solid", margin: "5px"}}>
-          <h1>{props.community_name}</h1>
-          {
-            props.pending ? <h2>PENDING</h2> : 
-            props.admin_id===userInfo.value.userId ? <h2>ADMIN</h2> : <h2>MEMBER</h2>
-          }
-        </div>
-      </Link>
+      <div>
+      {window.location.pathname === "/groups" && (
+        
+        <Link to={groupLink}>
+          <div>
+            <h1>{props.community_name}</h1>
+            {
+              props.pending ? <h2>PENDING</h2> : 
+              props.admin_id===userInfo.value.userId ? <h2>ADMIN</h2> : <h2>MEMBER</h2>
+            }
+          </div>
+        </Link>
+        
+      )}
+      </div>
+
     )
   }
 
   return(
-    <div style={{border: "solid"}}>
-      <h1>Your Groups</h1>
-      {groups.map(group => <h1 key={group.community_id}>{GroupForm(group)}</h1>)}
+    <div>
+    {window.location.pathname === "/groups" && (
+      
+      <div>
+        <h1>Your Groups</h1>
+        {groups.map(group => <h1 key={group.community_id}>{GroupForm(group)}</h1>)}
+      </div>
+      
+    )}
     </div>
+
   )
 }
 
