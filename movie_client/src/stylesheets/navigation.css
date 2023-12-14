@@ -63,7 +63,7 @@ nav {
 	position: fixed;
 	top: 0;
 	right: -250px;
-	width: 250px;
+	width: 249px;
 	height: 100%;
 	backdrop-filter: blur(50px);
 	padding-top: 60px;

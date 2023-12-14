@@ -53,9 +53,7 @@ select {
 }
 
 .groupButtonsContainer {
-  position: fixed;
-  top: 45%;
-  right: 5%;
+  float: right;
   display: flex;
   flex-direction: column;
 }
