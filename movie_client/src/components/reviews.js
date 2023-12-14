@@ -135,7 +135,7 @@ const Reviews = () => {
 
   return (
     <div>
-      < a href="/reviews">Reviews:</a>
+      <a id="home-page-link" href="/reviews">Reviews:</a>
       {window.location.pathname === "/reviews" && (
         <ul id="createReviewView" className="hidden">
           <li>

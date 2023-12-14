@@ -12,18 +12,19 @@
 }
 #articleImage {
   border-radius: 4px;
+	max-width: 45%;
 }
 
 #articleTitle {
   font-size: 1.5em;
-  color: #333;
 }
 
 #date {
-  color: #888;
+  font-weight: 100;
 }
+
 #link {
-  color: #007bff;
+  color: #48a0fe;
   font-size: inherit;
   text-decoration: none;
   display: inline-block;

@@ -1,0 +1,77 @@
+@media screen and (min-width: 640px) {
+	.reviews-list,
+	.group-list {
+		width: 45%;
+	}
+}
+
+.reviews-list {
+	padding: 0;
+}
+
+.review {
+	display: flex;
+	margin-top: 50px;
+	margin: 10px;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+}
+
+.card-content {
+	flex: 1;
+}
+
+#reviewImage {
+	margin: 0;
+	border-radius: inherit;
+	object-fit: contain;
+	width: 30%;
+	height: inherit;
+
+}
+
+.title-and-rating {
+	margin: 10px;
+	display: flex;
+	flex-direction: column end;
+	margin-bottom: 8px;
+}
+
+.title {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.rating {
+	margin-bottom: 0;
+	font-weight: bold;
+}
+
+.text {
+	margin-left: 10px;
+}
+
+.group-list {
+	padding: 0;
+}
+
+.group-item {
+	display: flex;
+	margin-top: 50px;
+	margin: 10px;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+}
+
+#group-name,
+#group-desc,
+.group-details {
+	margin: 10px;
+}
+
+#btn {
+	padding: 8px 12px;
+	cursor: pointer;
+	border-radius: 12px;
+	margin: 10px;
+}

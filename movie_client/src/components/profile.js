@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { userInfo, jwtToken } from "./signals"; 
 import { Link } from "react-router-dom"; 
-//import "../stylesheets/userProfile.css";
+import "../stylesheets/profile.css";
 
 
 function UserProfile() {
@@ -124,37 +124,42 @@ function UserProfile() {
         <div>
           <h1>{userInfo.value.username}</h1>
           
-          <h2>My reviews</h2>
-          <ul>
+          <h2>My reviews:</h2>
+          <ul className="reviews-list">
             {userReviews.map((review) => (
-              <li key={review.review_id}>
-                <h3>Review for {review.movieDetails ? review.movieDetails.title : "Movie Title not available"}</h3>
+              <li className="review" key={review.review_id}>          
                 {review.movieDetails && (
-                  <img
+                  <img id="reviewImage"
                     src={`https://image.tmdb.org/t/p/w500/${review.movieDetails.poster_path}`}
                     alt={`Poster for ${review.movieDetails.title || "Movie Title not available"}`}
                   />
                 )}
-                {/* arvostelu*/}
-                <p>Rating: {review.rating}</p>
-                <p>Text: {review.text}</p>
-              </li>
+								<div className="card-content">
+									<h3 className="title">{review.movieDetails ? review.movieDetails.title : "Movie Title not available"}</h3>
+                	{/* arvostelu*/}					
+									<div className="title-and-rating">             		
+                		<p className="text">{review.text}</p>
+										<p className="rating">Rating: {review.rating}/5</p>
+									</div>
+								</div>
+              </li>				
             ))}
           </ul>
-  
           {/* ryhmät */}
           <h2>My Groups</h2>
-          <ul>
+          <ul className='group-list'>
             {personalGroups.map((group) => (
-              <li key={group.community_id}>
-                <h4>
+              <li className='group-item' key={group.community_id}>
+                <h4 id="group-name">
                   <Link to={`/groups/${group.community_id}`}>{group.community_name}</Link>
                 </h4>
-                <p>ABOUT: {group.community_desc}</p>
+                <p id="group-desc">ABOUT: {group.community_desc}</p>
               </li>
             ))}
           </ul>
-          <div><button onClick={() => { handleDeleteAccount()}}>Delete Account</button></div>
+          <div>
+					<h3>Remove your data: </h3>
+					<button id="btn" onClick={() => { handleDeleteAccount()}}>Delete Account</button></div>
         </div>
       ) : (
         <h1>Please log in</h1>
