@@ -2,6 +2,7 @@ const { expect } = require('chai');
 const request = require('supertest');
 const start = require('../start');
 const exp = require('constants');
+const { group } = require('console');
 
 
 describe('Groups route', function () {
@@ -58,19 +59,30 @@ describe('Groups route', function () {
             .set('Authorization', 'Bearer ' + token)
             .send({ adminId: userId, groupName: 'test_group', groupDesc: 'test_desc' });
         expect(res.statusCode).to.equal(200);
+        expect(res.body).to.have.property('community_id');
         expect(res.body).to.have.property('groupInfo');
         expect(res.body.groupInfo).to.have.property('adminId');
         expect(res.body.groupInfo).to.have.property('groupName');
         expect(res.body.groupInfo).to.have.property('groupDesc');
+        groupId = res.body.community_id; // save groupId for later use in tests
     })
+
+
 
     it('should delete group', async function () {
         const res = await request(start)
-            .delete('/groups/deleteGroup/' + userId + '/1')
+            .delete('/groups/deleteGroup/' + userId + '/' + groupId)
             .set('Authorization', 'Bearer ' + token);
         expect(res.statusCode).to.equal(200);
         expect(res.body).to.have.property('message');
         expect(res.body.message).to.equal('Group deleted');
+        expect(res.body).to.have.property('result');
+        expect(res.body.result).to.have.property('removeUserRes');
+        expect(res.body.result).to.have.property('removeNewsRes');
+        expect(res.body.result).to.have.property('removeGroupRes');
+        expect(res.body.result.removeUserRes).to.have.property('rowCount');
+        expect(res.body.result.removeUserRes.rowCount).to.equal(1);
+        expect(res.body.result.removeGroupRes.rowCount).to.equal(1);
     })
 
     it('should delete user', async function () {

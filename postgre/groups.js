@@ -76,7 +76,7 @@ async function CreateGroup(admin_id, community_name, community_desc) {
     console.log('Query vastaus:', result);
     // lisätään saatu admin_id ja community_id, joka saatiin luodessa uusi ryhmä.
     await pgPool.query(sql.ADD_USER, [admin_id, community_id]);
-    await pgPool.query(sql.ADD_USER, [admin_id, community_id]);
+    return result;
   } catch (error) {
     console.error('Error executing CreateGroup:', error);
     throw error; 
@@ -98,15 +98,20 @@ async function removeGroupUsers(account_id) {
 // deletes group and all users, pending requests, and news.
 async function deleteGroupAndDependencies(account_id,community_id){
     console.log("deleting group")
-    await removeUser(community_id);
-    await groupDeleteNews(community_id);
-    await deleteGroup(account_id, community_id);
+    const removeUserRes = await removeUser(community_id);
+    const removeNewsRes = await groupDeleteNews(community_id);
+    const removeGroupRes = await deleteGroup(account_id, community_id);
+    console.log("remove user res: " + removeUserRes);
+    console.log("group delete news res: " + removeNewsRes);
+    console.log("delete group res: " + removeGroupRes);
+    return {removeUserRes, removeNewsRes, removeGroupRes};
 }
 
 // deletes group, but doesn't delete users or pending requests.
 // if you want to delete group completely, use deleteGroupAndDependencies instead.
 async function deleteGroup(account_id,community_id){
-    await pgPool.query(sql.DELETE_GROUP, [account_id, community_id]);
+    const result = await pgPool.query(sql.DELETE_GROUP, [account_id, community_id]);
+    return result;
 }
 
 
@@ -138,8 +143,8 @@ async function getAdmin(community_id) {
 
 //poistaa käyttäjän account taulusta.
 async function removeUser(community_id){
-    await pgPool.query(sql.REMOVE_USERS, [community_id]);
-
+    result = await pgPool.query(sql.REMOVE_USERS, [community_id]);
+    return result;
 }
 
 //liittymispyyntö

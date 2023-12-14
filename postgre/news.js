@@ -41,7 +41,8 @@ await pgPool.query(sql.DELETE_NEWS, [account_id]);
 } 
 
 async function groupDeleteNews(community_id){
-    await pgPool.query(sql.GROUP_DELETE_NEWS, [community_id])
+    const result = await pgPool.query(sql.GROUP_DELETE_NEWS, [community_id])
+    return result;
 }
 
 
