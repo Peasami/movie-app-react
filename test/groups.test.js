@@ -9,6 +9,7 @@ describe('Groups route', function () {
     // store values from tests for other tests
     let token = '';
     let userId = '';
+    let groupId = '';
 
     it('should create a new user and return 200', async function () {
         const res = await request(start)
@@ -61,6 +62,15 @@ describe('Groups route', function () {
         expect(res.body.groupInfo).to.have.property('adminId');
         expect(res.body.groupInfo).to.have.property('groupName');
         expect(res.body.groupInfo).to.have.property('groupDesc');
+    })
+
+    it('should delete group', async function () {
+        const res = await request(start)
+            .delete('/groups/deleteGroup/' + userId + '/1')
+            .set('Authorization', 'Bearer ' + token);
+        expect(res.statusCode).to.equal(200);
+        expect(res.body).to.have.property('message');
+        expect(res.body.message).to.equal('Group deleted');
     })
 
     it('should delete user', async function () {
