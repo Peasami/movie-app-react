@@ -6,6 +6,14 @@ const reviewRoute = require('./routes/reviews');
 const groupRoute = require('./routes/group');
 const newsRoute = require('./routes/news');
 
+
+
+const cors = require('cors');
+
+
+
+const app = express();
+
 const path = require('path');
 app.get("/*", function (req, res) {
     res.sendFile(
@@ -17,12 +25,6 @@ app.get("/*", function (req, res) {
         }
     )
 });
-
-const cors = require('cors');
-
-
-
-const app = express();
 
 //Setting middleware
 app.use(express.urlencoded({extended: true}));
