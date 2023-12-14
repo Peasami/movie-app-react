@@ -23,6 +23,7 @@ function Group(){
     const { groupId } = useParams();
     const [userInGroup, setUserInGroup] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [groupName, setGroupName] = useState("");
 
     // when component is rendered, check if user is in the group
     useEffect(() => {
@@ -52,26 +53,51 @@ function Group(){
         console.log("user is admin: ", isAdmin)
     }, [isAdmin]);
 
+    useEffect(() => {
+        const config = {
+            headers: { Authorization: 'Bearer ' + jwtToken.value }
+        }
+
+        axios.get('http://localhost:3001/groups/getGroup/' + groupId, config)
+            .then(res => setGroupName(res.data[0].community_name))
+            .catch(err => console.log(err.response.data));
+    }, [groupId]);
 
 
-    return(
+    return (
         <div>
             {jwtToken.value.length === 0 ? <h1>Please log in</h1> :
-                userInGroup ? 
-                <div className='group-item'>
-                    <h1>Group view: {groupId}</h1>
-                    {isAdmin ? <h1>YOU ARE ADMIN</h1> : <></>}
-                    <GroupMembersForm isAdmin={isAdmin}/>
-                    
-                    <GroupNewsForm groupId={groupId}/>
-                </div>
-                :
-                <div>
-                    <h1>You are not in this group</h1>
-                </div>
+                userInGroup
+                    ? <div>
+                        <h1 id="group-name">{groupName}</h1>
+                        {isAdmin
+                            ? <div id="admin-section">
+                                <h1>YOU ARE ADMIN</h1>
+                                <button id="delete-group-button" onClick={() => handleDeleteGroup(groupId)}>Delete group</button>
+                            </div>
+                            : <></>
+                        }
+                        <GroupMembersForm isAdmin={isAdmin} />
+                        <GroupNewsForm groupId={groupId} />
+                    </div>
+                    : <div>
+                        <h1>You are not in this group</h1>
+                    </div>
             }
         </div>
     )
+}
+
+
+function handleDeleteGroup(groupId){
+    const config = {
+        headers: { Authorization: 'Bearer ' + jwtToken.value }
+    }
+
+    axios.delete("http://localhost:3001/groups/deleteGroup/" + userInfo.value.userId + "/" + groupId, config)
+        .then(res => console.log(res))
+        .then(() => window.location.href = "/groups")
+        .catch(err => console.log(err.response.data));
 }
 
 
@@ -127,7 +153,12 @@ function GroupMembersForm(adminProps){
     }
 
     function removeUserFromGroup(userId){
-        axios.delete("http://localhost:3001/groups/removeUserFromGroup/" + userId + "/" + groupId)
+        
+        const config = {
+            headers: { Authorization: 'Bearer ' + jwtToken.value }
+        }
+
+        axios.delete("http://localhost:3001/groups/removeUserFromGroup/" + userId + "/" + groupId, config)
             .then(res => console.log(res))
             .then(() => getMembers())
             .catch(err => console.log(err.response.data));
@@ -171,15 +202,13 @@ function GroupNewsForm(props){
             <h1>Group news</h1>
             {news && news.map(news => 
                 <a href={news.news_url} key={news.news_id}>
-                    <h3>{news.news_url}</h3>
+                    <p id="news-url">{news.news_url}</p>
                 </a>
             )}
         </div>
     )
 
 }
-
-
 
 async function checkIfUserIsInGroup(groupId){
     return axios.get('http://localhost:3001/groups/getMembers/' + groupId)
