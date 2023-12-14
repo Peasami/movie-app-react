@@ -23,6 +23,7 @@ function Group(){
     const { groupId } = useParams();
     const [userInGroup, setUserInGroup] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [groupName, setGroupName] = useState("");
 
     // when component is rendered, check if user is in the group
     useEffect(() => {
@@ -52,6 +53,15 @@ function Group(){
         console.log("user is admin: ", isAdmin)
     }, [isAdmin]);
 
+    useEffect(() => {
+        const config = {
+            headers: { Authorization: 'Bearer ' + jwtToken.value }
+        }
+
+        axios.get('http://localhost:3001/groups/getGroup/' + groupId, config)
+            .then(res => setGroupName(res.data[0].community_name))
+            .catch(err => console.log(err.response.data));
+    }, [groupId]);
 
 
     return (
@@ -59,7 +69,7 @@ function Group(){
             {jwtToken.value.length === 0 ? <h1>Please log in</h1> :
                 userInGroup
                     ? <div>
-                        <h1>Group view: {groupId}</h1>
+                        <h1 id="group-name">{groupName}</h1>
                         {isAdmin
                             ? <div id="admin-section">
                                 <h1>YOU ARE ADMIN</h1>
