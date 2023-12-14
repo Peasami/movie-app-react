@@ -201,7 +201,7 @@ function ShowRequestsForm(){
 
   // change pending status to false in table account_community
   function acceptRequest(requestId){
-    axios.put('http://localhost:3001/groups/acceptRequest/' + requestId)
+    axios.put('http://localhost:3001/groups/acceptRequest/' + requestId, null, config)
       .then(() => console.log("request accepted"))
       .then(() => GetRequests())
       .then(() => showNoteForTime("Request accepted", 3000))
