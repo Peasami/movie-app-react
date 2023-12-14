@@ -1,4 +1,4 @@
-const {expect} = require('chai');
+const { expect } = require('chai');
 const request = require('supertest');
 const start = require('../start');
 const exp = require('constants');
@@ -8,7 +8,7 @@ let token = '';
 let userId = '';
 community_id = 72;
 
-describe('Account route', function(){
+describe('Account route', function () {
 
     it('should return 401 "Username not found" if user not found', async function(){
         const res = await request(start)
@@ -37,14 +37,25 @@ describe('Account route', function(){
 
 
 
-    it('should return jwt token', async function(){
-        const res = await request(start)
-          .post('/account/login')
-          .send({ username: 'test_test', pw: 'test_test' });
-        expect(res.statusCode).to.equal(200);
-        expect(res.body).to.have.property('jwtToken');
-        token = res.body.jwtToken; // save token for later use in tests
-    })
+  it('should return 401 "Incorrect password" if password is wrong', async function () {
+    const res = await request(start)
+      .post('/account/login')
+      .send({ username: 'test_test', pw: 'undefined' });
+    expect(res.statusCode).to.equal(401);
+    expect(res.body).to.have.property('error');
+    expect(res.body.error).to.equal('Incorrect password');
+  })
+
+
+
+  it('should return jwt token', async function () {
+    const res = await request(start)
+      .post('/account/login')
+      .send({ username: 'test_test', pw: 'test_test' });
+    expect(res.statusCode).to.equal(200);
+    expect(res.body).to.have.property('jwtToken');
+    token = res.body.jwtToken; // save token for later use in tests
+  })
 
     it('should return 400 "Username already exists" if username already exists', async function(){
         const res = await request(start)

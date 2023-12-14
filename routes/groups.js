@@ -8,12 +8,13 @@ const { createToken, auth } = require('../Auth/auth');
 const {deleteGroupAndDependencies, removeUserFromGroup, getMembers, getGroups,CreateGroup,getGroupUsers, joinRequest,getAdmin, getGroup, getRequests, getYourGroups, acceptRequest, rejectRequest, getUsersGroup, getGroupsWithAdmin} = require('../postgre/groups');
 const { getNews } = require('../postgre/news');
 
+// Get all groups
 router.get("/getGroups", upload.none(), async (req,res) =>{
     try {
         const result = await getGroups();
-        res.json(result.rows);
+        res.status(200).json(result.rows);
     } catch (error) {
-        console.error("Error executing query:", error);
+        console.error("Error getting all groups: ", error);
         
     }
 });
@@ -38,8 +39,8 @@ router.post("/createGroup", auth, async (req,res) =>{
 
         
         
-        await CreateGroup(groupInfo.adminId,groupInfo.groupName,groupInfo.groupDesc);
-        res.status(200).json({ groupInfo: groupInfo});
+        const result = await CreateGroup(groupInfo.adminId,groupInfo.groupName,groupInfo.groupDesc);
+        res.status(200).json({ groupInfo: groupInfo, community_id: result.rows[0].community_id});
     } catch(error){
         console.log("Error executing query:", error)
         
@@ -51,8 +52,9 @@ router.delete("/deleteGroup/:admin_id/:community_id", auth, async (req,res) =>{
     try {
         const community_id = req.params.community_id;
         const admin_id = req.params.admin_id;
-        await deleteGroupAndDependencies(admin_id, community_id);
-        res.status(200).json({ message: "Group deleted"});
+        const result = await deleteGroupAndDependencies(admin_id, community_id);
+        console.log("Group delete result: " + result)
+        res.status(200).json({ message: "Group deleted", result: result});
     } catch(error){
         console.log("Error deleting group:", error)
         

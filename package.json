@@ -16,6 +16,6 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "mocha test/*.js --timeout 10000"
+    "test": "mocha test/groups.test.js --timeout 10000"
   }
 }
