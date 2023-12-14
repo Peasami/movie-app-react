@@ -6,6 +6,18 @@ const reviewRoute = require('./routes/reviews');
 const groupRoute = require('./routes/group');
 const newsRoute = require('./routes/news');
 
+const path = require('path');
+app.get("/*", function (req, res) {
+    res.sendFile(
+        path.join(__dirname, "public/index.html"),
+        function (err) {
+            if (err) {
+                res.status(500).send(err);
+            }
+        }
+    )
+});
+
 const cors = require('cors');
 
 
