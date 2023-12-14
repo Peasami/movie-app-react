@@ -152,7 +152,12 @@ function GroupMembersForm(adminProps){
     }
 
     function removeUserFromGroup(userId){
-        axios.delete("http://localhost:3001/groups/removeUserFromGroup/" + userId + "/" + groupId)
+        
+        const config = {
+            headers: { Authorization: 'Bearer ' + jwtToken.value }
+        }
+
+        axios.delete("http://localhost:3001/groups/removeUserFromGroup/" + userId + "/" + groupId, config)
             .then(res => console.log(res))
             .then(() => getMembers())
             .catch(err => console.log(err.response.data));

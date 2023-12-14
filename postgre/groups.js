@@ -191,7 +191,8 @@ async function getYourGroups(admin_id){
 
 // Accepts pending group join request by updating pending to false
 async function acceptRequest(account_community_id){
-    await pgPool.query(sql.ACCEPT_REQUEST, [account_community_id]);
+    const result = await pgPool.query(sql.ACCEPT_REQUEST, [account_community_id]);
+    return result;
 }
 
 // Rejects pending group join request by deleting it from database

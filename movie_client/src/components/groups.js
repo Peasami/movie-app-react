@@ -13,10 +13,7 @@ function Groups() {
       {jwtToken.value.length === 0 ?<h1></h1> : <CreateGroupForm />}
       {jwtToken.value.length === 0 ?<h1></h1> : <ShowRequestsForm />}
       {jwtToken.value.length === 0 ?<h1></h1> : <YourGroupsForm />}
-      <ShowGroupsForm />
-			{/* 
-      <button onClick={() => console.log('userinfo: ' + JSON.stringify(userInfo.value))}>userinfo</button>
-			*/}    
+      <ShowGroupsForm />   
 		</div>
   );
 
@@ -28,9 +25,15 @@ function ShowGroupsForm() {
 
   const [groups, setGroups] = useState([]);
 
+  // stores jwtToken from signals.js
+  const config = {
+    headers: { Authorization: 'Bearer ' + jwtToken.value }
+  }
+
+
   // gets groups from database
   function getGroups() {
-    axios.get('http://localhost:3001/groups/getGroupsWithAdmin')
+    axios.get('http://localhost:3001/groups/getGroupsWithAdmin', config)
       .then(res => setGroups(res.data))
       .catch(err => console.log(err.response.data));
   }
@@ -79,7 +82,6 @@ function JoinGroupButton(groupId) {
     headers: { Authorization: 'Bearer ' + jwtToken.value }
   }
   function joinGroup() {
-    console.log("hello")
     axios.post('http://localhost:3001/groups/addRequest', requestBody, config)
       .then(res => console.log(res.data))
       .catch(err => console.log(err.response.data));
@@ -161,8 +163,6 @@ function ShowRequestsForm(){
         })
         .catch(err => console.log(err.response));
     }else{
-      console.log("userInfo has no value")
-      // console.log("requests: " + JSON.stringify(requests[0]))
       setTimeout(GetRequests, 250);
     }
   }
@@ -197,9 +197,7 @@ function ShowRequestsForm(){
 
   // change pending status to false in table account_community
   function acceptRequest(requestId){
-    console.log("config: " + JSON.stringify(config));
-    axios.put('http://localhost:3001/groups/acceptRequest/' + requestId)
-      .then(res => console.log(res.data))
+    axios.put('http://localhost:3001/groups/acceptRequest/' + requestId, null, config)
       .then(() => console.log("request accepted"))
       .then(() => GetRequests())
       .then(() => showNoteForTime("Request accepted", 3000))
@@ -209,13 +207,13 @@ function ShowRequestsForm(){
   // delete table account_community from database
   function rejectRequest(requestId){
     axios.delete('http://localhost:3001/groups/rejectRequest/' + requestId, config)
-      .then(res => console.log(res.data))
       .then(() => console.log("request rejected"))
       .then(() => GetRequests())
       .then(() => showNoteForTime("Request rejected", 3000))
       .catch(err => console.log(err.response));
   }
 
+  // Shows note for a certain time
   function showNoteForTime(note, time){
     setShowNote(note);
     setTimeout(() => setShowNote(null), time);
@@ -251,18 +249,19 @@ function ShowRequestsForm(){
 
 }
 
+// Shows any notification
+// props.note = notification text
+function NotificationForm(props) {
 
-function NotificationForm(props){
-
-  return(
+  return (
     <div>
-    {window.location.pathname === "/groups" && (
-      
-      <div>
-      <h1>{props.note}</h1>
-      </div>
-          
-    )}
+      {window.location.pathname === "/groups" && (
+
+        <div>
+          <h1>{props.note}</h1>
+        </div>
+
+      )}
     </div>
 
   )

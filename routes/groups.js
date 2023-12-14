@@ -30,7 +30,8 @@ router.get("/getGroup/:community_id", auth, upload.none(), async (req,res) =>{
     }
 });
 
-router.get("/getGroupsWithAdmin", upload.none(), async (req,res) =>{
+// Get ALL groups and their admin name
+router.get("/getGroupsWithAdmin", auth, upload.none(), async (req,res) =>{
     try {
         const result = await getGroupsWithAdmin();
         res.json(result.rows);
@@ -127,7 +128,7 @@ router.get("/getYourGroups/:adminId", async (req,res) => {
 });
 
 // accept request by updating "pending" -column to false
-router.put("/acceptRequest/:requestId", async (req,res) => {
+router.put("/acceptRequest/:requestId", auth, async (req,res) => {
     try{
         const result = await acceptRequest(req.params.requestId);
         res.status(200).json(result);
@@ -146,6 +147,7 @@ router.delete("/rejectRequest/:requestId", auth, async (req,res) => {
     }
 });
 
+// Gets information of groups where the user is a member or requesting membership
 router.get("/getUsersGroup/:account_id", async (req,res) =>{
     try {
         const result = await getUsersGroup(req.params.account_id);
@@ -155,6 +157,7 @@ router.get("/getUsersGroup/:account_id", async (req,res) =>{
     }
 });
 
+// Gets all members of a group
 router.get("/getMembers/:community_id", async (req,res) =>{
     try {
         const result = await getMembers(req.params.community_id);
@@ -164,6 +167,7 @@ router.get("/getMembers/:community_id", async (req,res) =>{
     }
 });
 
+// Gets admin of a group
 router.get("/getAdmin/:community_id", async (req,res) =>{
     try {
         const result = await getAdmin(req.params.community_id);
@@ -173,7 +177,9 @@ router.get("/getAdmin/:community_id", async (req,res) =>{
     }
 });
 
-router.delete("/removeUserFromGroup/:account_id/:community_id", async (req,res) =>{
+// Removes user from selected group by deleting account_community table
+// Also works if the user is admin or requesting membership
+router.delete("/removeUserFromGroup/:account_id/:community_id", auth, async (req,res) =>{
     try {
         const result = await removeUserFromGroup(req.params.account_id, req.params.community_id);
         res.status(200).json(result);
