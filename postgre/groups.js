@@ -49,15 +49,10 @@ async function getGroupsWithAdmin() {
     return result
 }
 
-// Get group by community_id
+// Get group name and desc by community_id
 async function getGroup(community_id){
-try {
     const result = await pgPool.query(sql.GET_1_GROUP, [community_id]);
     return result;
-    
-} catch (error) {
-    console.error("Error executing query:", error);
-}
 }
 
 // Creates a group and adds the admin to the group via the account_community table

@@ -19,6 +19,17 @@ router.get("/getGroups", upload.none(), async (req,res) =>{
     }
 });
 
+// Get group name and desc by community id
+router.get("/getGroup/:community_id", auth, upload.none(), async (req,res) =>{
+    try {
+        const result = await getGroup(req.params.community_id);
+        res.status(200).json(result.rows);
+    } catch (error) {
+        console.error("Error getting group: ", error);
+        
+    }
+});
+
 router.get("/getGroupsWithAdmin", upload.none(), async (req,res) =>{
     try {
         const result = await getGroupsWithAdmin();
