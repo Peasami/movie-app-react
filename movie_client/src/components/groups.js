@@ -304,7 +304,7 @@ function YourGroupsForm(){
   }, []);
 
   function GroupForm(props){
-    const groupLink = "http://localhost:3000/groups/" + props.community_id;
+    const groupLink = "/groups/" + props.community_id;
     return(
       <div>
       {window.location.pathname === "/groups" && (
