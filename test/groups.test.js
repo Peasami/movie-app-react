@@ -1,3 +1,8 @@
+// For testing groups route queries.
+// Creates a new user to get token and to create a group.
+// Deletes the user after tests.
+
+
 const { expect } = require('chai');
 const request = require('supertest');
 const start = require('../start');
