@@ -10,12 +10,14 @@ function Groups() {
   return (
     <div>
       <a id="home-page-link" href="/groups">Groups:</a>
-      {jwtToken.value.length === 0 ?<h1>Log in to create group</h1> : <CreateGroupForm />}
+      {jwtToken.value.length === 0 ?<h1></h1> : <CreateGroupForm />}
       {jwtToken.value.length === 0 ?<h1></h1> : <ShowRequestsForm />}
       {jwtToken.value.length === 0 ?<h1></h1> : <YourGroupsForm />}
       <ShowGroupsForm />
+			{/* 
       <button onClick={() => console.log('userinfo: ' + JSON.stringify(userInfo.value))}>userinfo</button>
-    </div>
+			*/}    
+		</div>
   );
 
 }
@@ -40,7 +42,7 @@ function ShowGroupsForm() {
             <h1 id="group-name">{props.community_name}</h1>
             <p id="group-desc">{props.community_desc}</p>
             <p id='group-admin'>{"Admin: "+props.username}</p>
-            {jwtToken.value.length === 0 ? <h1>Log in to join group</h1> : <JoinGroupButton groupId={props.community_id}/>}
+            {jwtToken.value.length === 0 ? <p>Log in to join group</p> : <JoinGroupButton groupId={props.community_id}/>}
           </div>
 
     )

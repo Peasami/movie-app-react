@@ -55,9 +55,7 @@
 	border: 1px solid #ddd;
 	border-radius: 8px;
 	max-width: 300px;
-	/* Adjust the max-width as needed */
 	margin-left: 2%;
-	/* Center the container horizontally */
 }
 
 #create-group input {
