@@ -128,7 +128,7 @@ const News = () => {
               {renderUserGroups}
               <h3 id='articleTitle'>{article.Title}</h3>
               <p id='date'>Publish Date: {article.PublishDate.slice(0, 10)}</p>
-              <p>{article.HTMLLead}</p>
+              <p id='news-text'>{article.HTMLLead}</p>
               <p>
                 <a id='link' href={article.ArticleURL} target="_blank">Lue lisää</a>
               </p>

@@ -1,0 +1,45 @@
+#auth-form {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  max-width: 400px;
+  margin: auto;
+  margin-top: 50px;
+	
+}
+
+#auth-form input {
+	width: 90%;
+	margin: 10px;
+  border-radius: 8px;
+  padding: 8px;
+  position: relative;
+}
+
+#auth-form button {
+	padding: 8px 12px;
+	cursor: pointer;
+	border-radius: 12px;
+	margin: 10px;
+}
+
+#pw {
+	position: relative;
+}
+
+#pw input {
+	width: 90%;
+  border-radius: 8px;
+  padding: 8px;
+  position: relative;
+}
+
+#pw button {
+	color: #969696;
+	background: transparent;
+	border-radius: 50px;
+	border: none;
+	position: absolute;
+	right: 5px;
+	bottom: 0;
+}

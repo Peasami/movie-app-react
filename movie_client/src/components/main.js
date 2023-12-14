@@ -5,13 +5,16 @@ import axios from "axios";
 import "../stylesheets/trending-window.css";
 import "../stylesheets/navigation.css";
 import Reviews from './reviews.js';
+import Groups from './groups.js';
 // Main component rendering Trending, Reviews, and Groups components
 function Main() {
   return (
     <div>
       <Trending />
-      <Reviews />
-      <Groups />
+      <div className="reviews-and-groups">
+          <Reviews />
+          <Groups />
+      </div>
     </div>
   );
 }
@@ -92,17 +95,5 @@ function Trending() {
   }
 }
 
-function Groups() {
-  return (
-    <div>
-      <h1>
-        <Link to="/groups" style={{ textDecoration: "none" }}>
-          Groups
-        </Link>
-      </h1>
-      <div style={{ width: "300px", height: "250px", border: "solid" }}></div>
-    </div>
-  );
-}
 
 export default Main;
