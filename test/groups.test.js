@@ -52,7 +52,8 @@ describe('Groups route', function () {
 
     it('should return 200 and all groups with admin id', async function () {
         const res = await request(start)
-            .get('/groups/getGroupsWithAdmin');
+            .get('/groups/getGroupsWithAdmin')
+            .set('Authorization', 'Bearer ' + token);
         expect(res.statusCode).to.equal(200);
         expect(res.body).to.be.an('array');
         expect(res.body[0]).to.have.property('admin_id');

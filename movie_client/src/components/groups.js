@@ -28,9 +28,15 @@ function ShowGroupsForm() {
 
   const [groups, setGroups] = useState([]);
 
+  // stores jwtToken from signals.js
+  const config = {
+    headers: { Authorization: 'Bearer ' + jwtToken.value }
+  }
+
+
   // gets groups from database
   function getGroups() {
-    axios.get('http://localhost:3001/groups/getGroupsWithAdmin')
+    axios.get('http://localhost:3001/groups/getGroupsWithAdmin', config)
       .then(res => setGroups(res.data))
       .catch(err => console.log(err.response.data));
   }
@@ -161,8 +167,6 @@ function ShowRequestsForm(){
         })
         .catch(err => console.log(err.response));
     }else{
-      console.log("userInfo has no value")
-      // console.log("requests: " + JSON.stringify(requests[0]))
       setTimeout(GetRequests, 250);
     }
   }
@@ -197,9 +201,7 @@ function ShowRequestsForm(){
 
   // change pending status to false in table account_community
   function acceptRequest(requestId){
-    console.log("config: " + JSON.stringify(config));
     axios.put('http://localhost:3001/groups/acceptRequest/' + requestId)
-      .then(res => console.log(res.data))
       .then(() => console.log("request accepted"))
       .then(() => GetRequests())
       .then(() => showNoteForTime("Request accepted", 3000))
@@ -209,7 +211,6 @@ function ShowRequestsForm(){
   // delete table account_community from database
   function rejectRequest(requestId){
     axios.delete('http://localhost:3001/groups/rejectRequest/' + requestId, config)
-      .then(res => console.log(res.data))
       .then(() => console.log("request rejected"))
       .then(() => GetRequests())
       .then(() => showNoteForTime("Request rejected", 3000))
