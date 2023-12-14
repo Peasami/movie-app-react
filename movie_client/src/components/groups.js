@@ -9,8 +9,7 @@ function Groups() {
   // shows loginForm only if user has jwtToken (logged in)
   return (
     <div>
-      
-      {window.location.pathname === "/" && <a id="home-page-link" href="/groups">Groups:</a>}
+      <Link to="/groups" id="home-page-link">Groups:</Link>
       {jwtToken.value.length === 0 ?<h1></h1> : <CreateGroupForm />}
       {jwtToken.value.length === 0 ?<h1></h1> : <ShowRequestsForm />}
       {jwtToken.value.length === 0 ?<h1></h1> : <YourGroupsForm />}
@@ -305,7 +304,7 @@ function YourGroupsForm(){
   }, []);
 
   function GroupForm(props){
-    const groupLink = "http://localhost:3000/groups/" + props.community_id;
+    const groupLink = "/groups/" + props.community_id;
     return(
       <div>
       {window.location.pathname === "/groups" && (
