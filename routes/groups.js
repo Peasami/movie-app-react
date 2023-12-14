@@ -147,6 +147,7 @@ router.delete("/rejectRequest/:requestId", auth, async (req,res) => {
     }
 });
 
+// Gets information of groups where the user is a member or requesting membership
 router.get("/getUsersGroup/:account_id", async (req,res) =>{
     try {
         const result = await getUsersGroup(req.params.account_id);
@@ -156,6 +157,7 @@ router.get("/getUsersGroup/:account_id", async (req,res) =>{
     }
 });
 
+// Gets all members of a group
 router.get("/getMembers/:community_id", async (req,res) =>{
     try {
         const result = await getMembers(req.params.community_id);
@@ -165,6 +167,7 @@ router.get("/getMembers/:community_id", async (req,res) =>{
     }
 });
 
+// Gets admin of a group
 router.get("/getAdmin/:community_id", async (req,res) =>{
     try {
         const result = await getAdmin(req.params.community_id);
@@ -174,7 +177,9 @@ router.get("/getAdmin/:community_id", async (req,res) =>{
     }
 });
 
-router.delete("/removeUserFromGroup/:account_id/:community_id", async (req,res) =>{
+// Removes user from selected group by deleting account_community table
+// Also works if the user is admin or requesting membership
+router.delete("/removeUserFromGroup/:account_id/:community_id", auth, async (req,res) =>{
     try {
         const result = await removeUserFromGroup(req.params.account_id, req.params.community_id);
         res.status(200).json(result);
