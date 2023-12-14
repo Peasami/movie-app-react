@@ -40,14 +40,14 @@ function ShowGroupsForm() {
 
   function GroupForm(props) {
     return (
-
-          <div className='group-item' key={props.community_id}>
-            <h1 id="group-name">{props.community_name}</h1>
-            <p id="group-desc">{props.community_desc}</p>
-            <p id='group-admin'>{"Admin: "+props.username}</p>
-            {jwtToken.value.length === 0 ? <p>Log in to join group</p> : <JoinGroupButton groupId={props.community_id}/>}
-          </div>
-
+  
+      <div className='group-item' key={props.community_id}>      
+        <h1 id="group-name">{props.community_name}</h1>
+        <p id="group-desc">{props.community_desc}</p>
+        <p id='group-admin'>{"Admin: "+props.username}</p>
+        {jwtToken.value.length === 0 ? <p>Log in to join group</p> : <JoinGroupButton groupId={props.community_id}/>}
+      </div>
+     
     )
   }
 
@@ -125,6 +125,7 @@ function CreateGroupForm() {
     <div>
     {window.location.pathname === "/groups" && (   
       <div id='create-group'>
+        <h3>Create a new group</h3>
         <input placeholder="Add Group Name" value={groupName} onChange={e => setGroupName(e.target.value)} />
         <input placeholder="Add Group Description" value={groupDesc} onChange={e => setGroupDesc(e.target.value)} />
         <button id='group-btn' onClick={createGroup}>Create Group</button>
@@ -233,7 +234,7 @@ function ShowRequestsForm(){
       <div>
       {requests && requests.length > 0
         ?
-        <div id="requests-form" style={{ border: "solid", margin: "12px" }}>
+        <div id="requests-form">
           <h1>Requests</h1>
           {console.log("requests: " + JSON.stringify(requests))}
           {requests.map((request) => (RequestForm(request)
@@ -309,11 +310,11 @@ function YourGroupsForm(){
       {window.location.pathname === "/groups" && (
         
         <Link to={groupLink}>
-          <div>
-            <h1>{props.community_name}</h1>
+          <div id="pending-groups">
+            <h2>{props.community_name}</h2>
             {
-              props.pending ? <h2>PENDING</h2> : 
-              props.admin_id===userInfo.value.userId ? <h2>ADMIN</h2> : <h2>MEMBER</h2>
+              props.pending ? <p>Request sent</p> : 
+              props.admin_id===userInfo.value.userId ? <p>ADMIN</p> : <p>Member</p>
             }
           </div>
         </Link>
@@ -329,7 +330,7 @@ function YourGroupsForm(){
     {window.location.pathname === "/groups" && (
       
       <div>
-        <h1>Your Groups</h1>
+        <h2>Your Groups: </h2>
         {groups.map(group => <h1 key={group.community_id}>{GroupForm(group)}</h1>)}
       </div>
       
