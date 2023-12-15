@@ -14,17 +14,8 @@ const cors = require('cors');
 
 const app = express();
 
-// const path = require('path');
-// app.get("/*", function (req, res) {
-//     res.sendFile(
-//         path.join(__dirname, "public/index.html"),
-//         function (err) {
-//             if (err) {
-//                 res.status(500).send(err);
-//             }
-//         }
-//     )
-// });
+const path = require('path');
+
 
 //Setting middleware
 app.use(express.urlencoded({extended: true}));
@@ -38,6 +29,17 @@ app.use('/groups', groupsRoute );
 app.use('/reviews',reviewRoute );
 app.use('/group', groupRoute );
 app.use('/news', newsRoute );
+
+app.get("/*", function (req, res) {
+    res.sendFile(
+        path.join(__dirname, "public/index.html"),
+        function (err) {
+            if (err) {
+                res.status(500).send(err);
+            }
+        }
+    )
+});
 
 //Start server
 const PORT = process.env.PORT || 3001;
