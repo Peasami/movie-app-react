@@ -179,8 +179,8 @@ function ShowRequestsForm(){
       <div>
       {window.location.pathname === "/groups" && (
         
-        <div style={{border: "solid", borderColor: "pink", margin: "12px"}}>
-          <h1>{props.username + "  " + props.community_name + "  " + props.account_community_id}</h1>
+        <div id='create-group'>
+          <h1>{props.username + "  " + props.community_name}</h1>
           <button id='group-btn'onClick={() => acceptRequest(props.account_community_id)}>Accept request</button>
           <button id='group-btn'onClick={() => rejectRequest(props.account_community_id)}>Decline request</button>
         </div>    
