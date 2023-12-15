@@ -10,7 +10,7 @@ function Register({}) {
   const [showPassword, setShowPassword] = useState(false);
 
   function register() {
-    axios.post('http://localhost:3001/account/register', { username, pw })
+    axios.post('https://movie-app-h3st.onrender.com/account/register', { username, pw })
       .then(res => {
         console.log("käyttäjän luonti onnistui");
         setSuccessMessage("Registration successful! You can now log in.");

@@ -22,7 +22,7 @@ function UserProfile() {
           console.log("Account ID:", accountId);
           console.log("Token:", jwtToken);
 
-          const response = await axios.get(`http://localhost:3001/reviews/Review/${accountId}`);
+          const response = await axios.get(`https://movie-app-h3st.onrender.com/reviews/Review/${accountId}`);
 
           if (response.data) {
             const movieIds = response.data.map((review) => review.movie_id);
@@ -47,7 +47,7 @@ function UserProfile() {
       try {
         if (userInfo.value && userInfo.value.userId) {
           const accountId = userInfo.value.userId;
-          const response = await axios.get(`http://localhost:3001/groups/getYourGroups/${accountId}`);
+          const response = await axios.get(`https://movie-app-h3st.onrender.com/groups/getYourGroups/${accountId}`);
 
           if (response.data) {
             setPersonalGroups(response.data);
@@ -103,14 +103,14 @@ function UserProfile() {
       console.log("käy täällä");
       if (userInfo.value && userInfo.value.userId) {
         const accountId = userInfo.value.userId;
-        const response = await axios.delete(`http://localhost:3001/account/Delete/${accountId}`, {
+        const response = await axios.delete(`https://movie-app-h3st.onrender.com/account/Delete/${accountId}`, {
           headers: {
             Authorization: `Bearer ${jwtToken}`,
           },
         });
   
       
-        window.location.href = 'http://localhost:3000/';
+        window.location.href = 'https://movie-app-h3st.onrender.com/';
         jwtToken.value = '';
       }
     } catch (error) {

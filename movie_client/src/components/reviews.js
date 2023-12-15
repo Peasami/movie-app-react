@@ -22,7 +22,7 @@ const Reviews = () => {
 
     // getReviews
     const getReviews = async () => {
-      const getReviewEndpoint = "http://localhost:3001/reviews/getReviews";
+      const getReviewEndpoint = "https://movie-app-h3st.onrender.com/reviews/getReviews";
       try {
         const response = await axios.get(getReviewEndpoint);
         const data = response.data;
@@ -65,7 +65,7 @@ const Reviews = () => {
       return;
     }
     const accountId = userInfo.value.userId;
-    const postReviewEndpoint = `http://localhost:3001/reviews/Review/${accountId}`;
+    const postReviewEndpoint = `https://movie-app-h3st.onrender.com/reviews/Review/${accountId}`;
     try {
       const response = await axios.post(postReviewEndpoint, {
         accountId,
@@ -83,7 +83,7 @@ const Reviews = () => {
 
   //fetch username from db
   const fetchUsername = async (account_id) => {
-    const dbUsernameEndpoint = `http://localhost:3001/account/getUsername/${account_id}`;
+    const dbUsernameEndpoint = `https://movie-app-h3st.onrender.com/account/getUsername/${account_id}`;
     try {
       const response = await axios.get(dbUsernameEndpoint);
       return response.data;

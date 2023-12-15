@@ -31,7 +31,7 @@ router.get("/getGroup/:community_id", auth, upload.none(), async (req,res) =>{
 });
 
 // Get ALL groups and their admin name
-router.get("/getGroupsWithAdmin", auth, upload.none(), async (req,res) =>{
+router.get("/getGroupsWithAdmin", upload.none(), async (req,res) =>{
     try {
         const result = await getGroupsWithAdmin();
         res.json(result.rows);
