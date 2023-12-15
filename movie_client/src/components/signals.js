@@ -37,7 +37,7 @@ effect(() => {
 
     // Update userInfo
     if(jwtToken.value.length !== 0){
-        axios.get('http://localhost:3001/account/getUserInfo', config)
+        axios.get('https://movie-app-h3st.onrender.com/account/getUserInfo', config)
             .then(res => {
                 userInfo.value = res.data;
             })

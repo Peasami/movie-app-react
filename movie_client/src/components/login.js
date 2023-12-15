@@ -15,7 +15,7 @@ function Login() {
 export const handleLogout = () => {
   if (userInfo && userInfo.value) {
     
-    window.location.href = 'http://localhost:3000/';
+    window.location.href = 'https://movie-app-h3st.onrender.com/';
     jwtToken.value = "" 
   } else {
     
@@ -33,13 +33,13 @@ function LoginForm() {
   
 
   function login() {
-    axios.postForm('http://localhost:3001/account/login', { username, pw })
+    axios.postForm('https://movie-app-h3st.onrender.comn', { username, pw })
       .then(res => jwtToken.value = res.data.jwtToken)
       .catch(err => console.log(err.response.data));
   }
   const ReDirectToRegister = () => {
     
-    window.location.href = 'http://localhost:3000/register';
+    window.location.href = 'https://movie-app-h3st.onrender.com/register';
   };
 
   return (

@@ -6,11 +6,25 @@ const reviewRoute = require('./routes/reviews');
 const groupRoute = require('./routes/group');
 const newsRoute = require('./routes/news');
 
+
+
 const cors = require('cors');
 
 
 
 const app = express();
+
+// const path = require('path');
+// app.get("/*", function (req, res) {
+//     res.sendFile(
+//         path.join(__dirname, "public/index.html"),
+//         function (err) {
+//             if (err) {
+//                 res.status(500).send(err);
+//             }
+//         }
+//     )
+// });
 
 //Setting middleware
 app.use(express.urlencoded({extended: true}));
