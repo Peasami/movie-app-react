@@ -33,7 +33,7 @@ function LoginForm() {
   
 
   function login() {
-    axios.postForm('https://movie-app-h3st.onrender.comn', { username, pw })
+    axios.postForm('https://movie-app-h3st.onrender.com', { username, pw })
       .then(res => jwtToken.value = res.data.jwtToken)
       .catch(err => console.log(err.response.data));
   }
