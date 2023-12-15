@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { jwtToken, userInfo } from "./signals"
 import '../stylesheets/login-register.css'
+import { Link } from "react-router-dom";
 
 
 function Login() {
@@ -15,7 +16,7 @@ function Login() {
 export const handleLogout = () => {
   if (userInfo && userInfo.value) {
     
-    window.location.href = 'http://localhost:3000/';
+    window.location.href = 'https://movie-app-h3st.onrender.com/';
     jwtToken.value = "" 
   } else {
     
@@ -33,14 +34,10 @@ function LoginForm() {
   
 
   function login() {
-    axios.postForm('http://localhost:3001/account/login', { username, pw })
+    axios.postForm('https://movie-app-h3st.onrender.com/account/login', { username, pw })
       .then(res => jwtToken.value = res.data.jwtToken)
       .catch(err => console.log(err.response.data));
   }
-  const ReDirectToRegister = () => {
-    
-    window.location.href = 'http://localhost:3000/register';
-  };
 
   return (
     <div id='auth-form'>
@@ -63,7 +60,7 @@ function LoginForm() {
       <button onClick={() => jwtToken.value = ''}>Logout</button>
 			<button onClick={() => console.log('jwtToken: ' + jwtToken.value + '\nuserInfo: ' + JSON.stringify(userInfo.value))}>logindata</button>
 			*/}
-			<button onClick={ReDirectToRegister}>Register</button>
+			<Link to="/register" id="register-link">No account? Register here.</Link>
 			</div>
   )
 }

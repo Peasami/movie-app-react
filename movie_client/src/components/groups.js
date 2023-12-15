@@ -33,7 +33,7 @@ function ShowGroupsForm() {
 
   // gets groups from database
   function getGroups() {
-    axios.get('http://localhost:3001/groups/getGroupsWithAdmin', config)
+    axios.get('https://movie-app-h3st.onrender.com/groups/getGroupsWithAdmin', config)
       .then(res => setGroups(res.data))
       .catch(err => console.log(err.response.data));
   }
@@ -82,7 +82,7 @@ function JoinGroupButton(groupId) {
     headers: { Authorization: 'Bearer ' + jwtToken.value }
   }
   function joinGroup() {
-    axios.post('http://localhost:3001/groups/addRequest', requestBody, config)
+    axios.post('https://movie-app-h3st.onrender.com/groups/addRequest', requestBody, config)
       .then(res => console.log(res.data))
       .catch(err => console.log(err.response.data));
   }
@@ -116,7 +116,7 @@ function CreateGroupForm() {
   }
 
   function createGroup() {
-    axios.post('http://localhost:3001/groups/createGroup', bodyParameters, config)
+    axios.post('https://movie-app-h3st.onrender.com/groups/createGroup', bodyParameters, config)
       .then(res => console.log(res.data))
       .catch(err => console.log(err.response.data));
   }
@@ -158,7 +158,7 @@ function ShowRequestsForm(){
     }
 
     if(typeof userInfo.value.userId !== "undefined"){
-      axios.get('http://localhost:3001/groups/getRequests/' + JSON.stringify(userInfo.value.userId), config)
+      axios.get('https://movie-app-h3st.onrender.com/groups/getRequests/' + JSON.stringify(userInfo.value.userId), config)
         .then(res => {
           setRequests(res.data)
         })
@@ -198,7 +198,7 @@ function ShowRequestsForm(){
 
   // change pending status to false in table account_community
   function acceptRequest(requestId){
-    axios.put('http://localhost:3001/groups/acceptRequest/' + requestId, null, config)
+    axios.put('https://movie-app-h3st.onrender.com/groups/acceptRequest/' + requestId, null, config)
       .then(() => console.log("request accepted"))
       .then(() => GetRequests())
       .then(() => showNoteForTime("Request accepted", 3000))
@@ -207,7 +207,7 @@ function ShowRequestsForm(){
 
   // delete table account_community from database
   function rejectRequest(requestId){
-    axios.delete('http://localhost:3001/groups/rejectRequest/' + requestId, config)
+    axios.delete('https://movie-app-h3st.onrender.com/groups/rejectRequest/' + requestId, config)
       .then(() => console.log("request rejected"))
       .then(() => GetRequests())
       .then(() => showNoteForTime("Request rejected", 3000))
@@ -288,7 +288,7 @@ function YourGroupsForm(){
     }
 
     if(typeof userInfo.value.userId !== "undefined"){
-      axios.get('http://localhost:3001/groups/getUsersGroup/' + JSON.stringify(userInfo.value.userId))
+      axios.get('https://movie-app-h3st.onrender.com/groups/getUsersGroup/' + JSON.stringify(userInfo.value.userId))
         .then(res => {
           setGroups(res.data.rows);
         })

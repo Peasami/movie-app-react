@@ -44,7 +44,7 @@ const News = () => {
     if (userInfo.value) {
  
       const accountId = userInfo.value.userId;
-      const getGroupsEndpoint = `http://localhost:3001/groups/getUsersGroup/${accountId}`;
+      const getGroupsEndpoint = `https://movie-app-h3st.onrender.com/groups/getUsersGroup/${accountId}`;
 
       try {
         const response = await axios.get(getGroupsEndpoint);
@@ -98,7 +98,7 @@ const News = () => {
   //post
   const post = async (accountId, community_id, ArticleURL) => {
     if (community_id !== undefined) {
-      const postNewsEndpoint = `http://localhost:3001/News/AddNews/${accountId}`;
+      const postNewsEndpoint = `https://movie-app-h3st.onrender.com/News/AddNews/${accountId}`;
       try {
           const response = await axios.post(postNewsEndpoint, {
               accountId: accountId,
