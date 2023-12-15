@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { jwtToken, userInfo } from "./signals"
 import '../stylesheets/login-register.css'
+import { Link } from "react-router-dom";
 
 
 function Login() {
@@ -37,10 +38,6 @@ function LoginForm() {
       .then(res => jwtToken.value = res.data.jwtToken)
       .catch(err => console.log(err.response.data));
   }
-  const ReDirectToRegister = () => {
-    
-    window.location = 'https://movie-app-h3st.onrender.com/register';
-  };
 
   return (
     <div id='auth-form'>
@@ -63,7 +60,7 @@ function LoginForm() {
       <button onClick={() => jwtToken.value = ''}>Logout</button>
 			<button onClick={() => console.log('jwtToken: ' + jwtToken.value + '\nuserInfo: ' + JSON.stringify(userInfo.value))}>logindata</button>
 			*/}
-			<button onClick={ReDirectToRegister}>Register</button>
+			<Link to="/register" id="register-link">No account? Register here.</Link>
 			</div>
   )
 }
