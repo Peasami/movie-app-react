@@ -14,7 +14,6 @@ Tietotekniikan ja viestinnän insinööri opiskelijoiden toisen vuoden projektei
 * Ryhmäsivun sisällön muokkaaminen
 * Sivuston responsiivisuus
 * Suodatettu haku elokuville/sarjoille
-* Oman näkymän muokkaaminen ja sen jakaminen
 * Arvostelu ominaisuus
 
 
@@ -33,7 +32,7 @@ Visual Studio Code, PostgreSQL, Postman,
 
 
 
-
+### Linkki webbisivustoon: https://movie-app-h3st.onrender.com/
 
 
 ### Tekijät
