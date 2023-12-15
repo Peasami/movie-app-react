@@ -39,7 +39,7 @@ function LoginForm() {
   }
   const ReDirectToRegister = () => {
     
-    window.location.href = 'https://movie-app-h3st.onrender.com/register';
+    window.location = 'https://movie-app-h3st.onrender.com/register';
   };
 
   return (
