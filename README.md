@@ -1,4 +1,7 @@
 # Movie App
+### Link to the website: https://movie-app-h3st.onrender.com/
+
+## info
 OAMK (Oulu University of Applied Sciences) second year studies include making a react web application. The application utilizes API calls from a third-party movie database TMDB, and uses it's own database for storing user- and group data.
 
 This repository is a duplicate of the private repository that our group made for the project. The only difference is this README -file.
@@ -26,7 +29,7 @@ The project was made as a react app. The app has it's own SQL database done with
 Visual Studio Code, PostgreSQL, Postman
 
 
-### Link to the website: https://movie-app-h3st.onrender.com/
+
 
 
 ### Authors
