@@ -6,8 +6,13 @@ OAMK (Oulu University of Applied Sciences) second year studies include making a 
 
 This repository is a duplicate of the private repository that our group made for the project. The only difference is this README -file.
 
+## Used technologies
+* Frontend with **React**
+* Backend with **Node.js**
+* Database with **PostgreSQL**
+
 ## My contributions
-My (Santeri Hyry) biggest contribution was frontend and backend functionalities for group views. I wrote the components for getting all relevant data from the database, and displaying them to the user. 
+My biggest contribution to this project was the frontend and backend functionalities for group views. I wrote the components for getting all relevant data from the database, and displaying them to the user. 
 The program also makes checks to see if the user is logged in, group member, or group admin, and changes displayed components accordingly.
 
 ## Requirements that have been met
@@ -20,16 +25,8 @@ The program also makes checks to see if the user is logged in, group member, or 
 * Movie review publishing and browsing
 
 
-
-
-## Project
-The project was made as a react app. The app has it's own SQL database done with PostgreSQL. The website is hosted on render.com. 
-
 ## Software used
 Visual Studio Code, PostgreSQL, Postman
-
-
-
 
 
 ### Authors
