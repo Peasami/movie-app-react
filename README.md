@@ -15,7 +15,7 @@ This repository is a duplicate of the private repository that our group made for
 My biggest contribution to this project was the frontend and backend functionalities for group views. I wrote the components for getting all relevant data from the database, and displaying them to the user. 
 The program also makes checks to see if the user is logged in, group member, or group admin, and changes displayed components accordingly.
 
-## Requirements that have been met
+## Working functionalities
 * User creation and deletion
 * User login
 * Custom group creation
