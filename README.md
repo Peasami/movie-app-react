@@ -1,6 +1,6 @@
 # Movie App
 ### Link to the website: https://movie-app-h3st.onrender.com/
-The website might not work correctly depending if backend is still active.
+The website might not work correctly depending if backend is still running.
 
 ## info
 OAMK (Oulu University of Applied Sciences) second year studies include making a react web application. The application utilizes API calls from a third-party movie database TMDB, and uses it's own database for storing user- and group data.
