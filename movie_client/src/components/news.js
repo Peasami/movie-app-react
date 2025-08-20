@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "../stylesheets/news.css";
 import { userInfo } from "./signals";
+import { API_BASE_URL } from '../apiConfig';
 
 const News = () => {
 
@@ -44,7 +45,7 @@ const News = () => {
     if (userInfo.value) {
  
       const accountId = userInfo.value.userId;
-      const getGroupsEndpoint = `https://movie-app-h3st.onrender.com/groups/getUsersGroup/${accountId}`;
+      const getGroupsEndpoint = `${API_BASE_URL}/groups/getUsersGroup/${accountId}`;
 
       try {
         const response = await axios.get(getGroupsEndpoint);
@@ -98,7 +99,7 @@ const News = () => {
   //post
   const post = async (accountId, community_id, ArticleURL) => {
     if (community_id !== undefined) {
-      const postNewsEndpoint = `https://movie-app-h3st.onrender.com/News/AddNews/${accountId}`;
+      const postNewsEndpoint = `${API_BASE_URL}/News/AddNews/${accountId}`;
       try {
           const response = await axios.post(postNewsEndpoint, {
               accountId: accountId,

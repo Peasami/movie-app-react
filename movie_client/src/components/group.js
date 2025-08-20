@@ -18,6 +18,7 @@ import axios, { all } from "axios";
 import { useEffect, useState } from "react";
 import { effect, signal } from "@preact/signals-core";
 import '../stylesheets/groups.css'
+import { API_BASE_URL } from "../apiConfig";
 function Group(){
     // save group id from url to variable
     const { groupId } = useParams();
@@ -34,7 +35,7 @@ function Group(){
         };
 
         const checkAdmin = async () => {
-            await axios.get('https://movie-app-h3st.onrender.com/groups/getAdmin/' + groupId)
+            await axios.get(`${API_BASE_URL}/groups/getAdmin/` + groupId)
             .then(res => {
                 console.log("checkAdmin res.data: " + res.data)
                 console.log("admin_id: " + res.data[0].account_id + "userinfo: " + userInfo.value.userId + "groupId: " + groupId);
@@ -58,7 +59,7 @@ function Group(){
             headers: { Authorization: 'Bearer ' + jwtToken.value }
         }
 
-        axios.get('https://movie-app-h3st.onrender.com/groups/getGroup/' + groupId, config)
+        axios.get(`${API_BASE_URL}/groups/getGroup/` + groupId, config)
             .then(res => setGroupName(res.data[0].community_name))
             .catch(err => console.log(err.response.data));
     }, [groupId]);
@@ -94,7 +95,7 @@ function handleDeleteGroup(groupId){
         headers: { Authorization: 'Bearer ' + jwtToken.value }
     }
 
-    axios.delete("https://movie-app-h3st.onrender.com/groups/deleteGroup/" + userInfo.value.userId + "/" + groupId, config)
+    axios.delete(`${API_BASE_URL}/groups/deleteGroup/` + userInfo.value.userId + "/" + groupId, config)
         .then(res => console.log(res))
         .then(() => window.location.href = "/groups")
         .catch(err => console.log(err.response.data));
@@ -122,14 +123,14 @@ function GroupMembersForm(adminProps){
 
     function getMembers(){
         // console.log("members: "+ members)
-        axios.get('https://movie-app-h3st.onrender.com/groups/getMembers/' + groupId)
+        axios.get(`${API_BASE_URL}/groups/getMembers/` + groupId)
             .then(res => setMembers(res.data))
             .then(() => getAdminId())
             .catch(err => console.log(err.response.data));
     }
 
     function getAdminId(){
-        axios.get("https://movie-app-h3st.onrender.com/groups/getAdmin/" + groupId)
+        axios.get(`${API_BASE_URL}/groups/getAdmin/` + groupId)
             .then(res => {console.log("admin id: "+res.data[0].account_id); return res})
             .then(res => setAdminId(res.data[0].account_id))
             .catch(err => console.log(err.response.data));
@@ -158,7 +159,7 @@ function GroupMembersForm(adminProps){
             headers: { Authorization: 'Bearer ' + jwtToken.value }
         }
 
-        axios.delete("https://movie-app-h3st.onrender.com/groups/removeUserFromGroup/" + userId + "/" + groupId, config)
+        axios.delete(`${API_BASE_URL}/groups/removeUserFromGroup/` + userId + "/" + groupId, config)
             .then(res => console.log(res))
             .then(() => getMembers())
             .catch(err => console.log(err.response.data));
@@ -180,7 +181,7 @@ function GroupNewsForm(props){
 
     // Get news url and id
     function getGroupNews(){
-        axios.get('https://movie-app-h3st.onrender.com/news/groupNews/' + props.groupId)
+        axios.get(`${API_BASE_URL}/news/groupNews/${props.groupId}`)
             .then(res => setNews(res.data.rows))
             .catch(err => console.log(err.response.data));
     }
@@ -211,7 +212,7 @@ function GroupNewsForm(props){
 }
 
 async function checkIfUserIsInGroup(groupId){
-    return axios.get('https://movie-app-h3st.onrender.com/groups/getMembers/' + groupId)
+    return axios.get(`${API_BASE_URL}/groups/getMembers/` + groupId)
         .then(res => {
             const accountIds = res.data.map(user => user.account_id,);
             console.log("res.data: "+ accountIds);

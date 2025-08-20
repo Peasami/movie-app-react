@@ -3,6 +3,7 @@ import axios from "axios";
 import { userInfo, jwtToken } from "./signals"; 
 import { Link } from "react-router-dom"; 
 import "../stylesheets/profile.css";
+import { API_BASE_URL } from "../apiConfig";
 
 
 function UserProfile() {
@@ -22,7 +23,7 @@ function UserProfile() {
           console.log("Account ID:", accountId);
           console.log("Token:", jwtToken);
 
-          const response = await axios.get(`https://movie-app-h3st.onrender.com/reviews/Review/${accountId}`);
+          const response = await axios.get(`${API_BASE_URL}/reviews/Review/${accountId}`);
 
           if (response.data) {
             const movieIds = response.data.map((review) => review.movie_id);
@@ -47,7 +48,7 @@ function UserProfile() {
       try {
         if (userInfo.value && userInfo.value.userId) {
           const accountId = userInfo.value.userId;
-          const response = await axios.get(`https://movie-app-h3st.onrender.com/groups/getYourGroups/${accountId}`);
+          const response = await axios.get(`${API_BASE_URL}/groups/getYourGroups/${accountId}`);
 
           if (response.data) {
             setPersonalGroups(response.data);
@@ -103,14 +104,14 @@ function UserProfile() {
       console.log("käy täällä");
       if (userInfo.value && userInfo.value.userId) {
         const accountId = userInfo.value.userId;
-        const response = await axios.delete(`https://movie-app-h3st.onrender.com/account/Delete/${accountId}`, {
+        const response = await axios.delete(`${API_BASE_URL}/account/Delete/${accountId}`, {
           headers: {
             Authorization: `Bearer ${jwtToken}`,
           },
         });
-  
-      
-        window.location.href = 'https://movie-app-h3st.onrender.com/';
+
+
+        window.location.href = `${API_BASE_URL}/`;
         jwtToken.value = '';
       }
     } catch (error) {

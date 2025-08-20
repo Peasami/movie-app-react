@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import "../stylesheets/reviews.css";
 import { userInfo } from "./signals";
+import { API_BASE_URL } from "../apiConfig";
 
 const Reviews = () => {
   const [searchParams] = useSearchParams();
@@ -22,7 +23,7 @@ const Reviews = () => {
 
     // getReviews
     const getReviews = async () => {
-      const getReviewEndpoint = "https://movie-app-h3st.onrender.com/reviews/getReviews";
+      const getReviewEndpoint = `${API_BASE_URL}/reviews/getReviews`;
       try {
         const response = await axios.get(getReviewEndpoint);
         const data = response.data;
@@ -65,7 +66,7 @@ const Reviews = () => {
       return;
     }
     const accountId = userInfo.value.userId;
-    const postReviewEndpoint = `https://movie-app-h3st.onrender.com/reviews/Review/${accountId}`;
+    const postReviewEndpoint = `${API_BASE_URL}/reviews/Review/${accountId}`;
     try {
       const response = await axios.post(postReviewEndpoint, {
         accountId,
@@ -83,7 +84,7 @@ const Reviews = () => {
 
   //fetch username from db
   const fetchUsername = async (account_id) => {
-    const dbUsernameEndpoint = `https://movie-app-h3st.onrender.com/account/getUsername/${account_id}`;
+    const dbUsernameEndpoint = `${API_BASE_URL}/account/getUsername/${account_id}`;
     try {
       const response = await axios.get(dbUsernameEndpoint);
       return response.data;

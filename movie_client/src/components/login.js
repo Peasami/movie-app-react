@@ -3,6 +3,7 @@ import axios from "axios";
 import { jwtToken, userInfo } from "./signals"
 import '../stylesheets/login-register.css'
 import { Link } from "react-router-dom";
+import { API_BASE_URL } from "../apiConfig";
 
 
 function Login() {
@@ -15,9 +16,9 @@ function Login() {
 }
 export const handleLogout = () => {
   if (userInfo && userInfo.value) {
-    
-    window.location.href = 'https://movie-app-h3st.onrender.com/';
-    jwtToken.value = "" 
+
+    window.location.href = `${API_BASE_URL}/`;
+    jwtToken.value = ""
   } else {
     
     console.error("User information is not available during logout");
@@ -34,7 +35,7 @@ function LoginForm() {
   
 
   function login() {
-    axios.postForm('https://movie-app-h3st.onrender.com/account/login', { username, pw })
+    axios.postForm(`${API_BASE_URL}/account/login`, { username, pw })
       .then(res => jwtToken.value = res.data.jwtToken)
       .catch(err => console.log(err.response.data));
   }

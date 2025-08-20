@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { jwtToken } from "./signals";
 import '../stylesheets/login-register.css'
+import { API_BASE_URL } from "../apiConfig";
 function Register({}) {
   const [username, setUsername] = useState("");
   const [pw, setPassword] = useState("");
@@ -10,7 +11,7 @@ function Register({}) {
   const [showPassword, setShowPassword] = useState(false);
 
   function register() {
-    axios.post('https://movie-app-h3st.onrender.com/account/register', { username, pw })
+    axios.post(`${API_BASE_URL}/account/register`, { username, pw })
       .then(res => {
         console.log("käyttäjän luonti onnistui");
         setSuccessMessage("Registration successful! You can now log in.");
