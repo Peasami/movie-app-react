@@ -21,12 +21,7 @@ const path = require('path');
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use(cors());
-app.use(express.static('public'));
-app.use(express.static(path.join(__dirname, 'client/build')));
-
-app.get("/*", function (req, res) {
-  res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-});
+app.use(express.static('movie_client/build'));
 
 //Setting routes
 app.use('/account', accountRoute );
@@ -37,7 +32,7 @@ app.use('/news', newsRoute );
 
 app.get("/*", function (req, res) {
     res.sendFile(
-        path.join(__dirname, "public/index.html"),
+        path.join(__dirname, "movie_client/build/index.html"),
         function (err) {
             if (err) {
                 res.status(500).send(err);
