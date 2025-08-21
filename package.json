@@ -16,7 +16,7 @@
   },
   "scripts": {
     "start": "node start.js",
-    "build": "npm install --prefix movie_client && npm run build --prefix movie_client",
+    "build": "npm i && cd movie_client && npm i && npm run build",
     "test": "mocha test/*js --timeout 10000"
   }
 }
