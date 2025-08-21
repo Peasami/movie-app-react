@@ -15,7 +15,8 @@
     "mocha": "^10.2.0"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "node start.js",
+    "build": "cd movie_client && npm i && npm run build",
     "test": "mocha test/*js --timeout 10000"
   }
 }
