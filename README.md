@@ -1,5 +1,5 @@
 # Movie App
-### Link to the website: https://movie-app-h3st.onrender.com/
+### Link to the website: https://my-movie-app-react.onrender.com/
 The website might not work correctly depending if backend is still running.
 
 ## info
